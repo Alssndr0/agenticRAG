@@ -24,18 +24,18 @@ def summarise_documents(
     max_words=SUMMARISE_DOCUMENT_INPUT_WORDS,
 ):
     """
-    Summarises documents using an OpenAI-compatible client and writes to file.
+    Summarises documents using an OpenAI-compatible client and writes summaries to a JSON file.
 
     Args:
         doc_filenames_file (str): Path to JSON file containing document filenames.
         full_docs_file (str): Path to JSON file containing full document texts.
-        output_file (str): File to save summaries to.
+        output_file (str): JSON file to save summaries to (filename -> summary mapping).
         model (str): The model to use (e.g., "gpt-4o").
         summarise_prompt (str): System prompt for summarization.
         max_words (int): Max number of words per document (truncates if longer).
 
     Returns:
-        str: Path to the output file containing summaries.
+        str: Path to the output JSON file containing summaries.
     """
     # Ensure output directory exists
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -47,14 +47,14 @@ def summarise_documents(
     with open(full_docs_file, "r", encoding="utf-8") as f:
         full_docs = json.load(f)
 
-    summaries = []
+    summaries_dict = {}
 
     for i, (filename, doc) in enumerate(zip(doc_filenames, full_docs)):
         print(f"📝 Summarizing document {i + 1}: {filename}")
 
         # Truncate the document to first `max_words` words
         words = doc.split()
-        truncated_doc = " ".join(words[:max_words])
+        truncated_doc = " ".join(words[: int(max_words)])
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         try:
             response = client.chat.completions.create(
@@ -66,18 +66,17 @@ def summarise_documents(
             )
 
             summary = response.choices[0].message.content.strip()
-            summaries.append(summary)
+            summaries_dict[filename] = summary
 
             print(f"  ✅ Summary: {summary[:80]}...")
 
         except Exception as e:
             print(f"  ❌ Error for document '{filename}': {str(e)}")
-            summaries.append("[ERROR: Could not generate summary]")
+            summaries_dict[filename] = "[ERROR: Could not generate summary]"
 
-    # Save to file
+    # Save to JSON file
     with open(output_file, "w", encoding="utf-8") as f:
-        for filename, summary in zip(doc_filenames, summaries):
-            f.write(f"{filename}:\n{summary}\n\n")
+        json.dump(summaries_dict, f, ensure_ascii=False, indent=2)
 
     print(f"\n✅ All summaries (with truncation) written to '{output_file}'")
 

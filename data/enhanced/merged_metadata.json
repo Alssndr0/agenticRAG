@@ -1,20 +1,86 @@
 {
   "Fitch Rating.pdf": [
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "Fitch Affirms Engie Brasil's Ratings; Outlook Stable",
+        "KEY RATING DRIVERS"
       ],
       "id": [
         0,
         1,
         2
       ],
-      "headings": [
-        "Fitch Affirms Engie Brasil's Ratings; Outlook Stable",
-        "KEY RATING DRIVERS",
-        "KEY RATING DRIVERS"
+      "page_mappings": {
+        "charspans_page_map": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1
+        },
+        "bounding_boxes_page_map": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 2,
+          "9": 1
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 29
+        },
+        {
+          "start": 0,
+          "end": 419
+        },
+        {
+          "start": 0,
+          "end": 387
+        },
+        {
+          "start": 0,
+          "end": 301
+        },
+        {
+          "start": 0,
+          "end": 519
+        },
+        {
+          "start": 0,
+          "end": 348
+        },
+        {
+          "start": 0,
+          "end": 469
+        },
+        {
+          "start": 0,
+          "end": 334
+        },
+        {
+          "start": 0,
+          "end": 408
+        },
+        {
+          "start": 0,
+          "end": 212
+        }
+      ],
+      "pages": [
+        1,
+        2
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -87,68 +153,65 @@
           "bottom": 690.685,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 29
-        },
-        {
-          "start": 0,
-          "end": 419
-        },
-        {
-          "start": 0,
-          "end": 387
-        },
-        {
-          "start": 0,
-          "end": 301
-        },
-        {
-          "start": 0,
-          "end": 519
-        },
-        {
-          "start": 0,
-          "end": 348
-        },
-        {
-          "start": 0,
-          "end": 469
-        },
-        {
-          "start": 0,
-          "end": 334
-        },
-        {
-          "start": 0,
-          "end": 408
-        },
-        {
-          "start": 0,
-          "end": 212
-        }
-      ],
-      "pages": [
-        1,
-        1,
-        1,
-        2
       ]
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "KEY RATING DRIVERS"
       ],
       "id": [
         3,
         4
       ],
-      "headings": [
-        "KEY RATING DRIVERS",
-        "KEY RATING DRIVERS"
+      "page_mappings": {
+        "charspans_page_map": {
+          "0": 2,
+          "1": 2,
+          "2": 2,
+          "3": 2,
+          "4": 2,
+          "5": 2
+        },
+        "bounding_boxes_page_map": {
+          "0": 2,
+          "1": 2,
+          "2": 2,
+          "3": 2,
+          "4": 2,
+          "5": 2
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 485
+        },
+        {
+          "start": 0,
+          "end": 341
+        },
+        {
+          "start": 0,
+          "end": 336
+        },
+        {
+          "start": 0,
+          "end": 323
+        },
+        {
+          "start": 0,
+          "end": 347
+        },
+        {
+          "start": 0,
+          "end": 303
+        }
+      ],
+      "pages": [
+        2
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -193,36 +256,6 @@
           "bottom": 196.62200000000007,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 485
-        },
-        {
-          "start": 0,
-          "end": 341
-        },
-        {
-          "start": 0,
-          "end": 336
-        },
-        {
-          "start": 0,
-          "end": 323
-        },
-        {
-          "start": 0,
-          "end": 347
-        },
-        {
-          "start": 0,
-          "end": 303
-        }
-      ],
-      "pages": [
-        2,
-        2
       ]
     },
     {
@@ -287,13 +320,13 @@
       "id": 5
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "DERIVATION SUMMARY",
+        "KEY ASSUMPTIONS",
+        "RATING SENSITIVITIES",
+        "Factors that Could, Individually or Collectively, Lead to Positive Rating Action/Upgrade:",
+        "LIQUIDITY AND DEBT STRUCTURE",
+        "ISSUER PROFILE"
       ],
       "id": [
         6,
@@ -303,13 +336,129 @@
         10,
         11
       ],
-      "headings": [
-        "DERIVATION SUMMARY",
-        "KEY ASSUMPTIONS",
-        "RATING SENSITIVITIES",
-        "Factors that Could, Individually or Collectively, Lead to Positive Rating Action/Upgrade:",
-        "LIQUIDITY AND DEBT STRUCTURE",
-        "ISSUER PROFILE"
+      "page_mappings": {
+        "bounding_boxes_page_map": {
+          "0": 3,
+          "1": 4,
+          "2": 3,
+          "3": 4,
+          "4": 3,
+          "5": 4,
+          "6": 3,
+          "7": 4,
+          "8": 3,
+          "9": 4,
+          "10": 3,
+          "11": 4,
+          "12": 3,
+          "13": 4,
+          "14": 3,
+          "15": 4,
+          "16": 3,
+          "17": 4,
+          "18": 4,
+          "19": 4
+        },
+        "charspans_page_map": {
+          "0": 4,
+          "1": 4,
+          "2": 4,
+          "3": 4,
+          "4": 3,
+          "5": 4,
+          "6": 4,
+          "7": 4,
+          "8": 3
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 578
+        },
+        {
+          "start": 0,
+          "end": 170
+        },
+        {
+          "start": 0,
+          "end": 86
+        },
+        {
+          "start": 0,
+          "end": 68
+        },
+        {
+          "start": 0,
+          "end": 58
+        },
+        {
+          "start": 0,
+          "end": 70
+        },
+        {
+          "start": 0,
+          "end": 48
+        },
+        {
+          "start": 0,
+          "end": 45
+        },
+        {
+          "start": 0,
+          "end": 60
+        },
+        {
+          "start": 0,
+          "end": 91
+        },
+        {
+          "start": 0,
+          "end": 257
+        },
+        {
+          "start": 0,
+          "end": 109
+        },
+        {
+          "start": 0,
+          "end": 86
+        },
+        {
+          "start": 0,
+          "end": 103
+        },
+        {
+          "start": 0,
+          "end": 116
+        },
+        {
+          "start": 0,
+          "end": 123
+        },
+        {
+          "start": 0,
+          "end": 91
+        },
+        {
+          "start": 0,
+          "end": 432
+        },
+        {
+          "start": 0,
+          "end": 469
+        },
+        {
+          "start": 0,
+          "end": 252
+        }
+      ],
+      "pages": [
+        3,
+        4
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -452,107 +601,16 @@
           "bottom": 315.197,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 578
-        },
-        {
-          "start": 0,
-          "end": 170
-        },
-        {
-          "start": 0,
-          "end": 86
-        },
-        {
-          "start": 0,
-          "end": 68
-        },
-        {
-          "start": 0,
-          "end": 58
-        },
-        {
-          "start": 0,
-          "end": 70
-        },
-        {
-          "start": 0,
-          "end": 48
-        },
-        {
-          "start": 0,
-          "end": 45
-        },
-        {
-          "start": 0,
-          "end": 60
-        },
-        {
-          "start": 0,
-          "end": 91
-        },
-        {
-          "start": 0,
-          "end": 257
-        },
-        {
-          "start": 0,
-          "end": 109
-        },
-        {
-          "start": 0,
-          "end": 86
-        },
-        {
-          "start": 0,
-          "end": 103
-        },
-        {
-          "start": 0,
-          "end": 116
-        },
-        {
-          "start": 0,
-          "end": 123
-        },
-        {
-          "start": 0,
-          "end": 91
-        },
-        {
-          "start": 0,
-          "end": 432
-        },
-        {
-          "start": 0,
-          "end": 469
-        },
-        {
-          "start": 0,
-          "end": 252
-        }
-      ],
-      "pages": [
-        3,
-        3,
-        3,
-        4,
-        4,
-        4,
-        4
       ]
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "SUMMARY OF FINANCIAL ADJUSTMENTS",
+        "REFERENCES FOR SUBSTANTIALLY MATERIAL SOURCE CITED AS KEY DRIVER OF RATING",
+        "MACROECONOMIC ASSUMPTIONS AND SECTOR FORECASTS",
+        "ESG CONSIDERATIONS",
+        "RATING ACTIONS",
+        "FITCH RATINGS ANALYSTS"
       ],
       "id": [
         12,
@@ -562,13 +620,98 @@
         16,
         17
       ],
-      "headings": [
-        "SUMMARY OF FINANCIAL ADJUSTMENTS",
-        "REFERENCES FOR SUBSTANTIALLY MATERIAL SOURCE CITED AS KEY DRIVER OF RATING",
-        "MACROECONOMIC ASSUMPTIONS AND SECTOR FORECASTS",
-        "ESG CONSIDERATIONS",
-        "RATING ACTIONS",
-        "FITCH RATINGS ANALYSTS"
+      "page_mappings": {
+        "bounding_boxes_page_map": {
+          "0": 4,
+          "1": 5,
+          "2": 4,
+          "3": 5,
+          "4": 4,
+          "5": 5,
+          "6": 5,
+          "7": 5,
+          "8": 5,
+          "9": 5,
+          "10": 5,
+          "11": 5,
+          "12": 5,
+          "13": 5
+        },
+        "charspans_page_map": {
+          "0": 5,
+          "1": 5,
+          "2": 5,
+          "3": 5,
+          "4": 5,
+          "5": 5,
+          "6": 5,
+          "7": 5
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 62
+        },
+        {
+          "start": 0,
+          "end": 99
+        },
+        {
+          "start": 0,
+          "end": 344
+        },
+        {
+          "start": 0,
+          "end": 221
+        },
+        {
+          "start": 0,
+          "end": 293
+        },
+        {
+          "start": 294,
+          "end": 364
+        },
+        {
+          "start": 0,
+          "end": 0
+        },
+        {
+          "start": 0,
+          "end": 17
+        },
+        {
+          "start": 0,
+          "end": 8
+        },
+        {
+          "start": 0,
+          "end": 22
+        },
+        {
+          "start": 0,
+          "end": 16
+        },
+        {
+          "start": 0,
+          "end": 34
+        },
+        {
+          "start": 0,
+          "end": 26
+        },
+        {
+          "start": 0,
+          "end": 67
+        }
+      ],
+      "pages": [
+        4,
+        5
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -669,87 +812,20 @@
           "bottom": 285.235,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 62
-        },
-        {
-          "start": 0,
-          "end": 99
-        },
-        {
-          "start": 0,
-          "end": 344
-        },
-        {
-          "start": 0,
-          "end": 221
-        },
-        {
-          "start": 0,
-          "end": 293
-        },
-        {
-          "start": 294,
-          "end": 364
-        },
-        {
-          "start": 0,
-          "end": 0
-        },
-        {
-          "start": 0,
-          "end": 17
-        },
-        {
-          "start": 0,
-          "end": 8
-        },
-        {
-          "start": 0,
-          "end": 22
-        },
-        {
-          "start": 0,
-          "end": 16
-        },
-        {
-          "start": 0,
-          "end": 34
-        },
-        {
-          "start": 0,
-          "end": 26
-        },
-        {
-          "start": 0,
-          "end": 67
-        }
-      ],
-      "pages": [
-        4,
-        4,
-        4,
-        4,
-        5,
-        5,
-        5
       ]
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "Lucas Rios, CFA",
+        "Mauro Storino",
+        "Elizabeth Fogerty",
+        "Maggie Guimaraes",
+        "PARTICIPATION STATUS",
+        "APPLICABLE CRITERIA",
+        "APPLICABLE MODELS",
+        "ADDITIONAL DISCLOSURES",
+        "ENDORSEMENT STATUS",
+        "DISCLAIMER & DISCLOSURES"
       ],
       "id": [
         18,
@@ -763,17 +839,184 @@
         26,
         27
       ],
-      "headings": [
-        "Lucas Rios, CFA",
-        "Mauro Storino",
-        "Elizabeth Fogerty",
-        "Maggie Guimaraes",
-        "PARTICIPATION STATUS",
-        "APPLICABLE CRITERIA",
-        "APPLICABLE MODELS",
-        "ADDITIONAL DISCLOSURES",
-        "ENDORSEMENT STATUS",
-        "DISCLAIMER & DISCLOSURES"
+      "page_mappings": {
+        "bounding_boxes_page_map": {
+          "0": 5,
+          "1": 6,
+          "2": 5,
+          "3": 6,
+          "4": 5,
+          "5": 6,
+          "6": 5,
+          "7": 6,
+          "8": 5,
+          "9": 6,
+          "10": 5,
+          "11": 6,
+          "12": 5,
+          "13": 6,
+          "14": 5,
+          "15": 6,
+          "16": 5,
+          "17": 6,
+          "18": 5,
+          "19": 6,
+          "20": 5,
+          "21": 6,
+          "22": 5,
+          "23": 6,
+          "24": 5,
+          "25": 6,
+          "26": 5,
+          "27": 6,
+          "28": 7,
+          "29": 6,
+          "30": 7
+        },
+        "charspans_page_map": {
+          "0": 6,
+          "1": 6,
+          "2": 6,
+          "3": 6,
+          "4": 6,
+          "5": 6,
+          "6": 5,
+          "7": 5
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 18
+        },
+        {
+          "start": 0,
+          "end": 24
+        },
+        {
+          "start": 0,
+          "end": 16
+        },
+        {
+          "start": 0,
+          "end": 27
+        },
+        {
+          "start": 0,
+          "end": 15
+        },
+        {
+          "start": 0,
+          "end": 21
+        },
+        {
+          "start": 0,
+          "end": 16
+        },
+        {
+          "start": 0,
+          "end": 30
+        },
+        {
+          "start": 0,
+          "end": 8
+        },
+        {
+          "start": 0,
+          "end": 15
+        },
+        {
+          "start": 0,
+          "end": 35
+        },
+        {
+          "start": 0,
+          "end": 9
+        },
+        {
+          "start": 0,
+          "end": 16
+        },
+        {
+          "start": 0,
+          "end": 34
+        },
+        {
+          "start": 0,
+          "end": 59
+        },
+        {
+          "start": 0,
+          "end": 321
+        },
+        {
+          "start": 0,
+          "end": 68
+        },
+        {
+          "start": 0,
+          "end": 49
+        },
+        {
+          "start": 0,
+          "end": 64
+        },
+        {
+          "start": 0,
+          "end": 80
+        },
+        {
+          "start": 0,
+          "end": 121
+        },
+        {
+          "start": 0,
+          "end": 68
+        },
+        {
+          "start": 0,
+          "end": 45
+        },
+        {
+          "start": 0,
+          "end": 19
+        },
+        {
+          "start": 0,
+          "end": 18
+        },
+        {
+          "start": 0,
+          "end": 25
+        },
+        {
+          "start": 0,
+          "end": 24
+        },
+        {
+          "start": 0,
+          "end": 162
+        },
+        {
+          "start": 0,
+          "end": 406
+        },
+        {
+          "start": 0,
+          "end": 168
+        },
+        {
+          "start": 0,
+          "end": 771
+        }
+      ],
+      "pages": [
+        5,
+        6,
+        7
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -993,145 +1236,6 @@
           "bottom": 642.872,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 18
-        },
-        {
-          "start": 0,
-          "end": 24
-        },
-        {
-          "start": 0,
-          "end": 16
-        },
-        {
-          "start": 0,
-          "end": 27
-        },
-        {
-          "start": 0,
-          "end": 15
-        },
-        {
-          "start": 0,
-          "end": 21
-        },
-        {
-          "start": 0,
-          "end": 16
-        },
-        {
-          "start": 0,
-          "end": 30
-        },
-        {
-          "start": 0,
-          "end": 8
-        },
-        {
-          "start": 0,
-          "end": 15
-        },
-        {
-          "start": 0,
-          "end": 35
-        },
-        {
-          "start": 0,
-          "end": 9
-        },
-        {
-          "start": 0,
-          "end": 16
-        },
-        {
-          "start": 0,
-          "end": 34
-        },
-        {
-          "start": 0,
-          "end": 59
-        },
-        {
-          "start": 0,
-          "end": 321
-        },
-        {
-          "start": 0,
-          "end": 68
-        },
-        {
-          "start": 0,
-          "end": 49
-        },
-        {
-          "start": 0,
-          "end": 64
-        },
-        {
-          "start": 0,
-          "end": 80
-        },
-        {
-          "start": 0,
-          "end": 121
-        },
-        {
-          "start": 0,
-          "end": 68
-        },
-        {
-          "start": 0,
-          "end": 45
-        },
-        {
-          "start": 0,
-          "end": 19
-        },
-        {
-          "start": 0,
-          "end": 18
-        },
-        {
-          "start": 0,
-          "end": 25
-        },
-        {
-          "start": 0,
-          "end": 24
-        },
-        {
-          "start": 0,
-          "end": 162
-        },
-        {
-          "start": 0,
-          "end": 406
-        },
-        {
-          "start": 0,
-          "end": 168
-        },
-        {
-          "start": 0,
-          "end": 771
-        }
-      ],
-      "pages": [
-        5,
-        5,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        7
       ]
     },
     {
@@ -1162,17 +1266,45 @@
       "id": 28
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "DISCLAIMER & DISCLOSURES"
       ],
       "id": [
         29,
         30
       ],
-      "headings": [
-        "DISCLAIMER & DISCLOSURES",
-        "DISCLAIMER & DISCLOSURES"
+      "page_mappings": {
+        "charspans_page_map": {
+          "0": 7,
+          "1": 7,
+          "2": 8
+        },
+        "bounding_boxes_page_map": {
+          "0": 7,
+          "1": 7,
+          "2": 8
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 2670
+        },
+        {
+          "start": 0,
+          "end": 699
+        },
+        {
+          "start": 0,
+          "end": 2699
+        }
+      ],
+      "pages": [
+        7,
+        8
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -1196,33 +1328,13 @@
           "bottom": 399.985,
           "origin": "BOTTOMLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 2670
-        },
-        {
-          "start": 0,
-          "end": 699
-        },
-        {
-          "start": 0,
-          "end": 2699
-        }
-      ],
-      "pages": [
-        7,
-        8
       ]
     },
     {
-      "filename": [
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf",
-        "Fitch Rating.pdf"
+      "headings": [
+        "DISCLAIMER & DISCLOSURES",
+        "SOLICITATION STATUS",
+        "ENDORSEMENT POLICY"
       ],
       "id": [
         31,
@@ -1231,11 +1343,60 @@
         34,
         35
       ],
-      "headings": [
-        "DISCLAIMER & DISCLOSURES",
-        "DISCLAIMER & DISCLOSURES",
-        "SOLICITATION STATUS",
-        "ENDORSEMENT POLICY"
+      "page_mappings": {
+        "bounding_boxes_page_map": {
+          "0": 8,
+          "1": 8,
+          "2": 8,
+          "3": 8,
+          "4": 9,
+          "5": 0,
+          "6": 9
+        },
+        "charspans_page_map": {
+          "0": 9,
+          "1": 9,
+          "2": 8,
+          "3": 8
+        }
+      },
+      "charspans": [
+        {
+          "start": 0,
+          "end": 2699
+        },
+        {
+          "start": 0,
+          "end": 1044
+        },
+        {
+          "start": 0,
+          "end": 181
+        },
+        {
+          "start": 0,
+          "end": 267
+        },
+        {
+          "start": 0,
+          "end": 165
+        },
+        {
+          "start": 0,
+          "end": 726
+        },
+        {
+          "start": 0,
+          "end": 13
+        }
+      ],
+      "pages": [
+        8,
+        9,
+        0
+      ],
+      "filename": [
+        "Fitch Rating.pdf"
       ],
       "bounding_boxes": [
         {
@@ -1287,43 +1448,6 @@
           "bottom": 0.0,
           "origin": "TOPLEFT"
         }
-      ],
-      "charspans": [
-        {
-          "start": 0,
-          "end": 2699
-        },
-        {
-          "start": 0,
-          "end": 1044
-        },
-        {
-          "start": 0,
-          "end": 181
-        },
-        {
-          "start": 0,
-          "end": 267
-        },
-        {
-          "start": 0,
-          "end": 165
-        },
-        {
-          "start": 0,
-          "end": 726
-        },
-        {
-          "start": 0,
-          "end": 13
-        }
-      ],
-      "pages": [
-        8,
-        8,
-        9,
-        9,
-        0
       ]
     }
   ]
