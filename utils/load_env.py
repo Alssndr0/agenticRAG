@@ -45,6 +45,12 @@ def load_env_vars():
         "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv(
             "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_context_summaries.txt"
         ),
+        "ENHANCED_CHUNKS_FILE": os.getenv(
+            "ENHANCED_CHUNKS_FILE", "data/enhanced/final_chunks.json"
+        ),
+        "ENHANCED_METADATA_FILE": os.getenv(
+            "ENHANCED_METADATA_FILE", "data/enhanced/final_metadata.json"
+        ),
     }
 
 
