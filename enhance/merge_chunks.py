@@ -122,6 +122,30 @@ def merge_metadata(meta1, meta2):
     # Special handling for document properties
     special_keys = {"filename", "id", "pages"}
 
+    def deduplicate_list(items):
+        """Deduplicate a list containing potentially unhashable items (like dicts)."""
+        seen = []
+        result = []
+        for item in items:
+            # Check if hashable
+            try:
+                hash(item)
+                is_hashable = True
+            except TypeError:
+                is_hashable = False
+
+            # Use set for hashable items for efficiency, otherwise check manually
+            if is_hashable:
+                if item not in seen:
+                    result.append(item)
+                    seen.append(
+                        item
+                    )  # Technically could use a set here for faster lookups
+            else:  # Handle unhashable items (like dicts)
+                if item not in result:
+                    result.append(item)
+        return result
+
     for key in all_keys:
         val1 = meta1.get(key)
         val2 = meta2.get(key)
@@ -132,84 +156,112 @@ def merge_metadata(meta1, meta2):
             merged[key] = val1
         elif key in special_keys:
             # Handle document properties (filename, id, pages)
-            if isinstance(val1, list) and isinstance(val2, list):
-                # Combine and deduplicate
-                merged[key] = list(dict.fromkeys(val1 + val2))
-            elif isinstance(val1, list):
-                # Add val2 to val1 list and deduplicate
-                merged[key] = list(dict.fromkeys(val1 + [val2]))
-            elif isinstance(val2, list):
-                # Add val1 to val2 list and deduplicate
-                merged[key] = list(dict.fromkeys([val1] + val2))
-            elif val1 == val2:
-                # Keep one if they're the same
-                merged[key] = val1
-            else:
-                # Store both as a deduplicated list
-                merged[key] = list(dict.fromkeys([val1, val2]))
+            list1 = [val1] if not isinstance(val1, list) else val1
+            list2 = [val2] if not isinstance(val2, list) else val2
+            combined = list1 + list2
+            # Simple types in special_keys are hashable, dict.fromkeys is fine
+            merged[key] = list(dict.fromkeys(combined)) if combined else []
+            # If only one item after deduplication and original wasn't a list, keep as single item
+            if len(merged[key]) == 1 and not (
+                isinstance(val1, list) or isinstance(val2, list)
+            ):
+                merged[key] = merged[key][0]
+            elif not merged[key]:  # Handle empty case
+                merged[key] = (
+                    [] if (isinstance(val1, list) or isinstance(val2, list)) else None
+                )
+
         elif key == "bounding_boxes" or key == "charspans":
             # For bounding boxes and charspans, we need to preserve their relationship
             # with pages, so we need to be careful when merging
-            if not merged.get("page_mappings"):
+            # Initialize page_mappings structure
+            if "page_mappings" not in merged:
                 merged["page_mappings"] = {}
-
-            # Create or get page_mappings for this element type
+            if not isinstance(merged["page_mappings"], dict):  # Ensure it's a dict
+                merged["page_mappings"] = {}
             if f"{key}_page_map" not in merged["page_mappings"]:
                 merged["page_mappings"][f"{key}_page_map"] = {}
 
-            # Combine the lists
-            if isinstance(val1, list) and isinstance(val2, list):
-                merged[key] = val1 + val2
+            # Combine the lists (handle non-list cases)
+            list1 = (
+                val1 if isinstance(val1, list) else ([val1] if val1 is not None else [])
+            )
+            list2 = (
+                val2 if isinstance(val2, list) else ([val2] if val2 is not None else [])
+            )
+            merged[key] = (
+                list1 + list2
+            )  # Keep duplicates for now, associate with page first
 
-                # Map the elements to their pages
-                pages1 = meta1.get("pages", [])
-                pages2 = meta2.get("pages", [])
+            # Map the elements to their pages
+            pages1 = meta1.get("pages", [])
+            if not isinstance(pages1, list):
+                pages1 = [pages1] if pages1 is not None else []
+            pages2 = meta2.get("pages", [])
+            if not isinstance(pages2, list):
+                pages2 = [pages2] if pages2 is not None else []
 
-                # Store mapping if we have page information
-                if pages1 and isinstance(pages1, list):
-                    for i, box in enumerate(val1):
-                        # Associate with the correct page if possible
-                        page_idx = i % len(pages1) if len(pages1) > 0 else 0
-                        page = pages1[page_idx]
-                        merged["page_mappings"][f"{key}_page_map"][len(val1) + i] = page
+            current_page_map = merged["page_mappings"][f"{key}_page_map"]
+            # Map items from meta1
+            if pages1:
+                for i, item in enumerate(list1):
+                    page_idx = i % len(pages1) if len(pages1) > 0 else 0
+                    page = pages1[page_idx]
+                    # Use original index from list1 as key
+                    current_page_map[str(i)] = page
+            # Map items from meta2, offset index
+            if pages2:
+                for i, item in enumerate(list2):
+                    page_idx = i % len(pages2) if len(pages2) > 0 else 0
+                    page = pages2[page_idx]
+                    # Use offset index from list2 as key
+                    current_page_map[str(len(list1) + i)] = page
 
-                if pages2 and isinstance(pages2, list):
-                    for i, box in enumerate(val2):
-                        # Associate with the correct page if possible
-                        page_idx = i % len(pages2) if len(pages2) > 0 else 0
-                        page = pages2[page_idx]
-                        merged["page_mappings"][f"{key}_page_map"][len(val1) + i] = page
+            # Note: Deduplication of bounding_boxes/charspans happens in finalise_chunks.py
+            # based on page association. We keep duplicates here to maintain correct mapping.
+
+        elif key == "page_mappings":
+            # Special handling to merge page_mappings dictionaries correctly
+            if isinstance(val1, dict) and isinstance(val2, dict):
+                merged_page_map = {}
+                map_keys = set(val1.keys()) | set(val2.keys())
+                for map_key in map_keys:  # e.g., 'bounding_boxes_page_map'
+                    map1 = val1.get(map_key, {})
+                    map2 = val2.get(map_key, {})
+                    if isinstance(map1, dict) and isinstance(map2, dict):
+                        # Merge the inner index->page dictionaries
+                        merged_page_map[map_key] = {**map1, **map2}
+                    elif isinstance(map1, dict):
+                        merged_page_map[map_key] = map1
+                    else:
+                        merged_page_map[map_key] = map2  # Keep map2 if map1 invalid
+                merged[key] = merged_page_map
+            elif isinstance(val1, dict):
+                merged[key] = val1  # Keep the valid dict
+            elif isinstance(val2, dict):
+                merged[key] = val2  # Keep the valid dict
             else:
-                # Handle non-list values - convert to list
-                merged[key] = [val1, val2] if val1 != val2 else [val1]
+                merged[key] = {}  # Both invalid, initialize empty
+
         elif key == "headings":
-            # For headings, deduplicate while preserving order
-            if isinstance(val1, list) and isinstance(val2, list):
-                # Use dict.fromkeys to preserve order while deduplicating
-                merged[key] = list(dict.fromkeys(val1 + val2))
-            elif isinstance(val1, list):
-                merged[key] = list(dict.fromkeys(val1 + [val2]))
-            elif isinstance(val2, list):
-                merged[key] = list(dict.fromkeys([val1] + val2))
-            elif val1 == val2:
-                merged[key] = val1
-            else:
-                merged[key] = [val1, val2]
-        elif isinstance(val1, list) and isinstance(val2, list):
-            # For other lists, deduplicate while preserving order
-            merged[key] = list(dict.fromkeys(val1 + val2))
-        elif isinstance(val1, list):
-            # Add val2 to val1 list and deduplicate
-            merged[key] = list(dict.fromkeys(val1 + [val2]))
-        elif isinstance(val2, list):
-            # Add val1 to val2 list and deduplicate
-            merged[key] = list(dict.fromkeys([val1] + val2))
-        elif val1 == val2:
-            # Keep one if they're the same
-            merged[key] = val1
-        else:
-            # Otherwise, store both as a list
-            merged[key] = [val1, val2]
+            # For headings (assumed hashable), deduplicate while preserving order
+            list1 = [val1] if not isinstance(val1, list) else val1
+            list2 = [val2] if not isinstance(val2, list) else val2
+            combined = list1 + list2
+            merged[key] = list(
+                dict.fromkeys(combined)
+            )  # Use dict.fromkeys for ordered deduplication
+
+        else:  # Generic list handling
+            list1 = (
+                val1 if isinstance(val1, list) else ([val1] if val1 is not None else [])
+            )
+            list2 = (
+                val2 if isinstance(val2, list) else ([val2] if val2 is not None else [])
+            )
+            combined = list1 + list2
+            # Use custom deduplication for potentially unhashable items
+            merged[key] = deduplicate_list(combined)
 
     return merged
 

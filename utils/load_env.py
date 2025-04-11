@@ -46,7 +46,7 @@ def load_env_vars():
             "SUMMARISE_OUTPUT_FOLDER", "data/enhanced"
         ),
         "SUMMARISE_OUTPUT_FILE": os.getenv(
-            "SUMMARISE_OUTPUT_FILE", "data/enhanced/document_summaries.txt"
+            "SUMMARISE_OUTPUT_FILE", "data/enhanced/document_summaries.json"
         ),
         "SUMMARISE_DOCUMENT_PROMPT": os.getenv(
             "SUMMARISE_DOCUMENT_PROMPT",
@@ -61,7 +61,10 @@ def load_env_vars():
             "Provide only a very short, succinct context summary for the target text to improve its searchability. Start with This chunk details...",
         ),
         "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv(
-            "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_context_summaries.txt"
+            "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_context_summaries.json"
+        ),
+        "SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS": os.getenv(
+            "SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS", "1000"
         ),
         # Final enhanced output files
         "ENHANCED_CHUNKS_FILE": os.getenv(

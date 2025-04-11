@@ -1,19 +1,85 @@
 [
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "Fitch Affirms Engie Brasil's Ratings; Outlook Stable",
+      "KEY RATING DRIVERS"
     ],
     "id": [
       0,
       1,
       2
     ],
-    "headings": [
-      "Fitch Affirms Engie Brasil's Ratings; Outlook Stable",
-      "KEY RATING DRIVERS",
-      "KEY RATING DRIVERS"
+    "page_mappings": {
+      "charspans_page_map": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1
+      },
+      "bounding_boxes_page_map": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,
+        "9": 1
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 29
+      },
+      {
+        "start": 0,
+        "end": 419
+      },
+      {
+        "start": 0,
+        "end": 387
+      },
+      {
+        "start": 0,
+        "end": 301
+      },
+      {
+        "start": 0,
+        "end": 519
+      },
+      {
+        "start": 0,
+        "end": 348
+      },
+      {
+        "start": 0,
+        "end": 469
+      },
+      {
+        "start": 0,
+        "end": 334
+      },
+      {
+        "start": 0,
+        "end": 408
+      },
+      {
+        "start": 0,
+        "end": 212
+      }
+    ],
+    "pages": [
+      1,
+      2
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -87,69 +153,66 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 29
-      },
-      {
-        "start": 0,
-        "end": 419
-      },
-      {
-        "start": 0,
-        "end": 387
-      },
-      {
-        "start": 0,
-        "end": 301
-      },
-      {
-        "start": 0,
-        "end": 519
-      },
-      {
-        "start": 0,
-        "end": 348
-      },
-      {
-        "start": 0,
-        "end": 469
-      },
-      {
-        "start": 0,
-        "end": 334
-      },
-      {
-        "start": 0,
-        "end": 408
-      },
-      {
-        "start": 0,
-        "end": 212
-      }
-    ],
-    "pages": [
-      1,
-      1,
-      1,
-      2
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Fitch Ratings' affirmation of Engie Brasil Energia S.A.'s credit ratings, emphasizing its strong market position and financial profile in Brazil's electric energy sector, potential challenges from high capital expenditures and pricing risks, and the implications of its parent-subsidiary structure."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' affirmation of Engie Brasil Energia S.A.'s credit ratings, highlighting its strong market position, operational efficiency, and financial profile amidst risks from uncontracted energy prices and leverage expectations, alongside insights on its capital expenditure and competitive positioning in Brazil's energy sector."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "KEY RATING DRIVERS"
     ],
     "id": [
       3,
       4
     ],
-    "headings": [
-      "KEY RATING DRIVERS",
-      "KEY RATING DRIVERS"
+    "page_mappings": {
+      "charspans_page_map": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "bounding_boxes_page_map": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 485
+      },
+      {
+        "start": 0,
+        "end": 341
+      },
+      {
+        "start": 0,
+        "end": 336
+      },
+      {
+        "start": 0,
+        "end": 323
+      },
+      {
+        "start": 0,
+        "end": 347
+      },
+      {
+        "start": 0,
+        "end": 303
+      }
+    ],
+    "pages": [
+      2
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -195,38 +258,8 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 485
-      },
-      {
-        "start": 0,
-        "end": 341
-      },
-      {
-        "start": 0,
-        "end": 336
-      },
-      {
-        "start": 0,
-        "end": 323
-      },
-      {
-        "start": 0,
-        "end": 347
-      },
-      {
-        "start": 0,
-        "end": 303
-      }
-    ],
-    "pages": [
-      2,
-      2
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Engie Brasil Energia S.A.'s credit risk management, focusing on its uncontracted energy volumes, hydrological risk mitigation, medium-term pricing and concession risks, and the weak parent-subsidiary linkage with Engie S.A., impacting its financial ratings."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' assessment of Engie Brasil Energia S.A., focusing on the company's manageable hydrologic and curtailment risks, exposure to pricing and concession risks, and weak parent-subsidiary linkage. The report highlights Engie Brasil’s uncontracted energy volumes and the importance of energy purchase contracts in safeguarding cash generation. Additionally, it discusses the potential financial impacts of upcoming concessions and positions Engie Brasil relative to its regional competitors in terms of financial and operational stability."
   },
   {
     "headings": [
@@ -288,17 +321,17 @@
       }
     ],
     "id": 5,
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Engie Brasil's credit ratings compared to Latin American and European peers, emphasizing its position in the energy market, financial profile, and potential rating changes influenced by Brazil's economic conditions. It outlines factors leading to possible negative and positive rating actions and highlights the company's liquidity and access to funding amid high capital expenditure."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Engie Brasil Energia S.A.'s credit ratings, comparing its performance and creditworthiness with Latin American peers and European integrated groups, while discussing factors influencing potential rating actions."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "DERIVATION SUMMARY",
+      "KEY ASSUMPTIONS",
+      "RATING SENSITIVITIES",
+      "Factors that Could, Individually or Collectively, Lead to Positive Rating Action/Upgrade:",
+      "LIQUIDITY AND DEBT STRUCTURE",
+      "ISSUER PROFILE"
     ],
     "id": [
       6,
@@ -308,13 +341,129 @@
       10,
       11
     ],
-    "headings": [
-      "DERIVATION SUMMARY",
-      "KEY ASSUMPTIONS",
-      "RATING SENSITIVITIES",
-      "Factors that Could, Individually or Collectively, Lead to Positive Rating Action/Upgrade:",
-      "LIQUIDITY AND DEBT STRUCTURE",
-      "ISSUER PROFILE"
+    "page_mappings": {
+      "bounding_boxes_page_map": {
+        "0": 3,
+        "1": 4,
+        "2": 3,
+        "3": 4,
+        "4": 3,
+        "5": 4,
+        "6": 3,
+        "7": 4,
+        "8": 3,
+        "9": 4,
+        "10": 3,
+        "11": 4,
+        "12": 3,
+        "13": 4,
+        "14": 3,
+        "15": 4,
+        "16": 3,
+        "17": 4,
+        "18": 4,
+        "19": 4
+      },
+      "charspans_page_map": {
+        "0": 4,
+        "1": 4,
+        "2": 4,
+        "3": 4,
+        "4": 3,
+        "5": 4,
+        "6": 4,
+        "7": 4,
+        "8": 3
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 578
+      },
+      {
+        "start": 0,
+        "end": 170
+      },
+      {
+        "start": 0,
+        "end": 86
+      },
+      {
+        "start": 0,
+        "end": 68
+      },
+      {
+        "start": 0,
+        "end": 58
+      },
+      {
+        "start": 0,
+        "end": 70
+      },
+      {
+        "start": 0,
+        "end": 48
+      },
+      {
+        "start": 0,
+        "end": 45
+      },
+      {
+        "start": 0,
+        "end": 60
+      },
+      {
+        "start": 0,
+        "end": 91
+      },
+      {
+        "start": 0,
+        "end": 257
+      },
+      {
+        "start": 0,
+        "end": 109
+      },
+      {
+        "start": 0,
+        "end": 86
+      },
+      {
+        "start": 0,
+        "end": 103
+      },
+      {
+        "start": 0,
+        "end": 116
+      },
+      {
+        "start": 0,
+        "end": 123
+      },
+      {
+        "start": 0,
+        "end": 91
+      },
+      {
+        "start": 0,
+        "end": 432
+      },
+      {
+        "start": 0,
+        "end": 469
+      },
+      {
+        "start": 0,
+        "end": 252
+      }
+    ],
+    "pages": [
+      3,
+      4
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -458,108 +607,17 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 578
-      },
-      {
-        "start": 0,
-        "end": 170
-      },
-      {
-        "start": 0,
-        "end": 86
-      },
-      {
-        "start": 0,
-        "end": 68
-      },
-      {
-        "start": 0,
-        "end": 58
-      },
-      {
-        "start": 0,
-        "end": 70
-      },
-      {
-        "start": 0,
-        "end": 48
-      },
-      {
-        "start": 0,
-        "end": 45
-      },
-      {
-        "start": 0,
-        "end": 60
-      },
-      {
-        "start": 0,
-        "end": 91
-      },
-      {
-        "start": 0,
-        "end": 257
-      },
-      {
-        "start": 0,
-        "end": 109
-      },
-      {
-        "start": 0,
-        "end": 86
-      },
-      {
-        "start": 0,
-        "end": 103
-      },
-      {
-        "start": 0,
-        "end": 116
-      },
-      {
-        "start": 0,
-        "end": 123
-      },
-      {
-        "start": 0,
-        "end": 91
-      },
-      {
-        "start": 0,
-        "end": 432
-      },
-      {
-        "start": 0,
-        "end": 469
-      },
-      {
-        "start": 0,
-        "end": 252
-      }
-    ],
-    "pages": [
-      3,
-      3,
-      3,
-      4,
-      4,
-      4,
-      4
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Engie Brasil's credit ratings in comparison to European integrated utilities, emphasizing its position within the Brazilian market, financial metrics, challenges, and the implications of capital expenditure on future performance."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Engie Brasil Energia S.A.'s credit ratings comparison with European peers, highlighting its financial metrics, risks, and projections while noting factors influencing potential rating changes."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "SUMMARY OF FINANCIAL ADJUSTMENTS",
+      "REFERENCES FOR SUBSTANTIALLY MATERIAL SOURCE CITED AS KEY DRIVER OF RATING",
+      "MACROECONOMIC ASSUMPTIONS AND SECTOR FORECASTS",
+      "ESG CONSIDERATIONS",
+      "RATING ACTIONS",
+      "FITCH RATINGS ANALYSTS"
     ],
     "id": [
       12,
@@ -569,13 +627,98 @@
       16,
       17
     ],
-    "headings": [
-      "SUMMARY OF FINANCIAL ADJUSTMENTS",
-      "REFERENCES FOR SUBSTANTIALLY MATERIAL SOURCE CITED AS KEY DRIVER OF RATING",
-      "MACROECONOMIC ASSUMPTIONS AND SECTOR FORECASTS",
-      "ESG CONSIDERATIONS",
-      "RATING ACTIONS",
-      "FITCH RATINGS ANALYSTS"
+    "page_mappings": {
+      "bounding_boxes_page_map": {
+        "0": 4,
+        "1": 5,
+        "2": 4,
+        "3": 5,
+        "4": 4,
+        "5": 5,
+        "6": 5,
+        "7": 5,
+        "8": 5,
+        "9": 5,
+        "10": 5,
+        "11": 5,
+        "12": 5,
+        "13": 5
+      },
+      "charspans_page_map": {
+        "0": 5,
+        "1": 5,
+        "2": 5,
+        "3": 5,
+        "4": 5,
+        "5": 5,
+        "6": 5,
+        "7": 5
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 62
+      },
+      {
+        "start": 0,
+        "end": 99
+      },
+      {
+        "start": 0,
+        "end": 344
+      },
+      {
+        "start": 0,
+        "end": 221
+      },
+      {
+        "start": 0,
+        "end": 293
+      },
+      {
+        "start": 294,
+        "end": 364
+      },
+      {
+        "start": 0,
+        "end": 0
+      },
+      {
+        "start": 0,
+        "end": 17
+      },
+      {
+        "start": 0,
+        "end": 8
+      },
+      {
+        "start": 0,
+        "end": 22
+      },
+      {
+        "start": 0,
+        "end": 16
+      },
+      {
+        "start": 0,
+        "end": 34
+      },
+      {
+        "start": 0,
+        "end": 26
+      },
+      {
+        "start": 0,
+        "end": 67
+      }
+    ],
+    "pages": [
+      4,
+      5
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -677,88 +820,21 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 62
-      },
-      {
-        "start": 0,
-        "end": 99
-      },
-      {
-        "start": 0,
-        "end": 344
-      },
-      {
-        "start": 0,
-        "end": 221
-      },
-      {
-        "start": 0,
-        "end": 293
-      },
-      {
-        "start": 294,
-        "end": 364
-      },
-      {
-        "start": 0,
-        "end": 0
-      },
-      {
-        "start": 0,
-        "end": 17
-      },
-      {
-        "start": 0,
-        "end": 8
-      },
-      {
-        "start": 0,
-        "end": 22
-      },
-      {
-        "start": 0,
-        "end": 16
-      },
-      {
-        "start": 0,
-        "end": 34
-      },
-      {
-        "start": 0,
-        "end": 26
-      },
-      {
-        "start": 0,
-        "end": 67
-      }
-    ],
-    "pages": [
-      4,
-      4,
-      4,
-      4,
-      5,
-      5,
-      5
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Engie Brasil Energia S.A.'s credit ratings, financial metrics, analysis methodology, and ESG relevance scores, along with information on Fitch Ratings' frameworks and the overall rating stability."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' methodology and ESG relevance scores associated with Engie Brasil Energia S.A.'s credit ratings, including their stable long-term issuer default ratings, along with references to their macroeconomic forecasts and credit analysis criteria."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "Lucas Rios, CFA",
+      "Mauro Storino",
+      "Elizabeth Fogerty",
+      "Maggie Guimaraes",
+      "PARTICIPATION STATUS",
+      "APPLICABLE CRITERIA",
+      "APPLICABLE MODELS",
+      "ADDITIONAL DISCLOSURES",
+      "ENDORSEMENT STATUS",
+      "DISCLAIMER & DISCLOSURES"
     ],
     "id": [
       18,
@@ -772,17 +848,184 @@
       26,
       27
     ],
-    "headings": [
-      "Lucas Rios, CFA",
-      "Mauro Storino",
-      "Elizabeth Fogerty",
-      "Maggie Guimaraes",
-      "PARTICIPATION STATUS",
-      "APPLICABLE CRITERIA",
-      "APPLICABLE MODELS",
-      "ADDITIONAL DISCLOSURES",
-      "ENDORSEMENT STATUS",
-      "DISCLAIMER & DISCLOSURES"
+    "page_mappings": {
+      "bounding_boxes_page_map": {
+        "0": 5,
+        "1": 6,
+        "2": 5,
+        "3": 6,
+        "4": 5,
+        "5": 6,
+        "6": 5,
+        "7": 6,
+        "8": 5,
+        "9": 6,
+        "10": 5,
+        "11": 6,
+        "12": 5,
+        "13": 6,
+        "14": 5,
+        "15": 6,
+        "16": 5,
+        "17": 6,
+        "18": 5,
+        "19": 6,
+        "20": 5,
+        "21": 6,
+        "22": 5,
+        "23": 6,
+        "24": 5,
+        "25": 6,
+        "26": 5,
+        "27": 6,
+        "28": 7,
+        "29": 6,
+        "30": 7
+      },
+      "charspans_page_map": {
+        "0": 6,
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 5,
+        "7": 5
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 18
+      },
+      {
+        "start": 0,
+        "end": 24
+      },
+      {
+        "start": 0,
+        "end": 16
+      },
+      {
+        "start": 0,
+        "end": 27
+      },
+      {
+        "start": 0,
+        "end": 15
+      },
+      {
+        "start": 0,
+        "end": 21
+      },
+      {
+        "start": 0,
+        "end": 16
+      },
+      {
+        "start": 0,
+        "end": 30
+      },
+      {
+        "start": 0,
+        "end": 8
+      },
+      {
+        "start": 0,
+        "end": 15
+      },
+      {
+        "start": 0,
+        "end": 35
+      },
+      {
+        "start": 0,
+        "end": 9
+      },
+      {
+        "start": 0,
+        "end": 16
+      },
+      {
+        "start": 0,
+        "end": 34
+      },
+      {
+        "start": 0,
+        "end": 59
+      },
+      {
+        "start": 0,
+        "end": 321
+      },
+      {
+        "start": 0,
+        "end": 68
+      },
+      {
+        "start": 0,
+        "end": 49
+      },
+      {
+        "start": 0,
+        "end": 64
+      },
+      {
+        "start": 0,
+        "end": 80
+      },
+      {
+        "start": 0,
+        "end": 121
+      },
+      {
+        "start": 0,
+        "end": 68
+      },
+      {
+        "start": 0,
+        "end": 45
+      },
+      {
+        "start": 0,
+        "end": 19
+      },
+      {
+        "start": 0,
+        "end": 18
+      },
+      {
+        "start": 0,
+        "end": 25
+      },
+      {
+        "start": 0,
+        "end": 24
+      },
+      {
+        "start": 0,
+        "end": 162
+      },
+      {
+        "start": 0,
+        "end": 406
+      },
+      {
+        "start": 0,
+        "end": 168
+      },
+      {
+        "start": 0,
+        "end": 771
+      }
+    ],
+    "pages": [
+      5,
+      6,
+      7
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -1003,147 +1246,8 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 18
-      },
-      {
-        "start": 0,
-        "end": 24
-      },
-      {
-        "start": 0,
-        "end": 16
-      },
-      {
-        "start": 0,
-        "end": 27
-      },
-      {
-        "start": 0,
-        "end": 15
-      },
-      {
-        "start": 0,
-        "end": 21
-      },
-      {
-        "start": 0,
-        "end": 16
-      },
-      {
-        "start": 0,
-        "end": 30
-      },
-      {
-        "start": 0,
-        "end": 8
-      },
-      {
-        "start": 0,
-        "end": 15
-      },
-      {
-        "start": 0,
-        "end": 35
-      },
-      {
-        "start": 0,
-        "end": 9
-      },
-      {
-        "start": 0,
-        "end": 16
-      },
-      {
-        "start": 0,
-        "end": 34
-      },
-      {
-        "start": 0,
-        "end": 59
-      },
-      {
-        "start": 0,
-        "end": 321
-      },
-      {
-        "start": 0,
-        "end": 68
-      },
-      {
-        "start": 0,
-        "end": 49
-      },
-      {
-        "start": 0,
-        "end": 64
-      },
-      {
-        "start": 0,
-        "end": 80
-      },
-      {
-        "start": 0,
-        "end": 121
-      },
-      {
-        "start": 0,
-        "end": 68
-      },
-      {
-        "start": 0,
-        "end": 45
-      },
-      {
-        "start": 0,
-        "end": 19
-      },
-      {
-        "start": 0,
-        "end": 18
-      },
-      {
-        "start": 0,
-        "end": 25
-      },
-      {
-        "start": 0,
-        "end": 24
-      },
-      {
-        "start": 0,
-        "end": 162
-      },
-      {
-        "start": 0,
-        "end": 406
-      },
-      {
-        "start": 0,
-        "end": 168
-      },
-      {
-        "start": 0,
-        "end": 771
-      }
-    ],
-    "pages": [
-      5,
-      5,
-      6,
-      6,
-      6,
-      6,
-      6,
-      6,
-      6,
-      6,
-      7
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Fitch Ratings' contact information, its reliance on factual information from issuers and third-party sources for credit rating purposes, and the limitations and methodologies employed in their ratings process."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' process for issuing and maintaining credit ratings, emphasizing the reliance on factual information from various sources and the inherent uncertainties in forecasting future events. It outlines the roles of analysts and the importance of independent verification in the rating process."
   },
   {
     "headings": [
@@ -1171,21 +1275,49 @@
       }
     ],
     "id": 28,
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Fitch Ratings' methodology in issuing and maintaining credit ratings, emphasizing its reliance on credible information from issuers and independent sources, as well as the inherent uncertainties in financial forecasts and ratings."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' methodology for issuing and maintaining credit ratings, emphasizing the reliance on factual information from issuers, the verification process, and the inherent uncertainties in forward-looking ratings and forecasts."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "DISCLAIMER & DISCLOSURES"
     ],
     "id": [
       29,
       30
     ],
-    "headings": [
-      "DISCLAIMER & DISCLOSURES",
-      "DISCLAIMER & DISCLOSURES"
+    "page_mappings": {
+      "charspans_page_map": {
+        "0": 7,
+        "1": 7,
+        "2": 8
+      },
+      "bounding_boxes_page_map": {
+        "0": 7,
+        "1": 7,
+        "2": 8
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 2670
+      },
+      {
+        "start": 0,
+        "end": 699
+      },
+      {
+        "start": 0,
+        "end": 2699
+      }
+    ],
+    "pages": [
+      7,
+      8
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -1210,34 +1342,14 @@
         "origin": "BOTTOMLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 2670
-      },
-      {
-        "start": 0,
-        "end": 699
-      },
-      {
-        "start": 0,
-        "end": 2699
-      }
-    ],
-    "pages": [
-      7,
-      8
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Fitch Ratings' methodology in issuing credit ratings, the adjustments made to financial data for consistency across sectors, and the general guidelines and responsibilities concerning the accuracy of the information provided by issuers. It also discusses the implications of their ratings, their fees, and the distribution of reports."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' processes and responsibilities in issuing credit ratings and reports, emphasizing the reliance on factual information, potential future uncertainties affecting ratings, and the collaborative nature of their rating methodology. It also discusses the fees associated with ratings and the regulatory status of Fitch."
   },
   {
-    "filename": [
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf",
-      "Fitch Rating.pdf"
+    "headings": [
+      "DISCLAIMER & DISCLOSURES",
+      "SOLICITATION STATUS",
+      "ENDORSEMENT POLICY"
     ],
     "id": [
       31,
@@ -1246,11 +1358,60 @@
       34,
       35
     ],
-    "headings": [
-      "DISCLAIMER & DISCLOSURES",
-      "DISCLAIMER & DISCLOSURES",
-      "SOLICITATION STATUS",
-      "ENDORSEMENT POLICY"
+    "page_mappings": {
+      "bounding_boxes_page_map": {
+        "0": 8,
+        "1": 8,
+        "2": 8,
+        "3": 8,
+        "4": 9,
+        "5": 0,
+        "6": 9
+      },
+      "charspans_page_map": {
+        "0": 9,
+        "1": 9,
+        "2": 8,
+        "3": 8
+      }
+    },
+    "charspans": [
+      {
+        "start": 0,
+        "end": 2699
+      },
+      {
+        "start": 0,
+        "end": 1044
+      },
+      {
+        "start": 0,
+        "end": 181
+      },
+      {
+        "start": 0,
+        "end": 267
+      },
+      {
+        "start": 0,
+        "end": 165
+      },
+      {
+        "start": 0,
+        "end": 726
+      },
+      {
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "pages": [
+      8,
+      9,
+      0
+    ],
+    "filename": [
+      "Fitch Rating.pdf"
     ],
     "bounding_boxes": [
       {
@@ -1303,44 +1464,7 @@
         "origin": "TOPLEFT"
       }
     ],
-    "charspans": [
-      {
-        "start": 0,
-        "end": 2699
-      },
-      {
-        "start": 0,
-        "end": 1044
-      },
-      {
-        "start": 0,
-        "end": 181
-      },
-      {
-        "start": 0,
-        "end": 267
-      },
-      {
-        "start": 0,
-        "end": 165
-      },
-      {
-        "start": 0,
-        "end": 726
-      },
-      {
-        "start": 0,
-        "end": 13
-      }
-    ],
-    "pages": [
-      8,
-      8,
-      9,
-      9,
-      0
-    ],
-    "document_summary": "Brasil's credit ratings and outlook, highlighting its market position as the second-largest electric energy generation company in Brazil, solid financial profile, and operational efficiency amidst high capital expenditure and evolving market risks. The document discusses the company's performance, expected financial metrics, potential challenges from uncontracted energy pricing, leverage ratios, and the implications of parent-subsidiary dynamics within the broader corporate structure.",
-    "chunk_context_summary": "This chunk details Fitch Ratings' policies regarding the assignment, publication, and dissemination of credit ratings, including fee structures for issuers and the distinction between NRSRO and non-NRSRO credit ratings, as well as regulatory compliance in different jurisdictions."
+    "document_summary": "This Fitch Ratings report affirms Engie Brasil Energia S.A.'s credit ratings, including a 'BB+' Foreign Currency and 'BBB-' Local Currency Long-Term Issuer Default Rating, with a Stable Outlook. The assessment highlights Engie Brasil's strong market position as Brazil's second-largest electric energy generator, robust operating cash flow, and manageable high capital expenditure plans. The report discusses risks related to uncontracted energy prices, leverage expectations, and parent-subsidiary linkage, noting Engie Brasil's positioning against regional competitors in the context of Brazil's economic environment.",
+    "chunk_context_summary": "This chunk details Fitch Ratings' policies regarding the assignment and dissemination of credit ratings, fee structures, and compliance with financial regulations for rating organizations. It highlights the distinction between NRSRO and non-NRSRO credit ratings, licensing information, and the treatment of credit ratings in various jurisdictions."
   }
 ]
