@@ -6,6 +6,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
+from finalise_chunks import export_enriched_chunks_and_metadata
 from load_chunks import load_chunks_and_metadata
 from merge_chunks import build_full_docs, group_by_filename, merge_small_chunks
 from summarise_chunks import summarise_chunk_contexts
@@ -32,4 +33,8 @@ summarised_docs = summarise_documents(doc_filenames, full_docs)
 # Summarise the chunks
 summarised_chunks = summarise_chunk_contexts(
     doc_filenames, summarised_docs, merged_grouped_chunks
+)
+# Export the enriched chunks and metadata
+export_enriched_chunks_and_metadata(
+    summarised_docs, summarised_chunks, merged_grouped_chunks, merged_grouped_metadata
 )
