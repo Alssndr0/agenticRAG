@@ -1,3 +1,4 @@
+import json
 import os
 
 from openai import OpenAI
@@ -10,31 +11,42 @@ SUMMARISE_OUTPUT_FILE = ENV["SUMMARISE_OUTPUT_FILE"]
 SUMMARISE_MODEL = ENV["SUMMARISE_MODEL"]
 SUMMARISE_DOCUMENT_INPUT_WORDS = ENV["SUMMARISE_DOCUMENT_INPUT_WORDS"]
 SUMMARISE_DOCUMENT_PROMPT = ENV["SUMMARISE_DOCUMENT_PROMPT"]
+DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhance/doc_filenames.json")
+FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhance/full_docs.json")
 
 
 def summarise_documents(
-    doc_filenames,
-    full_docs,
+    doc_filenames_file=DOC_FILENAMES_FILE,
+    full_docs_file=FULL_DOCS_FILE,
     output_file=SUMMARISE_OUTPUT_FILE,
     model=SUMMARISE_MODEL,
     summarise_prompt=SUMMARISE_DOCUMENT_PROMPT,
     max_words=SUMMARISE_DOCUMENT_INPUT_WORDS,
 ):
     """
-    Summarises a list of documents using an OpenAI-compatible client.
+    Summarises documents using an OpenAI-compatible client and writes to file.
 
     Args:
-        client: The OpenAI client instance.
-        doc_filenames (list[str]): List of filenames corresponding to each document.
-        full_docs (list[str]): List of full document texts.
-        system_prompt (str): System prompt to guide summarisation.
+        doc_filenames_file (str): Path to JSON file containing document filenames.
+        full_docs_file (str): Path to JSON file containing full document texts.
         output_file (str): File to save summaries to.
         model (str): The model to use (e.g., "gpt-4o").
+        summarise_prompt (str): System prompt for summarization.
         max_words (int): Max number of words per document (truncates if longer).
 
     Returns:
-        list[str]: List of generated summaries.
+        str: Path to the output file containing summaries.
     """
+    # Ensure output directory exists
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    # Load document filenames and full docs from files
+    with open(doc_filenames_file, "r", encoding="utf-8") as f:
+        doc_filenames = json.load(f)
+
+    with open(full_docs_file, "r", encoding="utf-8") as f:
+        full_docs = json.load(f)
+
     summaries = []
 
     for i, (filename, doc) in enumerate(zip(doc_filenames, full_docs)):
@@ -69,4 +81,4 @@ def summarise_documents(
 
     print(f"\n✅ All summaries (with truncation) written to '{output_file}'")
 
-    return summaries
+    return output_file
