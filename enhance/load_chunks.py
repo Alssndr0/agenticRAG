@@ -109,3 +109,95 @@ def load_enhanced_chunks_by_source(chunks_file):
     except Exception as e:
         print(f"❌ Error loading enhanced chunks from {chunks_file}: {e}")
         return {}
+
+
+def load_enhanced_chunks_with_metadata(chunks_file, metadata_file):
+    """
+    Load both enhanced chunks and metadata and link them using chunk_id.
+
+    Args:
+        chunks_file (str): Path to the enhanced chunks JSON file (usually final_chunks.json)
+        metadata_file (str): Path to the enhanced metadata JSON file (usually final_metadata.json)
+
+    Returns:
+        dict: A dictionary with chunk_ids as keys, and each value containing both
+              the chunk text and its associated metadata
+    """
+    import json
+
+    linked_data = {}
+
+    # Load chunks
+    try:
+        with open(chunks_file, "r", encoding="utf-8") as f:
+            chunks = json.load(f)
+        print(f"✅ Loaded {len(chunks)} enhanced chunks from {chunks_file}")
+
+        # Index chunks by chunk_id
+        chunks_dict = {
+            chunk.get("chunk_id", f"unknown_{i}"): chunk
+            for i, chunk in enumerate(chunks)
+        }
+    except Exception as e:
+        print(f"❌ Error loading enhanced chunks from {chunks_file}: {e}")
+        return {}
+
+    # Load metadata
+    try:
+        with open(metadata_file, "r", encoding="utf-8") as f:
+            metadata = json.load(f)
+        print(f"✅ Loaded {len(metadata)} metadata entries from {metadata_file}")
+
+        # Index metadata by chunk_id
+        metadata_dict = {
+            meta.get("chunk_id", f"unknown_{i}"): meta
+            for i, meta in enumerate(metadata)
+        }
+    except Exception as e:
+        print(f"❌ Error loading metadata from {metadata_file}: {e}")
+        return chunks_dict  # Return just chunks if metadata loading fails
+
+    # Link chunks with their metadata
+    for chunk_id, chunk in chunks_dict.items():
+        meta = metadata_dict.get(chunk_id)
+        if meta:
+            linked_data[chunk_id] = {"chunk": chunk, "metadata": meta}
+        else:
+            # If metadata not found, still include the chunk
+            linked_data[chunk_id] = {"chunk": chunk, "metadata": None}
+
+    print(f"✅ Linked {len(linked_data)} chunks with their metadata")
+    return linked_data
+
+
+def get_chunks_by_source_with_metadata(chunks_file, metadata_file):
+    """
+    Load chunks and metadata organized by source document.
+
+    Args:
+        chunks_file (str): Path to the enhanced chunks JSON file
+        metadata_file (str): Path to the enhanced metadata JSON file
+
+    Returns:
+        dict: A dictionary with source filenames as keys, and each value containing
+              a list of objects with both chunk text and metadata
+    """
+    from collections import defaultdict
+
+    # First get the linked data
+    linked_data = load_enhanced_chunks_with_metadata(chunks_file, metadata_file)
+
+    # Organize by source file
+    by_source = defaultdict(list)
+    for chunk_id, data in linked_data.items():
+        chunk = data["chunk"]
+        source = chunk.get("source_file", "unknown")
+        by_source[source].append(data)
+
+    # Sort chunks within each source by chunk_index
+    for source in by_source:
+        by_source[source] = sorted(
+            by_source[source], key=lambda x: x["chunk"].get("chunk_index", 0)
+        )
+
+    return dict(by_source)
