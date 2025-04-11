@@ -23,6 +23,28 @@ def load_env_vars():
         ),
         "CHUNKS_FILE": os.getenv("CHUNKS_FILE", "data/chunked/chunks.json"),
         "METADATA_FILE": os.getenv("METADATA_FILE", "data/chunked/metadata.json"),
+        # Summarization related variables
+        "SUMMARISE_OUTPUT_FOLDER": os.getenv(
+            "SUMMARISE_OUTPUT_FOLDER", "data/enhanced"
+        ),
+        "SUMMARISE_OUTPUT_FILE": os.getenv(
+            "SUMMARISE_OUTPUT_FILE", "data/enhanced/document_summaries.txt"
+        ),
+        "SUMMARISE_DOCUMENT_PROMPT": os.getenv(
+            "SUMMARISE_DOCUMENT_PROMPT",
+            "Give a short succinct description of the overall document for the purposes of improving search retrieval.",
+        ),
+        "SUMMARISE_DOCUMENT_INPUT_WORDS": int(
+            os.getenv("SUMMARISE_DOCUMENT_INPUT_WORDS", "5000")
+        ),
+        "SUMMARISE_MODEL": os.getenv("SUMMARISE_MODEL", "gpt-4o"),
+        "SUMMARISE_CHUNK_PROMPT": os.getenv(
+            "SUMMARISE_CHUNK_PROMPT",
+            "Provide only a very short, succinct context summary for the target text to improve its searchability. Start with This chunk details...",
+        ),
+        "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv(
+            "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_context_summaries.txt"
+        ),
     }
 
 
