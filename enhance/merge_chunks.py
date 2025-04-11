@@ -1,32 +1,37 @@
+import json
+import os
 from collections import defaultdict
 from typing import Any, Dict, List, Tuple
 
+from utils.load_env import get_env_vars
 
-def group_by_filename(
-    chunks: List[Any], metadata: List[Dict]
-) -> Tuple[Dict[str, List[Any]], Dict[str, List[Dict]]]:
+ENV = get_env_vars()
+GROUPED_CHUNKS_FILE = ENV.get(
+    "GROUPED_CHUNKS_FILE", "data/enhanced/grouped_chunks.json"
+)
+GROUPED_METADATA_FILE = ENV.get(
+    "GROUPED_METADATA_FILE", "data/enhanced/grouped_metadata.json"
+)
+MERGED_CHUNKS_FILE = ENV.get("MERGED_CHUNKS_FILE", "data/enhanced/merged_chunks.json")
+MERGED_METADATA_FILE = ENV.get(
+    "MERGED_METADATA_FILE", "data/enhanced/merged_metadata.json"
+)
+FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhanced/full_docs.json")
+DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json")
+
+
+def group_by_filename(chunks: List[Any], metadata: List[Dict]) -> Tuple[str, str]:
     """
-    Groups chunks and metadata based on the 'filename' key in the metadata.
-
-    Handles cases where the 'filename' value might be a single string or a list
-    of strings (e.g., after merging documents).
+    Group chunks and their metadata by filename.
 
     Args:
-        chunks: A list of chunks (content).
-        metadata: A list of metadata dictionaries. Each dictionary is expected
-                  to have a 'filename' key.
+        chunks: List of chunks.
+        metadata: List of metadata entries.
 
     Returns:
-        A tuple containing two dictionaries:
-        1. grouped_chunks: A dictionary where keys are filenames and values
-           are lists of chunks associated with that filename.
-        2. grouped_metadata: A dictionary where keys are filenames and values
-           are lists of metadata dictionaries associated with that filename.
-
-    Raises:
-        KeyError: If a metadata dictionary is missing the 'filename' key.
-        TypeError: If a 'filename' value is neither a string nor a list.
+        Tuple containing paths to the output files (chunks_path, metadata_path).
     """
+    # Create defaultdicts to group by filename
     grouped_chunks = defaultdict(list)
     grouped_metadata = defaultdict(list)
 
@@ -60,7 +65,8 @@ def group_by_filename(
                 )
             grouped_chunks[fname].append(chunk)
             grouped_metadata[fname].append(meta)  # Append the original meta dict
-        print("📄 Documents found:", list(grouped_chunks.keys()))
+
+    print("📄 Documents found:", list(grouped_chunks.keys()))
 
     for filename in grouped_chunks:
         print(f"\n--- {filename} ---")
@@ -72,38 +78,169 @@ def group_by_filename(
     # Print summary
     for i, count in enumerate(word_counts):
         print(f"Chunk {i}: {count} words")
-    # Convert defaultdicts to regular dicts for the return value
-    return dict(grouped_chunks), dict(grouped_metadata)
+
+    # Ensure directories exist
+    os.makedirs(os.path.dirname(GROUPED_CHUNKS_FILE), exist_ok=True)
+    os.makedirs(os.path.dirname(GROUPED_METADATA_FILE), exist_ok=True)
+
+    # Convert defaultdicts to regular dicts for JSON serialization
+    grouped_chunks_dict = {k: v for k, v in grouped_chunks.items()}
+    grouped_metadata_dict = {k: v for k, v in grouped_metadata.items()}
+
+    # Write to files
+    with open(GROUPED_CHUNKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(grouped_chunks_dict, f, ensure_ascii=False, indent=2)
+
+    with open(GROUPED_METADATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(grouped_metadata_dict, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ Grouped chunks written to {GROUPED_CHUNKS_FILE}")
+    print(f"✅ Grouped metadata written to {GROUPED_METADATA_FILE}")
+
+    return GROUPED_CHUNKS_FILE, GROUPED_METADATA_FILE
 
 
 def to_list(x):
     return x if isinstance(x, list) else [x]
 
 
-def merge_metadata(meta1, meta2):
-    return {
-        "id": to_list(meta1.get("id", [])) + to_list(meta2.get("id", [])),
-        "headings": to_list(meta1.get("headings", []))
-        + to_list(meta2.get("headings", [])),
-        "filename": list(
-            set(to_list(meta1.get("filename", [])) + to_list(meta2.get("filename", [])))
-        ),
-        "page_no": sorted(
-            list(
-                set(
-                    to_list(meta1.get("page_no", []) or meta1.get("pages", []))
-                    + to_list(meta2.get("page_no", []) or meta2.get("pages", []))
-                )
-            )
-        ),
-    }
-
-
 def count_words(text):
+    """Count words in a text string."""
     return len(text.split())
 
 
-def merge_small_chunks(grouped_chunks, grouped_metadata, min_words=200):
+def merge_metadata(meta1, meta2):
+    """
+    Merge two metadata dictionaries.
+    If values are incompatible types, keep both as a list.
+    Deduplicates values in lists and maintains relationships between
+    bounding boxes, charspans, and their respective pages.
+    """
+    merged = {}
+    all_keys = set(meta1.keys()) | set(meta2.keys())
+
+    # Special handling for document properties
+    special_keys = {"filename", "id", "pages"}
+
+    for key in all_keys:
+        val1 = meta1.get(key)
+        val2 = meta2.get(key)
+
+        if val1 is None:
+            merged[key] = val2
+        elif val2 is None:
+            merged[key] = val1
+        elif key in special_keys:
+            # Handle document properties (filename, id, pages)
+            if isinstance(val1, list) and isinstance(val2, list):
+                # Combine and deduplicate
+                merged[key] = list(dict.fromkeys(val1 + val2))
+            elif isinstance(val1, list):
+                # Add val2 to val1 list and deduplicate
+                merged[key] = list(dict.fromkeys(val1 + [val2]))
+            elif isinstance(val2, list):
+                # Add val1 to val2 list and deduplicate
+                merged[key] = list(dict.fromkeys([val1] + val2))
+            elif val1 == val2:
+                # Keep one if they're the same
+                merged[key] = val1
+            else:
+                # Store both as a deduplicated list
+                merged[key] = list(dict.fromkeys([val1, val2]))
+        elif key == "bounding_boxes" or key == "charspans":
+            # For bounding boxes and charspans, we need to preserve their relationship
+            # with pages, so we need to be careful when merging
+            if not merged.get("page_mappings"):
+                merged["page_mappings"] = {}
+
+            # Create or get page_mappings for this element type
+            if f"{key}_page_map" not in merged["page_mappings"]:
+                merged["page_mappings"][f"{key}_page_map"] = {}
+
+            # Combine the lists
+            if isinstance(val1, list) and isinstance(val2, list):
+                merged[key] = val1 + val2
+
+                # Map the elements to their pages
+                pages1 = meta1.get("pages", [])
+                pages2 = meta2.get("pages", [])
+
+                # Store mapping if we have page information
+                if pages1 and isinstance(pages1, list):
+                    for i, box in enumerate(val1):
+                        # Associate with the correct page if possible
+                        page_idx = i % len(pages1) if len(pages1) > 0 else 0
+                        page = pages1[page_idx]
+                        merged["page_mappings"][f"{key}_page_map"][len(val1) + i] = page
+
+                if pages2 and isinstance(pages2, list):
+                    for i, box in enumerate(val2):
+                        # Associate with the correct page if possible
+                        page_idx = i % len(pages2) if len(pages2) > 0 else 0
+                        page = pages2[page_idx]
+                        merged["page_mappings"][f"{key}_page_map"][len(val1) + i] = page
+            else:
+                # Handle non-list values - convert to list
+                merged[key] = [val1, val2] if val1 != val2 else [val1]
+        elif key == "headings":
+            # For headings, deduplicate while preserving order
+            if isinstance(val1, list) and isinstance(val2, list):
+                # Use dict.fromkeys to preserve order while deduplicating
+                merged[key] = list(dict.fromkeys(val1 + val2))
+            elif isinstance(val1, list):
+                merged[key] = list(dict.fromkeys(val1 + [val2]))
+            elif isinstance(val2, list):
+                merged[key] = list(dict.fromkeys([val1] + val2))
+            elif val1 == val2:
+                merged[key] = val1
+            else:
+                merged[key] = [val1, val2]
+        elif isinstance(val1, list) and isinstance(val2, list):
+            # For other lists, deduplicate while preserving order
+            merged[key] = list(dict.fromkeys(val1 + val2))
+        elif isinstance(val1, list):
+            # Add val2 to val1 list and deduplicate
+            merged[key] = list(dict.fromkeys(val1 + [val2]))
+        elif isinstance(val2, list):
+            # Add val1 to val2 list and deduplicate
+            merged[key] = list(dict.fromkeys([val1] + val2))
+        elif val1 == val2:
+            # Keep one if they're the same
+            merged[key] = val1
+        else:
+            # Otherwise, store both as a list
+            merged[key] = [val1, val2]
+
+    return merged
+
+
+def merge_small_chunks(
+    grouped_chunks_file=GROUPED_CHUNKS_FILE,
+    grouped_metadata_file=GROUPED_METADATA_FILE,
+    min_words=200,
+):
+    """
+    Merge small chunks to meet minimum word count and write results to files.
+
+    Args:
+        grouped_chunks_file: Path to the JSON file with grouped chunks.
+        grouped_metadata_file: Path to the JSON file with grouped metadata.
+        min_words: Minimum number of words per chunk.
+
+    Returns:
+        Tuple of file paths (merged_chunks_file, merged_metadata_file).
+    """
+    # Ensure directories exist
+    os.makedirs(os.path.dirname(MERGED_CHUNKS_FILE), exist_ok=True)
+    os.makedirs(os.path.dirname(MERGED_METADATA_FILE), exist_ok=True)
+
+    # Load grouped chunks and metadata from files
+    with open(grouped_chunks_file, "r", encoding="utf-8") as f:
+        grouped_chunks = json.load(f)
+
+    with open(grouped_metadata_file, "r", encoding="utf-8") as f:
+        grouped_metadata = json.load(f)
+
     merged_grouped_chunks = {}
     merged_grouped_metadata = {}
 
@@ -170,19 +307,38 @@ def merge_small_chunks(grouped_chunks, grouped_metadata, min_words=200):
         print(f"  ➤ Avg words: {sum(word_counts) / len(word_counts):.2f}")
         print(f"  ➤ Max words: {max(word_counts)}")
         print(f"  ➤ Min words: {min(word_counts)}")
-    return merged_grouped_chunks, merged_grouped_metadata
+
+    # Write merged chunks and metadata to files
+    with open(MERGED_CHUNKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(merged_grouped_chunks, f, ensure_ascii=False, indent=2)
+
+    with open(MERGED_METADATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(merged_grouped_metadata, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ Merged chunks written to {MERGED_CHUNKS_FILE}")
+    print(f"✅ Merged metadata written to {MERGED_METADATA_FILE}")
+
+    return MERGED_CHUNKS_FILE, MERGED_METADATA_FILE
 
 
-def build_full_docs(merged_grouped_chunks):
+def build_full_docs(merged_chunks_file=MERGED_CHUNKS_FILE):
     """
-    Combines chunks of text per document into full document strings.
+    Combines chunks of text per document into full document strings and writes to files.
 
     Args:
-        merged_grouped_chunks (dict): Mapping of filename to list of text chunks.
+        merged_chunks_file (str): Path to the JSON file containing merged chunks.
 
     Returns:
-        tuple: (full_docs, doc_filenames)
+        tuple: (full_docs_file_path, doc_filenames_file_path)
     """
+    # Ensure directories exist
+    os.makedirs(os.path.dirname(FULL_DOCS_FILE), exist_ok=True)
+    os.makedirs(os.path.dirname(DOC_FILENAMES_FILE), exist_ok=True)
+
+    # Load merged chunks from file
+    with open(merged_chunks_file, "r", encoding="utf-8") as f:
+        merged_grouped_chunks = json.load(f)
+
     full_docs = []
     doc_filenames = []
 
@@ -196,4 +352,14 @@ def build_full_docs(merged_grouped_chunks):
         print(f"\n📄 Document {i + 1}: {fname}")
         print(f"  ➤ Total words: {len(doc.split())}")
 
-    return full_docs, doc_filenames
+    # Write full docs and filenames to files
+    with open(FULL_DOCS_FILE, "w", encoding="utf-8") as f:
+        json.dump(full_docs, f, ensure_ascii=False, indent=2)
+
+    with open(DOC_FILENAMES_FILE, "w", encoding="utf-8") as f:
+        json.dump(doc_filenames, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ Full documents written to {FULL_DOCS_FILE}")
+    print(f"✅ Document filenames written to {DOC_FILENAMES_FILE}")
+
+    return FULL_DOCS_FILE, DOC_FILENAMES_FILE

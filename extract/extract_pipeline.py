@@ -16,13 +16,13 @@ from write_chunks import write_chunks_json
 from extract import convert_pdf_with_vlm
 from utils.load_env import get_env_vars
 
-env_vars = get_env_vars()
+env_vars = get_env_vars(force_reload=True)
 INPUT_FOLDER = Path(env_vars["INPUT_FOLDER"])
 OUTPUT_FOLDER = Path(env_vars["OUTPUT_FOLDER"])
 MAX_TOKENS = int(env_vars["CHUNK_SIZE"])
 EMBED_MODEL_ID = env_vars["EMBED_MODEL_ID"]
-CHUNKS_FILE = env_vars.get("CHUNKS_FILE", "exports/chunks.json")
-METADATA_FILE = env_vars.get("METADATA_FILE", "exports/metadata.json")
+CHUNKS_FILE = env_vars.get("CHUNKS_FILE", "data/chunked/chunks.json")
+METADATA_FILE = env_vars.get("METADATA_FILE", "data/chunked/metadata.json")
 
 # Initialize chunker with tokenizer and max tokens
 tokenizer = AutoTokenizer.from_pretrained(EMBED_MODEL_ID)
@@ -31,6 +31,7 @@ chunker = HybridChunker(tokenizer=tokenizer, max_tokens=MAX_TOKENS, merge_peers=
 
 # Process each PDF document one at a time
 for input_doc_path in INPUT_FOLDER.glob("*.pdf"):
+    print("Input folder:", INPUT_FOLDER)
     print(f"Processing: {input_doc_path.name}")
 
     # Convert the document

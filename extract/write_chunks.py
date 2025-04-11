@@ -4,8 +4,8 @@ import os
 from utils.load_env import get_env_vars
 
 env_vars = get_env_vars()
-CHUNKS_FILE = env_vars.get("CHUNKS_FILE", "exports/chunks.json")
-METADATA_FILE = env_vars.get("METADATA_FILE", "exports/metadata.json")
+CHUNKS_FILE = env_vars.get("CHUNKS_FILE", "data/chunked/chunks.json")
+METADATA_FILE = env_vars.get("METADATA_FILE", "data/chunked/metadata.json")
 
 
 def write_chunks_json(
