@@ -129,10 +129,12 @@ def export_enriched_chunks_and_metadata(
             zip(chunks, metadata_list, chunk_contexts)
         ):
             # Store each chunk as an object with text and source information
+            chunk_id = f"{filename}_{chunk_idx}"
             chunk_obj = {
                 "text": chunk,
                 "source_file": filename,
                 "chunk_index": chunk_idx,
+                "chunk_id": chunk_id,  # Unique identifier that matches the metadata
             }
             all_merged_chunks.append(chunk_obj)
 
@@ -142,6 +144,8 @@ def export_enriched_chunks_and_metadata(
                 **meta,  # Spread the original metadata keys
                 "document_summary": doc_summary,
                 "chunk_context_summary": chunk_summary,
+                "chunk_id": chunk_id,  # Same ID as in the chunks file for linking
+                "source_file": filename,  # Explicitly add source file for easier querying
             }
 
             # Ensure essential keys from the original meta are present (even if None/empty)
