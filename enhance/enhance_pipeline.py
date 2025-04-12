@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import sys
@@ -25,7 +26,49 @@ ENHANCED_CHUNKS_FILE = ENV.get(
 )
 
 
-def run_pipeline():
+def parse_args():
+    """Parse command line arguments for the enhancement pipeline."""
+    parser = argparse.ArgumentParser(
+        description="Enhance extracted chunks with document and chunk summaries",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        default=EXTRACTED_CHUNKS_FILE,
+        help="Path to the extracted chunks JSON file",
+    )
+
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=ENHANCED_CHUNKS_FILE,
+        help="Path to save the enhanced chunks JSON file",
+    )
+
+    parser.add_argument(
+        "--temp-dir",
+        type=str,
+        default="data/enhanced",
+        help="Directory for temporary files during processing",
+    )
+
+    parser.add_argument(
+        "--keep-temp",
+        action="store_true",
+        help="Keep temporary files after processing",
+    )
+
+    return parser.parse_args()
+
+
+def run_pipeline(
+    input_file=EXTRACTED_CHUNKS_FILE,
+    output_file=ENHANCED_CHUNKS_FILE,
+    temp_dir="data/enhanced",
+    keep_temp=False,
+):
     """
     Run the enhance pipeline to enrich chunks with document and chunk summaries.
     The pipeline:
@@ -35,22 +78,33 @@ def run_pipeline():
     4. Generates chunk summaries
     5. Adds summaries to chunk metadata
     6. Saves enhanced chunks
+
+    Args:
+        input_file: Path to the extracted chunks JSON file
+        output_file: Path to save the enhanced chunks JSON file
+        temp_dir: Directory for temporary files during processing
+        keep_temp: Whether to keep temporary files after processing
+
+    Returns:
+        bool: True if enhancement was successful, False otherwise
     """
-    print("\n🚀 Starting enhance pipeline...")
+    print("\n" + "=" * 80)
+    print("✨ ENHANCE PIPELINE")
+    print("=" * 80 + "\n")
 
     # Ensure the extracted chunks file exists
-    if not os.path.exists(EXTRACTED_CHUNKS_FILE):
-        print(f"Error: Extracted chunks file {EXTRACTED_CHUNKS_FILE} not found.")
+    if not os.path.exists(input_file):
+        print(f"❌ Error: Extracted chunks file {input_file} not found.")
         return False
 
     # Load the extracted chunks
-    print(f"\n📄 Loading extracted chunks from {EXTRACTED_CHUNKS_FILE}...")
+    print(f"\n📄 Loading extracted chunks from {input_file}...")
     try:
-        with open(EXTRACTED_CHUNKS_FILE, "r", encoding="utf-8") as f:
+        with open(input_file, "r", encoding="utf-8") as f:
             chunks = json.load(f)
         print(f"  ✅ Loaded {len(chunks)} chunks")
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error: Failed to load chunks from {EXTRACTED_CHUNKS_FILE}: {e}")
+        print(f"❌ Error: Failed to load chunks from {input_file}: {e}")
         return False
 
     # Group chunks by filename
@@ -86,7 +140,6 @@ def run_pipeline():
         full_docs.append(full_doc)
 
     # Create temporary files for the summarization process
-    temp_dir = "data/enhanced"
     os.makedirs(temp_dir, exist_ok=True)
 
     # Save document filenames and full docs to temporary files
@@ -185,23 +238,50 @@ def run_pipeline():
         enhanced_chunks.append(enhanced_chunk)
 
     # Save enhanced chunks
-    os.makedirs(os.path.dirname(ENHANCED_CHUNKS_FILE), exist_ok=True)
-    with open(ENHANCED_CHUNKS_FILE, "w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, "w", encoding="utf-8") as f:
         json.dump(enhanced_chunks, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ Enhanced chunks written to {ENHANCED_CHUNKS_FILE}")
+    print(f"\n✅ Enhanced chunks written to {output_file}")
 
     # Clean up temporary files
-    try:
-        os.remove(doc_filenames_file)
-        os.remove(full_docs_file)
-        os.remove(merged_chunks_file)
-    except:
-        pass
+    if not keep_temp:
+        try:
+            os.remove(doc_filenames_file)
+            os.remove(full_docs_file)
+            os.remove(merged_chunks_file)
+            print("  ✅ Temporary files cleaned up")
+        except Exception as e:
+            print(f"  ⚠️ Warning: Could not remove temporary files: {e}")
+    else:
+        print("  ℹ️ Temporary files kept as requested")
 
-    print("\n✅ Enhance pipeline completed successfully!")
+    print("\n" + "=" * 80)
+    print("✅ ENHANCE PIPELINE COMPLETED SUCCESSFULLY")
+    print("=" * 80 + "\n")
+
     return True
 
 
+def main():
+    """Run the enhance pipeline with command line arguments."""
+    args = parse_args()
+
+    success = run_pipeline(
+        input_file=args.input_file,
+        output_file=args.output_file,
+        temp_dir=args.temp_dir,
+        keep_temp=args.keep_temp,
+    )
+
+    if not success:
+        print("\n" + "=" * 80)
+        print("❌ ENHANCE PIPELINE FAILED")
+        print("=" * 80 + "\n")
+        sys.exit(1)
+
+    sys.exit(0)
+
+
 if __name__ == "__main__":
-    run_pipeline()
+    main()
