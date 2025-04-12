@@ -8,14 +8,23 @@ from utils.load_env import get_env_vars
 
 # Get environment variables
 ENV = get_env_vars()
-SUMMARISE_OUTPUT_FILE = ENV["SUMMARISE_OUTPUT_FILE"]
-SUMMARISE_MODEL = ENV["SUMMARISE_MODEL"]
-SUMMARISE_DOCUMENT_INPUT_WORDS = ENV["SUMMARISE_DOCUMENT_INPUT_WORDS"]
-SUMMARISE_DOCUMENT_PROMPT = ENV["SUMMARISE_DOCUMENT_PROMPT"]
-SUMMARISE_CHUNK_PROMPT = ENV["SUMMARISE_CHUNK_PROMPT"]
-SUMMARISE_CHUNK_OUTPUT_FILE = ENV["SUMMARISE_CHUNK_OUTPUT_FILE"]
-DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhance/doc_filenames.json")
-MERGED_CHUNKS_FILE = ENV.get("MERGED_CHUNKS_FILE", "data/enhance/merged_chunks.json")
+SUMMARISE_OUTPUT_FILE = ENV.get(
+    "SUMMARISE_OUTPUT_FILE", "data/enhanced/doc_summaries.json"
+)
+SUMMARISE_MODEL = ENV.get("SUMMARISE_MODEL", "gpt-4o")
+SUMMARISE_DOCUMENT_INPUT_WORDS = ENV.get("SUMMARISE_DOCUMENT_INPUT_WORDS", "5000")
+SUMMARISE_DOCUMENT_PROMPT = ENV.get(
+    "SUMMARISE_DOCUMENT_PROMPT",
+    "Provide a concise summary of the document in 2-3 sentences.",
+)
+SUMMARISE_CHUNK_PROMPT = ENV.get(
+    "SUMMARISE_CHUNK_PROMPT", "Provide a concise summary of the chunk in 1-2 sentences."
+)
+SUMMARISE_CHUNK_OUTPUT_FILE = ENV.get(
+    "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_summaries.json"
+)
+DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json")
+MERGED_CHUNKS_FILE = ENV.get("MERGED_CHUNKS_FILE", "data/enhanced/merged_chunks.json")
 
 
 def summarise_chunk_contexts(

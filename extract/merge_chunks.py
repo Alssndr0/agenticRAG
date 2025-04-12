@@ -1,103 +1,111 @@
 import json
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple
 
 from utils.load_env import get_env_vars
 
 ENV = get_env_vars()
+EXTRACTED_CHUNKS_FILE = ENV.get(
+    "EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"
+)
 GROUPED_CHUNKS_FILE = ENV.get(
     "GROUPED_CHUNKS_FILE", "data/enhanced/grouped_chunks.json"
 )
-GROUPED_METADATA_FILE = ENV.get(
-    "GROUPED_METADATA_FILE", "data/enhanced/grouped_metadata.json"
-)
 MERGED_CHUNKS_FILE = ENV.get("MERGED_CHUNKS_FILE", "data/enhanced/merged_chunks.json")
-MERGED_METADATA_FILE = ENV.get(
-    "MERGED_METADATA_FILE", "data/enhanced/merged_metadata.json"
-)
 FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhanced/full_docs.json")
 DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json")
 
 
-def group_by_filename(chunks: List[Any], metadata: List[Dict]) -> Tuple[str, str]:
+def group_by_filename(extracted_chunks_file: str) -> str:
     """
-    Group chunks and their metadata by filename.
+    Group unified chunks by filename.
 
     Args:
-        chunks: List of chunks.
-        metadata: List of metadata entries.
+        extracted_chunks_file: Path to the unified chunks JSON file.
 
     Returns:
-        Tuple containing paths to the output files (chunks_path, metadata_path).
+        Path to the grouped chunks file.
     """
     # Create defaultdicts to group by filename
     grouped_chunks = defaultdict(list)
-    grouped_metadata = defaultdict(list)
 
-    if len(chunks) != len(metadata):
-        raise ValueError(
-            f"Input lists have different lengths: chunks ({len(chunks)}), metadata ({len(metadata)})"
-        )
+    # Load unified chunks
+    try:
+        with open(extracted_chunks_file, "r", encoding="utf-8") as f:
+            unified_chunks = json.load(f)
+            print(f"Loaded {len(unified_chunks)} chunks from {extracted_chunks_file}")
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading unified chunks from {extracted_chunks_file}: {e}")
+        return None
 
-    for chunk, meta in zip(chunks, metadata):
+    # Group chunks by filename
+    for chunk in unified_chunks:
+        # Get text from top level
+        text = chunk.get("text", "")
+        # Get metadata from the metadata field
+        metadata = chunk.get("metadata", {})
+
         # Get filename(s) from metadata, ensuring it's always a list
         try:
-            filenames_val = meta["filename"]
-        except KeyError:
-            print(f"Error: Metadata item missing 'filename' key: {meta}")
-            raise  # Re-raise the KeyError
+            filename_val = metadata.get("filename")
+            if filename_val is None:
+                print(f"Error: Metadata missing 'filename' key: {metadata}")
+                continue  # Skip this chunk
+        except (KeyError, TypeError):
+            print(f"Error: Problem accessing 'filename' in metadata: {metadata}")
+            continue  # Skip this chunk
 
-        if isinstance(filenames_val, list):
-            filenames = filenames_val
-        elif isinstance(filenames_val, str):
-            filenames = [filenames_val]
+        if isinstance(filename_val, list):
+            filenames = filename_val
+        elif isinstance(filename_val, str):
+            filenames = [filename_val]
         else:
-            raise TypeError(
-                f"Unexpected type for 'filename' in metadata: {type(filenames_val)}. Expected str or list. Metadata: {meta}"
+            print(
+                f"Unexpected type for 'filename' in metadata: {type(filename_val)}. Expected str or list."
             )
+            continue  # Skip this chunk
 
-        # Add chunk and metadata to groups for each associated filename
+        # Add chunk to groups for each associated filename
         for fname in filenames:
             if not isinstance(fname, str):
-                raise TypeError(
-                    f"Expected filename to be a string, but got {type(fname)} in list: {filenames}. Metadata: {meta}"
+                print(
+                    f"Expected filename to be a string, but got {type(fname)} in list: {filenames}."
                 )
-            grouped_chunks[fname].append(chunk)
-            grouped_metadata[fname].append(meta)  # Append the original meta dict
+                continue  # Skip this filename
+
+            # Preserve the structure with the three main keys
+            grouped_chunks[fname].append(
+                {"idx": chunk.get("idx"), "text": text, "metadata": metadata}
+            )
 
     print("📄 Documents found:", list(grouped_chunks.keys()))
 
     for filename in grouped_chunks:
         print(f"\n--- {filename} ---")
         print(f"Chunks: {len(grouped_chunks[filename])}")
-        print(f"Metadata entries: {len(grouped_metadata[filename])}")
 
     # Count words in each chunk
-    word_counts = [len(chunk.split()) for chunk in chunks]
+    all_chunks = [
+        chunk["text"]
+        for chunks_list in grouped_chunks.values()
+        for chunk in chunks_list
+    ]
+    word_counts = [len(chunk.split()) for chunk in all_chunks]
+
     # Print summary
     for i, count in enumerate(word_counts):
         print(f"Chunk {i}: {count} words")
 
-    # Ensure directories exist
+    # Ensure directory exists
     os.makedirs(os.path.dirname(GROUPED_CHUNKS_FILE), exist_ok=True)
-    os.makedirs(os.path.dirname(GROUPED_METADATA_FILE), exist_ok=True)
 
-    # Convert defaultdicts to regular dicts for JSON serialization
-    grouped_chunks_dict = {k: v for k, v in grouped_chunks.items()}
-    grouped_metadata_dict = {k: v for k, v in grouped_metadata.items()}
-
-    # Write to files
+    # Write to file
     with open(GROUPED_CHUNKS_FILE, "w", encoding="utf-8") as f:
-        json.dump(grouped_chunks_dict, f, ensure_ascii=False, indent=2)
-
-    with open(GROUPED_METADATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(grouped_metadata_dict, f, ensure_ascii=False, indent=2)
+        json.dump(grouped_chunks, f, ensure_ascii=False, indent=2)
 
     print(f"✅ Grouped chunks written to {GROUPED_CHUNKS_FILE}")
-    print(f"✅ Grouped metadata written to {GROUPED_METADATA_FILE}")
 
-    return GROUPED_CHUNKS_FILE, GROUPED_METADATA_FILE
+    return GROUPED_CHUNKS_FILE
 
 
 def to_list(x):
@@ -121,30 +129,6 @@ def merge_metadata(meta1, meta2):
 
     # Special handling for document properties
     special_keys = {"filename", "id", "pages"}
-
-    def deduplicate_list(items):
-        """Deduplicate a list containing potentially unhashable items (like dicts)."""
-        seen = []
-        result = []
-        for item in items:
-            # Check if hashable
-            try:
-                hash(item)
-                is_hashable = True
-            except TypeError:
-                is_hashable = False
-
-            # Use set for hashable items for efficiency, otherwise check manually
-            if is_hashable:
-                if item not in seen:
-                    result.append(item)
-                    seen.append(
-                        item
-                    )  # Technically could use a set here for faster lookups
-            else:  # Handle unhashable items (like dicts)
-                if item not in result:
-                    result.append(item)
-        return result
 
     for key in all_keys:
         val1 = meta1.get(key)
@@ -252,6 +236,15 @@ def merge_metadata(meta1, meta2):
                 dict.fromkeys(combined)
             )  # Use dict.fromkeys for ordered deduplication
 
+        elif key == "document_summary" or key == "chunk_summary":
+            # For document or chunk summaries, concatenate with a separator
+            summary1 = val1 if val1 is not None else ""
+            summary2 = val2 if val2 is not None else ""
+            if summary1 and summary2:
+                merged[key] = summary1 + " " + summary2
+            else:
+                merged[key] = summary1 or summary2
+
         else:  # Generic list handling
             list1 = (
                 val1 if isinstance(val1, list) else ([val1] if val1 is not None else [])
@@ -260,117 +253,132 @@ def merge_metadata(meta1, meta2):
                 val2 if isinstance(val2, list) else ([val2] if val2 is not None else [])
             )
             combined = list1 + list2
-            # Use custom deduplication for potentially unhashable items
-            merged[key] = deduplicate_list(combined)
+            # Try to deduplicate if possible (for hashable elements)
+            try:
+                merged[key] = list(dict.fromkeys(combined))
+            except TypeError:  # If elements are not hashable
+                merged[key] = combined
 
     return merged
 
 
 def merge_small_chunks(
     grouped_chunks_file=GROUPED_CHUNKS_FILE,
-    grouped_metadata_file=GROUPED_METADATA_FILE,
     min_words=200,
 ):
     """
-    Merge small chunks to meet minimum word count and write results to files.
+    Merge small chunks to meet minimum word count and write results to file.
 
     Args:
         grouped_chunks_file: Path to the JSON file with grouped chunks.
-        grouped_metadata_file: Path to the JSON file with grouped metadata.
         min_words: Minimum number of words per chunk.
 
     Returns:
-        Tuple of file paths (merged_chunks_file, merged_metadata_file).
+        Path to the merged chunks file.
     """
-    # Ensure directories exist
+    # Ensure directory exists
     os.makedirs(os.path.dirname(MERGED_CHUNKS_FILE), exist_ok=True)
-    os.makedirs(os.path.dirname(MERGED_METADATA_FILE), exist_ok=True)
 
-    # Load grouped chunks and metadata from files
+    # Load grouped chunks from file
     with open(grouped_chunks_file, "r", encoding="utf-8") as f:
         grouped_chunks = json.load(f)
 
-    with open(grouped_metadata_file, "r", encoding="utf-8") as f:
-        grouped_metadata = json.load(f)
-
     merged_grouped_chunks = {}
-    merged_grouped_metadata = {}
 
     for filename in grouped_chunks:
-        chunks = grouped_chunks[filename]
-        metadata = grouped_metadata[filename]
+        chunks_with_metadata = grouped_chunks[filename]
 
         merged = True
         while merged:
             merged = False
-            new_chunks = []
-            new_metadata = []
+            new_chunks_with_metadata = []
             i = 0
 
-            while i < len(chunks):
-                chunk = chunks[i]
-                meta = metadata[i]
-                word_count = count_words(chunk)
+            while i < len(chunks_with_metadata):
+                current_chunk = chunks_with_metadata[i]
+                text = current_chunk.get("text", "")
+                word_count = count_words(text)
 
                 if word_count >= min_words:
-                    new_chunks.append(chunk)
-                    new_metadata.append(meta)
+                    new_chunks_with_metadata.append(current_chunk)
                     i += 1
                 else:
-                    prev_len = count_words(chunks[i - 1]) if i > 0 else float("inf")
+                    prev_len = (
+                        count_words(chunks_with_metadata[i - 1].get("text", ""))
+                        if i > 0
+                        else float("inf")
+                    )
                     next_len = (
-                        count_words(chunks[i + 1])
-                        if i + 1 < len(chunks)
+                        count_words(chunks_with_metadata[i + 1].get("text", ""))
+                        if i + 1 < len(chunks_with_metadata)
                         else float("inf")
                     )
 
-                    if next_len <= prev_len and i + 1 < len(chunks):
+                    if next_len <= prev_len and i + 1 < len(chunks_with_metadata):
                         # Merge with next
-                        new_chunk = chunk + " " + chunks[i + 1]
-                        new_meta = merge_metadata(meta, metadata[i + 1])
-                        new_chunks.append(new_chunk)
-                        new_metadata.append(new_meta)
+                        current_meta = current_chunk.get("metadata", {})
+                        next_chunk = chunks_with_metadata[i + 1]
+                        next_text = next_chunk.get("text", "")
+                        next_meta = next_chunk.get("metadata", {})
+
+                        # Merge metadata
+                        merged_meta = merge_metadata(current_meta, next_meta)
+
+                        # Create new merged chunk with combined text and maintaining structure
+                        new_chunk = {
+                            "idx": current_chunk.get("idx"),  # Keep original idx
+                            "text": text + " " + next_text,
+                            "metadata": merged_meta,
+                        }
+
+                        new_chunks_with_metadata.append(new_chunk)
                         i += 2
                         merged = True
                     elif i > 0:
                         # Merge with previous
-                        new_chunks[-1] += " " + chunk
-                        new_metadata[-1] = merge_metadata(new_metadata[-1], meta)
+                        prev_chunk = new_chunks_with_metadata[-1]
+                        prev_text = prev_chunk.get("text", "")
+                        prev_meta = prev_chunk.get("metadata", {})
+                        current_meta = current_chunk.get("metadata", {})
+
+                        # Merge metadata
+                        merged_meta = merge_metadata(prev_meta, current_meta)
+
+                        # Update previous chunk with merged data while maintaining structure
+                        new_chunks_with_metadata[-1] = {
+                            "idx": prev_chunk.get("idx"),  # Keep previous idx
+                            "text": prev_text + " " + text,
+                            "metadata": merged_meta,
+                        }
+
                         i += 1
                         merged = True
                     else:
                         # Nowhere to merge
-                        new_chunks.append(chunk)
-                        new_metadata.append(meta)
+                        new_chunks_with_metadata.append(current_chunk)
                         i += 1
 
-            chunks = new_chunks
-            metadata = new_metadata
+            chunks_with_metadata = new_chunks_with_metadata
 
-        merged_grouped_chunks[filename] = chunks
-        merged_grouped_metadata[filename] = metadata
+        merged_grouped_chunks[filename] = chunks_with_metadata
 
     print("✅ Merging complete.")
     print(f"Documents processed: {len(merged_grouped_chunks)}")
     for filename, chunks in merged_grouped_chunks.items():
         print(f"\n📄 Document: {filename}")
-        word_counts = [len(chunk.split()) for chunk in chunks]
+        word_counts = [len(chunk.get("text", "").split()) for chunk in chunks]
 
         print(f"  ➤ Avg words: {sum(word_counts) / len(word_counts):.2f}")
         print(f"  ➤ Max words: {max(word_counts)}")
         print(f"  ➤ Min words: {min(word_counts)}")
 
-    # Write merged chunks and metadata to files
+    # Write merged chunks to file
     with open(MERGED_CHUNKS_FILE, "w", encoding="utf-8") as f:
         json.dump(merged_grouped_chunks, f, ensure_ascii=False, indent=2)
 
-    with open(MERGED_METADATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(merged_grouped_metadata, f, ensure_ascii=False, indent=2)
-
     print(f"✅ Merged chunks written to {MERGED_CHUNKS_FILE}")
-    print(f"✅ Merged metadata written to {MERGED_METADATA_FILE}")
 
-    return MERGED_CHUNKS_FILE, MERGED_METADATA_FILE
+    return MERGED_CHUNKS_FILE
 
 
 def build_full_docs(merged_chunks_file=MERGED_CHUNKS_FILE):
@@ -395,7 +403,7 @@ def build_full_docs(merged_chunks_file=MERGED_CHUNKS_FILE):
     doc_filenames = []
 
     for filename, chunks in merged_grouped_chunks.items():
-        full_text = " ".join(chunks)
+        full_text = " ".join(chunk.get("text", "") for chunk in chunks)
         full_docs.append(full_text)
         doc_filenames.append(filename)
 

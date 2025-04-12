@@ -1,13 +1,13 @@
 def extract_all_chunks_metadata(chunks_list):
     results = []
 
-    for chunk in chunks_list:
+    for chunk_idx, chunk in enumerate(chunks_list):
         metadata = {}
 
-        # Headings
+        # Extract headings if available
         metadata["headings"] = getattr(chunk.meta, "headings", None)
 
-        # Filename
+        # Extract filename from origin
         try:
             filename = chunk.meta.origin.filename
             if isinstance(filename, str):
@@ -21,7 +21,10 @@ def extract_all_chunks_metadata(chunks_list):
         except (AttributeError, TypeError, KeyError):
             metadata["filename"] = None
 
-        # Page numbers
+        # Extract MIME type
+        metadata["mimetype"] = getattr(chunk.meta.origin, "mimetype", None)
+
+        # Extract page numbers from provenance
         page_numbers = []
         try:
             for item in chunk.meta.doc_items:
@@ -32,7 +35,7 @@ def extract_all_chunks_metadata(chunks_list):
         except Exception:
             metadata["pages"] = None
 
-        # Bounding boxes and char spans
+        # Extract bounding boxes and char spans from provenance
         bboxes = []
         charspans = []
         try:
@@ -58,10 +61,16 @@ def extract_all_chunks_metadata(chunks_list):
             metadata["bounding_boxes"] = None
             metadata["charspans"] = None
 
+        # Initialize empty summaries
+        metadata["document_summary"] = ""
+        metadata["chunk_summary"] = ""
+
+        # Create unified chunk with the new structure (idx, text, metadata)
         results.append(
             {
-                "chunk": chunk.text,
-                "metadata": metadata,  # id will be added later in write_chunks_json
+                "idx": chunk_idx,
+                "text": chunk.text,
+                "metadata": metadata,
             }
         )
 
