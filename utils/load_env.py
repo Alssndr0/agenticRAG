@@ -18,36 +18,21 @@ def load_env_vars():
         "INPUT_FOLDER": os.getenv("INPUT_FOLDER", "data/test"),
         "OUTPUT_FOLDER": os.getenv("OUTPUT_FOLDER", "data/chunked"),
         "CHUNK_SIZE": os.getenv("CHUNK_SIZE", "400"),
+        "MIN_WORDS": os.getenv("MIN_WORDS", "200"),
         "EMBED_MODEL_ID": os.getenv(
             "EMBED_MODEL_ID", "Alibaba-NLP/gte-Qwen2-7B-instruct"
         ),
-        # Extraction related files
+        # Extraction output file (unified format with merging)
+        "EXTRACTED_CHUNKS_FILE": os.getenv(
+            "EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"
+        ),
+        # Legacy extraction files (maintained for backward compatibility)
         "CHUNKS_FILE": os.getenv("CHUNKS_FILE", "data/chunked/chunks.json"),
         "METADATA_FILE": os.getenv("METADATA_FILE", "data/chunked/metadata.json"),
-        # Enhancement intermediate files
-        "GROUPED_CHUNKS_FILE": os.getenv(
-            "GROUPED_CHUNKS_FILE", "data/enhanced/grouped_chunks.json"
-        ),
-        "GROUPED_METADATA_FILE": os.getenv(
-            "GROUPED_METADATA_FILE", "data/enhanced/grouped_metadata.json"
-        ),
-        "MERGED_CHUNKS_FILE": os.getenv(
-            "MERGED_CHUNKS_FILE", "data/enhanced/merged_chunks.json"
-        ),
-        "MERGED_METADATA_FILE": os.getenv(
-            "MERGED_METADATA_FILE", "data/enhanced/merged_metadata.json"
-        ),
-        "FULL_DOCS_FILE": os.getenv("FULL_DOCS_FILE", "data/enhanced/full_docs.json"),
-        "DOC_FILENAMES_FILE": os.getenv(
-            "DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json"
-        ),
+        # Embeddings output file
+        "EMBEDDINGS_FILE": os.getenv("EMBEDDINGS_FILE", "data/chunked/embeddings.npz"),
         # Summarization related variables
-        "SUMMARISE_OUTPUT_FOLDER": os.getenv(
-            "SUMMARISE_OUTPUT_FOLDER", "data/enhanced"
-        ),
-        "SUMMARISE_OUTPUT_FILE": os.getenv(
-            "SUMMARISE_OUTPUT_FILE", "data/enhanced/document_summaries.json"
-        ),
+        "SUMMARISE_MODEL": os.getenv("SUMMARISE_MODEL", "gpt-4o"),
         "SUMMARISE_DOCUMENT_PROMPT": os.getenv(
             "SUMMARISE_DOCUMENT_PROMPT",
             "Give a short succinct description of the overall document for the purposes of improving search retrieval.",
@@ -55,23 +40,12 @@ def load_env_vars():
         "SUMMARISE_DOCUMENT_INPUT_WORDS": int(
             os.getenv("SUMMARISE_DOCUMENT_INPUT_WORDS", "5000")
         ),
-        "SUMMARISE_MODEL": os.getenv("SUMMARISE_MODEL", "gpt-4o"),
         "SUMMARISE_CHUNK_PROMPT": os.getenv(
             "SUMMARISE_CHUNK_PROMPT",
             "Provide only a very short, succinct context summary for the target text to improve its searchability. Start with This chunk details...",
         ),
-        "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv(
-            "SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_context_summaries.json"
-        ),
         "SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS": os.getenv(
             "SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS", "1000"
-        ),
-        # Final enhanced output files
-        "ENHANCED_CHUNKS_FILE": os.getenv(
-            "ENHANCED_CHUNKS_FILE", "data/enhanced/final_chunks.json"
-        ),
-        "ENHANCED_METADATA_FILE": os.getenv(
-            "ENHANCED_METADATA_FILE", "data/enhanced/final_metadata.json"
         ),
     }
 

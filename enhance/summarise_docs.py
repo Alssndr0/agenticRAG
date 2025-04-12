@@ -7,12 +7,17 @@ from utils.load_env import get_env_vars
 
 # Get environment variables
 ENV = get_env_vars()
-SUMMARISE_OUTPUT_FILE = ENV["SUMMARISE_OUTPUT_FILE"]
-SUMMARISE_MODEL = ENV["SUMMARISE_MODEL"]
-SUMMARISE_DOCUMENT_INPUT_WORDS = ENV["SUMMARISE_DOCUMENT_INPUT_WORDS"]
-SUMMARISE_DOCUMENT_PROMPT = ENV["SUMMARISE_DOCUMENT_PROMPT"]
-DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhance/doc_filenames.json")
-FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhance/full_docs.json")
+SUMMARISE_OUTPUT_FILE = ENV.get(
+    "SUMMARISE_OUTPUT_FILE", "data/enhanced/doc_summaries.json"
+)
+SUMMARISE_MODEL = ENV.get("SUMMARISE_MODEL", "gpt-4o")
+SUMMARISE_DOCUMENT_INPUT_WORDS = ENV.get("SUMMARISE_DOCUMENT_INPUT_WORDS", "5000")
+SUMMARISE_DOCUMENT_PROMPT = ENV.get(
+    "SUMMARISE_DOCUMENT_PROMPT",
+    "Provide a concise summary of the document in 2-3 sentences.",
+)
+DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json")
+FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhanced/full_docs.json")
 
 
 def summarise_documents(
