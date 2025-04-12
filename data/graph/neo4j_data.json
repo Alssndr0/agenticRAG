@@ -1,0 +1,1524 @@
+{
+  "entities": [
+    {
+      "id": "engie_brasil_energia_sa",
+      "name": "Engie Brasil Energia S.A.",
+      "type": "organization",
+      "attributes": {
+        "foreign_currency_idr": "BB+",
+        "local_currency_idr": "BBB-",
+        "long_term_national_scale_rating": "AAA(bra)",
+        "total_installed_capacity": "9.3 GW",
+        "expanded_capacity": "10.7 GW",
+        "transmission_lines_operational": "2710 km",
+        "transmission_lines_under_development": "1780 km",
+        "permitted_annual_revenues": "BRL771 million",
+        "ebitda_2025": "BRL6.9 billion",
+        "ebitda_2026": "BRL7.0 billion",
+        "cffo_2025": "BRL4.1 billion",
+        "cffo_2026": "BRL4.0 billion",
+        "negative_fcf_2025": "BRL1.9 billion",
+        "positive_fcf_2026": "BRL190 million",
+        "ebitda_margin_2025": "65%",
+        "average_tariff_2025": "BRL232/MWh",
+        "average_tariff_2026": "BRL226/MWh",
+        "net_leverage_ratio_2025": "3.2x",
+        "net_leverage_ratio_2023": "2.3x",
+        "net_leverage_ratio_2024": "3.0x",
+        "dividends_received_2025": "BRL151 million",
+        "dividends_received_2024": "BRL583 million",
+        "rating": "BB+",
+        "rating_outlook": "Stable",
+        "national_rating": "AAA(bra)",
+        "national_rating_outlook": "Stable",
+        "senior_unsecured_rating": "AAA(bra)",
+        "senior_unsecured_rating_outlook": "Affirmed"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "fitch_ratings",
+      "name": "Fitch Ratings",
+      "type": "organization",
+      "attributes": {
+        "location": "Rio de Janeiro",
+        "rating_outlook": "Stable",
+        "website": [
+          "www.fitchratings.com",
+          "https://www.fitchratings.com"
+        ],
+        "description": "A global leader in credit ratings and research."
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0,
+        5,
+        7
+      ]
+    },
+    {
+      "id": "transportadora_associada_de_gas_sa",
+      "name": "Transportadora Associada de Gás S.A.",
+      "type": "organization",
+      "attributes": {
+        "dividends_received_2025": "BRL151 million",
+        "dividends_received_2024": "BRL583 million"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "id": "brazil",
+      "name": "Brazil",
+      "type": "market",
+      "attributes": {
+        "country_ceiling": "BB+"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "id": "electric_power_generation",
+      "name": "Electric Power Generation",
+      "type": "market",
+      "attributes": {
+        "segment": "electric power generation",
+        "position": "second-largest"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "id": "engie_brasil",
+      "name": "Engie Brasil",
+      "type": "organization",
+      "attributes": {
+        "uncontracted_energy_volumes_2025": "16%",
+        "uncontracted_energy_volumes_2026": "19%",
+        "gsf_2025": "0.89",
+        "gsf_2026": "0.91",
+        "regulated_market_energy_percentage": "35%",
+        "assured_energy_exposure_gsf": "31%",
+        "constrained_off_renewables": "10%",
+        "installed_capacity_percentage": "43%",
+        "parent_company": "Engie S.A.",
+        "parent_company_control_percentage": "68.71%",
+        "ebitda_percentage": "<10%",
+        "FC_IDR": [
+          "BB+/Stable",
+          "two to three notches below"
+        ],
+        "LC_IDR": [
+          "BBB-/Stable",
+          "two to three notches below"
+        ],
+        "installed_capacity": "9.3GW",
+        "financial_profile": "stronger",
+        "total_debt": "BRL24.0 billion",
+        "cash_and_marketable_securities": "BRL4.0 billion",
+        "restricted_cash": "BRL384 million",
+        "short_term_debt": "BRL2.8 billion",
+        "operational_installed_capacity": "9.3GW",
+        "under_development_capacity": "1.4GW",
+        "transmission_lines_operational": "2710 km",
+        "transmission_lines_pre_operational": "1780 km"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "fitch",
+      "name": "Fitch",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB+/Stable",
+        "role": "rating agency",
+        "focus": "credit ratings and reports"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1,
+        6
+      ]
+    },
+    {
+      "id": "brl210_mwh",
+      "name": "BRL210/MWh",
+      "type": "financial/performance metric",
+      "attributes": {
+        "description": "average prices for new contracts from 2028 onward"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "id": "brl256_mwh",
+      "name": "BRL256/MWh",
+      "type": "financial/performance metric",
+      "attributes": {
+        "description": "average prices for current contracts"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "id": "3.9gw_concessions",
+      "name": "3.9GW Concessions",
+      "type": "deals/transactions",
+      "attributes": {
+        "description": "total concessions representing 43% of installed capacity",
+        "expiration_period": "2030-2032"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "id": "standalone_credit_profile",
+      "name": "Standalone Credit Profile",
+      "type": "trend",
+      "attributes": {
+        "description": "basis for Engie Brasil's ratings"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "id": "engie_chile",
+      "name": "Engie Energia Chile S.A.",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB/Stable",
+        "installed_capacity": "2.5GW",
+        "economic_environment": "better"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "enel_colombia",
+      "name": "Enel Colombia S.A. E.S.P.",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB/Stable",
+        "installed_capacity": "4.3GW",
+        "economic_environment": "better"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "aes_andes",
+      "name": "AES Andes S.A.",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB-/Stable",
+        "installed_capacity": "6.1GW",
+        "economic_environment": "better"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "brazil_country_ceiling",
+      "name": "Brazil Country Ceiling",
+      "type": "market",
+      "attributes": {
+        "rating": "BB+"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "hydrological_conditions",
+      "name": "Hydrological Conditions",
+      "type": "trend",
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "coal_natural_gas_price_volatility",
+      "name": "Coal and Natural Gas Price Volatility",
+      "type": "trend",
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "cash_flow_generation",
+      "name": "Cash Flow Generation",
+      "type": "financial/performance metric",
+      "attributes": {
+        "predictability": "predictable",
+        "robustness": "robust"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "id": "enel_spa",
+      "name": "Enel S.p.A.",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB+/Stable",
+        "installed_capacity": "81GW"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "iberdrola_sa",
+      "name": "Iberdrola, S.A.",
+      "type": "organization",
+      "attributes": {
+        "rating": "BBB+/Stable",
+        "installed_capacity": "55GW"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "asa_branca_grauna_project",
+      "name": "Asa Branca and Grauna project",
+      "type": "project",
+      "attributes": {
+        "capex": "BRL3.8 billion",
+        "years": "2025 and 2026"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "bndes",
+      "name": "Banco Nacional de Desenvolvimento Econônico e Social",
+      "type": "organization",
+      "attributes": {
+        "debt_amount": "BRL10.8 billion"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "debentures",
+      "name": "Debentures",
+      "type": "financial_instrument",
+      "attributes": {
+        "amount": "BRL9.0 billion",
+        "raised_date": "01-10-2024",
+        "due_date": "01-01-2030"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "financial_metrics",
+      "name": "Financial Metrics",
+      "type": "financial/performance metric",
+      "attributes": {
+        "energy_sales_2025": "4.7 aGW",
+        "energy_sales_2026": "4.8 aGW",
+        "average_sales_price_2025": "BRL232/MWh",
+        "average_sales_price_2026": "BRL226/MWh",
+        "energy_purchase_2025": "0.9 aGW",
+        "energy_purchase_2026": "0.8 aGW",
+        "average_GSF_2025": "0.89",
+        "average_GSF_2026": "0.91",
+        "capex_2025_to_2027": "BRL8.3 billion"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "id": "fitch_ratings_brasil_ltda",
+      "name": "Fitch Ratings Brasil Ltda.",
+      "type": "organization",
+      "attributes": {
+        "address": "Av. Barão de Tefé, 27 - Sala 601 Saúde Rio de Janeiro, RJ 20220-460",
+        "contact_person": "Wellington Senter",
+        "contact_title": "Director",
+        "contact_phone": "+55 21 4503 2606",
+        "contact_email": "wellington.senter@fitchratings.com"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "id": "esg_relevance_scores",
+      "name": "ESG Relevance Scores",
+      "type": "financial/performance metric",
+      "attributes": {
+        "highest_score": "3",
+        "description": "ESG issues are credit-neutral or have only a minimal credit impact"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "id": "fitch_macro_forecasts",
+      "name": "Fitch's Macro and Sector Forecasts",
+      "type": "product/service",
+      "attributes": {
+        "description": "Aggregates key data points used in credit analysis"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "id": "lucas_rios",
+      "name": "Lucas Rios",
+      "type": "person",
+      "attributes": {
+        "role": "Associate Director",
+        "email": "lucas.rios@fitchratings.com",
+        "phone": "+55 11 4504 2205"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "mauro_storino",
+      "name": "Mauro Storino",
+      "type": "person",
+      "attributes": {
+        "role": "Senior Director",
+        "email": "mauro.storino@fitchratings.com",
+        "phone": "+55 21 4503 2625"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "elizabeth_fogerty",
+      "name": "Elizabeth Fogerty",
+      "type": "person",
+      "attributes": {
+        "role": "Committee Chairperson",
+        "email": "elizabeth.fogerty@thefitchgroup.com",
+        "phone": "+1 212 908 0526",
+        "location": "New York"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "maggie_guimaraes",
+      "name": "Maggie Guimaraes",
+      "type": "person",
+      "attributes": {
+        "email": "maggie.guimaraes@thefitchgroup.com",
+        "phone": "+55 11 4504 2207",
+        "location": "São Paulo"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "engie_brasil_energia",
+      "name": "Engie Brasil Energia S.A.",
+      "type": "organization",
+      "attributes": {
+        "endorsements": [
+          "EU Endorsed",
+          "UK Endorsed"
+        ]
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "corporate_hybrids_treatment",
+      "name": "Corporate Hybrids Treatment and Notching Criteria",
+      "type": "market",
+      "attributes": {
+        "publication_date": "12-11-2020"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "national_scale_rating_criteria",
+      "name": "National Scale Rating Criteria",
+      "type": "market",
+      "attributes": {
+        "publication_date": "22-12-2020"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "parent_subsidiary_linkage",
+      "name": "Parent and Subsidiary Linkage Rating Criteria",
+      "type": "market",
+      "attributes": {
+        "publication_date": "16-06-2023"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "sector_navigators_addendum",
+      "name": "Sector Navigators - Addendum to the Corporate Rating Criteria",
+      "type": "market",
+      "attributes": {
+        "publication_date": "06-12-2024"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "comfort_model",
+      "name": "Corporate Monitoring & Forecasting Model (COMFORT Model)",
+      "type": "product/service",
+      "attributes": {
+        "version": "v8.1.0"
+      },
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "id": "issuer",
+      "name": "issuer",
+      "type": "organization",
+      "attributes": {
+        "role": "entity providing information",
+        "responsibility": "accuracy of information"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "underwriter",
+      "name": "underwriter",
+      "type": "organization",
+      "attributes": {
+        "role": "entity providing information"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "independent_auditors",
+      "name": "independent auditors",
+      "type": "organization",
+      "attributes": {
+        "role": "financial statement verification"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "attorneys",
+      "name": "attorneys",
+      "type": "organization",
+      "attributes": {
+        "role": "legal and tax matters verification"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "third_party_verification",
+      "name": "third-party verification",
+      "type": "concept",
+      "attributes": {
+        "description": "verification from independent sources"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "factual_information",
+      "name": "factual information",
+      "type": "concept",
+      "attributes": {
+        "description": "information relied upon by Fitch"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "rated_security",
+      "name": "rated security",
+      "type": "concept",
+      "attributes": {
+        "description": "security being rated by Fitch"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "market",
+      "name": "market",
+      "type": "market",
+      "attributes": {
+        "description": "financial market where securities are offered"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "id": "credit_rating",
+      "name": "credit rating",
+      "type": "market",
+      "attributes": {
+        "rating_scale": "AAA to D",
+        "definition": "An opinion as to the creditworthiness of a security."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "id": "best_case_scenario",
+      "name": "best-case scenario",
+      "type": "trend",
+      "attributes": {
+        "description": "Best-case rating upgrade scenarios.",
+        "average_upgrade_notches": 4
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "id": "worst_case_scenario",
+      "name": "worst-case scenario",
+      "type": "trend",
+      "attributes": {
+        "description": "Worst-case rating downgrade scenarios.",
+        "average_downgrade_notches": 8
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "id": "rating_performance_page",
+      "name": "Rating Performance page",
+      "type": "product/service",
+      "attributes": {
+        "description": "Page on Fitch's website detailing best- and worst-case measures."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "id": "fees_structure",
+      "name": "fees structure",
+      "type": "financial/performance metric",
+      "attributes": {
+        "fee_range": "US$1,000 to US$750,000",
+        "currency": "USD"
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "id": "fitch_ratings_inc",
+      "name": "Fitch Ratings, Inc.",
+      "type": "organization",
+      "attributes": {
+        "registered_with": "U.S. Securities and Exchange Commission",
+        "type_of_organization": "Nationally Recognized Statistical Rating Organization",
+        "address": "33 Whitehall Street, NY, NY 10004",
+        "telephone": "1-800-753-4824, (212) 908-0500"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "fitch_australia_pty_ltd",
+      "name": "Fitch Australia Pty Ltd",
+      "type": "organization",
+      "attributes": {
+        "license": "Australian financial services license",
+        "license_number": "337123",
+        "client_type": "wholesale clients only"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "dv01",
+      "name": "dv01",
+      "type": "organization",
+      "attributes": {
+        "affiliation": "Fitch Solutions",
+        "role": "loan data agent"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "financial_services_and_markets_act_2000",
+      "name": "Financial Services and Markets Act of 2000",
+      "type": "market",
+      "attributes": {
+        "jurisdiction": "United Kingdom"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "corporations_act_2001",
+      "name": "Corporations Act 2001",
+      "type": "market",
+      "attributes": {
+        "jurisdiction": "Australia"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "nrsro",
+      "name": "Nationally Recognized Statistical Rating Organization",
+      "type": "market",
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "eu_cra_regulation",
+      "name": "EU CRA Regulation",
+      "type": "market",
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "uk_credit_rating_agencies_regulations_2019",
+      "name": "UK Credit Rating Agencies (Amendment etc.) (EU Exit) Regulations 2019",
+      "type": "market",
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "id": "credit_ratings_information",
+      "name": "Credit Ratings Information",
+      "type": "product/service",
+      "attributes": {
+        "intended_audience": "wholesale clients",
+        "availability": "not intended for retail clients"
+      },
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "source_id": "engie_brasil_energia_sa",
+      "target_id": "brazil",
+      "type": "LOCATED_IN",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "source_id": "engie_brasil_energia_sa",
+      "target_id": "electric_power_generation",
+      "type": "OPERATES_IN",
+      "strength": 1,
+      "attributes": {
+        "market_position": "second-largest"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "engie_brasil_energia_sa",
+      "type": "AFFIRMS_RATING",
+      "strength": 1,
+      "attributes": {
+        "foreign_currency_idr": "BB+",
+        "local_currency_idr": "BBB-"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "source_id": "engie_brasil_energia_sa",
+      "target_id": "transportadora_associada_de_gas_sa",
+      "type": "RECEIVES_DIVIDENDS_FROM",
+      "strength": 1,
+      "attributes": {
+        "dividends_received_2025": "BRL151 million",
+        "dividends_received_2024": "BRL583 million"
+      },
+      "chunk_idx": 0,
+      "chunk_indices": [
+        0
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "fitch",
+      "type": "RATED_BY",
+      "strength": 0.8,
+      "attributes": {
+        "rating": "BBB+/Stable"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "brl210_mwh",
+      "type": "PRICE_ESTIMATE_FOR_NEW_CONTRACTS",
+      "strength": 0.7,
+      "attributes": {
+        "year": "2028"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "brl256_mwh",
+      "type": "PRICE_ESTIMATE_FOR_CURRENT_CONTRACTS",
+      "strength": 0.7,
+      "attributes": {
+        "year": "current"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "3.9gw_concessions",
+      "type": "HAS_CONCESSIONS",
+      "strength": 0.9,
+      "attributes": {
+        "percentage_of_capacity": "43%"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "standalone_credit_profile",
+      "type": "BASED_ON",
+      "strength": 0.85,
+      "attributes": {
+        "description": "basis for ratings"
+      },
+      "chunk_idx": 1,
+      "chunk_indices": [
+        1
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "brazil_country_ceiling",
+      "type": "CAPPED_BY",
+      "strength": 8,
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "engie_chile",
+      "type": "COMPARABLE_WITH",
+      "strength": 7,
+      "attributes": {
+        "comparison_basis": "installed capacity"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "enel_colombia",
+      "type": "COMPARABLE_WITH",
+      "strength": 7,
+      "attributes": {
+        "comparison_basis": "installed capacity"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "aes_andes",
+      "type": "COMPARABLE_WITH",
+      "strength": 7,
+      "attributes": {
+        "comparison_basis": "installed capacity"
+      },
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_chile",
+      "target_id": "coal_natural_gas_price_volatility",
+      "type": "EXPOSED_TO",
+      "strength": 6,
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "aes_andes",
+      "target_id": "coal_natural_gas_price_volatility",
+      "type": "EXPOSED_TO",
+      "strength": 6,
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "hydrological_conditions",
+      "type": "EXPOSED_TO",
+      "strength": 6,
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "enel_colombia",
+      "target_id": "hydrological_conditions",
+      "type": "EXPOSED_TO",
+      "strength": 6,
+      "attributes": {},
+      "chunk_idx": 2,
+      "chunk_indices": [
+        2
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "enel_spa",
+      "type": "COMPETES_WITH",
+      "strength": 0.8,
+      "attributes": {
+        "comparison": "two to three notches below"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "iberdrola_sa",
+      "type": "COMPETES_WITH",
+      "strength": 0.8,
+      "attributes": {
+        "comparison": "two to three notches below"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "financial_metrics",
+      "type": "HAS_METRICS",
+      "strength": 1.0,
+      "attributes": {},
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "asa_branca_grauna_project",
+      "type": "INVESTS_IN",
+      "strength": 0.9,
+      "attributes": {
+        "capex": "BRL3.8 billion"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "bndes",
+      "type": "OWES",
+      "strength": 0.7,
+      "attributes": {
+        "debt_amount": "BRL10.8 billion"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil",
+      "target_id": "debentures",
+      "type": "RAISES",
+      "strength": 0.6,
+      "attributes": {
+        "amount": "BRL9.0 billion"
+      },
+      "chunk_idx": 3,
+      "chunk_indices": [
+        3
+      ]
+    },
+    {
+      "source_id": "engie_brasil_energia_sa",
+      "target_id": "fitch_macro_forecasts",
+      "type": "RECEIVES_DATA_FROM",
+      "strength": 0.8,
+      "attributes": {
+        "data_type": "credit analysis"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_brasil_ltda",
+      "target_id": "engie_brasil_energia_sa",
+      "type": "RATES",
+      "strength": 0.9,
+      "attributes": {
+        "rating": "BB+"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_brasil_ltda",
+      "target_id": "esg_relevance_scores",
+      "type": "PROVIDES",
+      "strength": 0.7,
+      "attributes": {
+        "context": "credit decision"
+      },
+      "chunk_idx": 4,
+      "chunk_indices": [
+        4
+      ]
+    },
+    {
+      "source_id": "lucas_rios",
+      "target_id": "fitch_ratings",
+      "type": "WORKS_FOR",
+      "strength": 0.9,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "mauro_storino",
+      "target_id": "fitch_ratings",
+      "type": "WORKS_FOR",
+      "strength": 0.9,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "elizabeth_fogerty",
+      "target_id": "fitch_ratings",
+      "type": "WORKS_FOR",
+      "strength": 0.9,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "maggie_guimaraes",
+      "target_id": "fitch_ratings",
+      "type": "WORKS_FOR",
+      "strength": 0.9,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "engie_brasil_energia",
+      "target_id": "fitch_ratings",
+      "type": "RATED_BY",
+      "strength": 0.8,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "corporate_hybrids_treatment",
+      "target_id": "fitch_ratings",
+      "type": "PUBLISHED_BY",
+      "strength": 0.7,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "national_scale_rating_criteria",
+      "target_id": "fitch_ratings",
+      "type": "PUBLISHED_BY",
+      "strength": 0.7,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "parent_subsidiary_linkage",
+      "target_id": "fitch_ratings",
+      "type": "PUBLISHED_BY",
+      "strength": 0.7,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "sector_navigators_addendum",
+      "target_id": "fitch_ratings",
+      "type": "PUBLISHED_BY",
+      "strength": 0.7,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "comfort_model",
+      "target_id": "fitch_ratings",
+      "type": "PUBLISHED_BY",
+      "strength": 0.7,
+      "attributes": {},
+      "chunk_idx": 5,
+      "chunk_indices": [
+        5
+      ]
+    },
+    {
+      "source_id": "fitch",
+      "target_id": "issuer",
+      "type": "RELIES_ON",
+      "strength": 0.9,
+      "attributes": {
+        "description": "Fitch relies on information from issuers"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "fitch",
+      "target_id": "underwriter",
+      "type": "RELIES_ON",
+      "strength": 0.8,
+      "attributes": {
+        "description": "Fitch relies on information from underwriters"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "issuer",
+      "target_id": "factual_information",
+      "type": "PROVIDES",
+      "strength": 0.95,
+      "attributes": {
+        "description": "Issuer provides factual information to Fitch"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "fitch",
+      "target_id": "independent_auditors",
+      "type": "RELIES_ON",
+      "strength": 0.85,
+      "attributes": {
+        "description": "Fitch relies on independent auditors for verification"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "fitch",
+      "target_id": "attorneys",
+      "type": "RELIES_ON",
+      "strength": 0.85,
+      "attributes": {
+        "description": "Fitch relies on attorneys for legal matters"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "fitch",
+      "target_id": "third_party_verification",
+      "type": "REQUIRES",
+      "strength": 0.7,
+      "attributes": {
+        "description": "Fitch requires third-party verification for ratings"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "rated_security",
+      "target_id": "market",
+      "type": "OFFERED_IN",
+      "strength": 0.75,
+      "attributes": {
+        "description": "Rated security is offered in the market"
+      },
+      "chunk_idx": 6,
+      "chunk_indices": [
+        6
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "credit_rating",
+      "type": "PROVIDES",
+      "strength": 0.9,
+      "attributes": {
+        "description": "Fitch Ratings provides credit ratings."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "best_case_scenario",
+      "type": "INFORMS",
+      "strength": 0.8,
+      "attributes": {
+        "description": "Fitch Ratings informs about best-case rating upgrade scenarios."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "worst_case_scenario",
+      "type": "INFORMS",
+      "strength": 0.8,
+      "attributes": {
+        "description": "Fitch Ratings informs about worst-case rating downgrade scenarios."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "rating_performance_page",
+      "type": "REFERENCES",
+      "strength": 0.7,
+      "attributes": {
+        "description": "Fitch Ratings references the Rating Performance page for detailed measures."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "source_id": "fitch_ratings",
+      "target_id": "fees_structure",
+      "type": "CHARGES",
+      "strength": 0.85,
+      "attributes": {
+        "description": "Fitch Ratings charges fees for rating securities."
+      },
+      "chunk_idx": 7,
+      "chunk_indices": [
+        7
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_inc",
+      "target_id": "nrsro",
+      "type": "IS_A",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "fitch_australia_pty_ltd",
+      "target_id": "credit_ratings_information",
+      "type": "PROVIDES",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_inc",
+      "target_id": "financial_services_and_markets_act_2000",
+      "type": "COMPLIES_WITH",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_inc",
+      "target_id": "corporations_act_2001",
+      "type": "COMPLIES_WITH",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_inc",
+      "target_id": "eu_cra_regulation",
+      "type": "ENDORSES",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "fitch_ratings_inc",
+      "target_id": "uk_credit_rating_agencies_regulations_2019",
+      "type": "ENDORSES",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    },
+    {
+      "source_id": "dv01",
+      "target_id": "fitch_ratings_inc",
+      "type": "AFFILIATED_WITH",
+      "strength": 1,
+      "attributes": {},
+      "chunk_idx": 8,
+      "chunk_indices": [
+        8
+      ]
+    }
+  ],
+  "context": {
+    "domain": "energy",
+    "themes": [
+      "parent-subsidiary linkage",
+      "financial performance",
+      "market forecasts",
+      "pricing risk",
+      "information verification",
+      "market competition",
+      "credit analysis",
+      "regulatory compliance",
+      "risk assessment",
+      "market position",
+      "Corporate Governance",
+      "ESG factors",
+      "hydrological risk",
+      "investment strategy",
+      "Financial Profiles of Energy Companies",
+      "Latin American Power Generation",
+      "financial metrics",
+      "Credit Ratings",
+      "investment projects",
+      "financial services licensing",
+      "Economic Environment Comparison",
+      "credit ratings",
+      "market dynamics",
+      "curtailment risk",
+      "Financial Criteria"
+    ]
+  }
+}
