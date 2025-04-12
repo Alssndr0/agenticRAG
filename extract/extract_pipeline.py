@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -25,8 +26,62 @@ EXTRACTED_CHUNKS_FILE = env_vars["EXTRACTED_CHUNKS_FILE"]
 MIN_WORDS = int(env_vars.get("MIN_WORDS", "200"))  # Minimum words per chunk
 
 
+def parse_args():
+    """Parse command line arguments for the extraction pipeline."""
+    parser = argparse.ArgumentParser(
+        description="Extract, chunk, and process documents for RAG",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument(
+        "--input-folder",
+        type=str,
+        default=str(INPUT_FOLDER),
+        help="Directory containing input documents to process",
+    )
+
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=str(EXTRACTED_CHUNKS_FILE),
+        help="Path to the JSON file where extracted chunks will be saved",
+    )
+
+    parser.add_argument(
+        "--clear-output",
+        action="store_true",
+        help="Clear the output file before processing",
+    )
+
+    parser.add_argument(
+        "--min-words",
+        type=int,
+        default=MIN_WORDS,
+        help="Minimum number of words per chunk",
+    )
+
+    parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=MAX_TOKENS,
+        help="Maximum number of tokens per chunk",
+    )
+
+    parser.add_argument(
+        "--specific-file",
+        type=str,
+        default=None,
+        help="Process only this specific file (full path)",
+    )
+
+    return parser.parse_args()
+
+
 def process_single_document(
-    input_doc_path, extracted_chunks_file=EXTRACTED_CHUNKS_FILE
+    input_doc_path,
+    extracted_chunks_file=EXTRACTED_CHUNKS_FILE,
+    min_words=MIN_WORDS,
+    max_tokens=MAX_TOKENS,
 ):
     """
     Process a single document through the entire pipeline:
@@ -37,6 +92,8 @@ def process_single_document(
     Args:
         input_doc_path: Path to the input document
         extracted_chunks_file: Path to the output JSON file
+        min_words: Minimum words per chunk
+        max_tokens: Maximum tokens per chunk
 
     Returns:
         bool: True if processing was successful
@@ -46,7 +103,7 @@ def process_single_document(
     # Initialize chunker with tokenizer
     tokenizer = AutoTokenizer.from_pretrained(EMBED_MODEL_ID)
     chunker = HybridChunker(
-        tokenizer=tokenizer, max_tokens=MAX_TOKENS, merge_peers=True
+        tokenizer=tokenizer, max_tokens=max_tokens, merge_peers=True
     )
 
     try:
@@ -85,7 +142,7 @@ def process_single_document(
 
         # Now perform the merge on the grouped structure
         merged_grouped_chunks = {}
-        min_words = MIN_WORDS
+        min_words = min_words
 
         for filename, chunks_with_metadata in grouped_chunks.items():
             merged = True
@@ -172,7 +229,7 @@ def process_single_document(
             merged_chunks.extend(chunks)
 
         print(
-            f"  ✓ Merged into {len(merged_chunks)} chunks with minimum {MIN_WORDS} words"
+            f"  ✓ Merged into {len(merged_chunks)} chunks with minimum {min_words} words"
         )
 
         # Print statistics
@@ -194,28 +251,75 @@ def process_single_document(
 
 def main():
     """Run the extraction pipeline for all files in the input folder."""
-    print("\n🚀 Starting document extraction pipeline")
-    print(f"  ➤ Input folder: {INPUT_FOLDER}")
-    print(f"  ➤ Output file: {EXTRACTED_CHUNKS_FILE}")
-    print(f"  ➤ Min words per chunk: {MIN_WORDS}")
+    args = parse_args()
 
-    # Create output directory if it doesn't exist
-    os.makedirs(os.path.dirname(EXTRACTED_CHUNKS_FILE), exist_ok=True)
+    # Update parameters based on command line arguments
+    input_folder = Path(args.input_folder)
+    extracted_chunks_file = args.output_file
+    min_words = args.min_words
+    max_tokens = args.max_tokens
 
-    # Process each PDF document one at a time
-    successful_files = 0
-    failed_files = 0
+    print("\n" + "=" * 80)
+    print("📚 DOCUMENT EXTRACTION PIPELINE")
+    print("=" * 80 + "\n")
 
-    for input_doc_path in sorted(INPUT_FOLDER.glob("*.pdf")):
-        if process_single_document(input_doc_path, EXTRACTED_CHUNKS_FILE):
-            successful_files += 1
+    print(f"  ➤ Input folder: {input_folder}")
+    print(f"  ➤ Output file: {extracted_chunks_file}")
+    print(f"  ➤ Min words per chunk: {min_words}")
+    print(f"  ➤ Max tokens per chunk: {max_tokens}")
+
+    # Create the output directory if it doesn't exist
+    os.makedirs(os.path.dirname(extracted_chunks_file), exist_ok=True)
+
+    # Clear the output file if specified
+    if args.clear_output and os.path.exists(extracted_chunks_file):
+        print(f"  ➤ Clearing output file: {extracted_chunks_file}")
+        with open(extracted_chunks_file, "w") as f:
+            f.write("[]")
+
+    # Process a specific file if requested
+    if args.specific_file:
+        specific_file = Path(args.specific_file)
+        if specific_file.exists():
+            success = process_single_document(
+                specific_file,
+                extracted_chunks_file,
+                min_words=min_words,
+                max_tokens=max_tokens,
+            )
+            if success:
+                print("\n✅ Successfully processed the specified file.")
+            else:
+                print("\n❌ Failed to process the specified file.")
+            return
         else:
-            failed_files += 1
+            print(f"❌ Specified file not found: {specific_file}")
+            return
 
-    print("\n✅ Extraction pipeline complete!")
-    print(f"  ➤ Successfully processed: {successful_files} files")
-    if failed_files > 0:
-        print(f"  ➤ Failed to process: {failed_files} files")
+    # Check if the input folder exists
+    if not input_folder.exists():
+        print(f"❌ Input folder does not exist: {input_folder}")
+        return
+
+    # Process all PDF files in the input folder
+    pdf_files = list(input_folder.glob("**/*.pdf"))
+    print(f"  ➤ Found {len(pdf_files)} PDF files to process")
+
+    successful = 0
+    failed = 0
+
+    for pdf_file in pdf_files:
+        success = process_single_document(
+            pdf_file, extracted_chunks_file, min_words=min_words, max_tokens=max_tokens
+        )
+        if success:
+            successful += 1
+        else:
+            failed += 1
+
+    print("\n" + "=" * 80)
+    print(f"✅ Extraction completed: {successful} succeeded, {failed} failed")
+    print("=" * 80 + "\n")
 
 
 if __name__ == "__main__":
