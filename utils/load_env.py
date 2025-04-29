@@ -24,6 +24,11 @@ def load_env_vars():
         # Embeddings
         "EMBED_MODEL_ID": os.getenv("EMBED_MODEL_ID", "Alibaba-NLP/gte-Qwen2-7B-instruct"),
 
+        # Indexes Paths
+        "FAISS_INDEX_PATH": os.getenv("FAISS_INDEX_PATH", "indexes/FAISS-TEST/enhanced_chunks_20250412_193515"),
+        "BM25_INDEX_PATH": os.getenv("BM25_INDEX_PATH", "indexes/bm25/bm25_index_20250412_193515.pkl"),
+        "GRAPH_INDEX_PATH": os.getenv("GRAPH_INDEX_PATH", "data/indexes/graph_index"),
+
         # Extraction output files
         "EXTRACTED_CHUNKS_FILE": os.getenv("EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"),
         "EMBEDDINGS_FILE": os.getenv("EMBEDDINGS_FILE", "data/chunked/embeddings.npz"),
@@ -52,8 +57,13 @@ def load_env_vars():
         ),
         "SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS": os.getenv("SUMMARISE_CHUNK_MODEL_MAX_INPUT_TOKENS", "1000"),
         "SUMMARISE_OUTPUT_FILE": os.getenv("SUMMARISE_OUTPUT_FILE", "data/enhanced/doc_summaries.json"),
-        "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv("SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_summaries.json"
-),
+        "SUMMARISE_CHUNK_OUTPUT_FILE": os.getenv("SUMMARISE_CHUNK_OUTPUT_FILE", "data/enhanced/chunk_summaries.json"),
+                                                 
+        #Neo4j
+        "NEO4J_URI": os.getenv("NEO4J_URI", "bolt://localhost:7687"),
+        "NEO4J_USERNAME": os.getenv("NEO4J_USERNAME", "neo4j"),
+        "NEO4J_PASSWORD": os.getenv("NEO4J_PASSWORD", "password"),
+        "NEO4J_FULLTEXT_INDEX_NAME": os.getenv("NEO4J_FULLTEXT_INDEX_NAME", "entityNames"),
     }
 
 # Singleton-like pattern - load once when module is imported

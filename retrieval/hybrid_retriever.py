@@ -1,180 +1,281 @@
+import os
 import pickle
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import faiss
 import numpy as np
+from neo4j import GraphDatabase
+from utils.load_env import get_env_vars
 
 
 class HybridRetriever:
     """
-    A hybrid retrieval system combining FAISS (vector) and BM25 (keyword) search capabilities.
-
-    This retriever allows for flexible document retrieval using both semantic similarity
-    and keyword matching approaches, with configurable weighting between the two methods.
+    A context-manager-friendly hybrid retriever combining:
+      - FAISS (vector) search
+      - BM25 (keyword) search
+      - Neo4j graph search (full-text + relationships)
+    Configuration (paths, credentials, index names) comes entirely from .env via get_env_vars().
     """
 
     def __init__(
         self,
-        faiss_index_path: str,
-        bm25_index_path: str,
-        model_embeddings: Any = None,
+        model_embeddings: Any,
+        faiss_index_path: Optional[str] = None,
+        bm25_index_path: Optional[str] = None,
     ):
-        """
-        Initialize the hybrid retriever with both FAISS and BM25 indexes.
+        # Load config
+        env = get_env_vars()
+        faiss_index_path = faiss_index_path or env["FAISS_INDEX_PATH"]
+        bm25_index_path = bm25_index_path or env["BM25_INDEX_PATH"]
 
-        Args:
-            faiss_index_path: Path to the FAISS index file (without extension)
-            bm25_index_path: Path to the BM25 index file
-            model_embeddings: Model used for embedding queries
-        """
+        # Embedding model
         if model_embeddings is None:
-            raise ValueError("You must provide a model for embedding.")
+            raise ValueError("An embeddings model must be provided")
         self.model = model_embeddings
 
-        # Load FAISS
+        # --- FAISS initialization ---
         try:
             self.index = faiss.read_index(f"{faiss_index_path}.index")
             with open(f"{faiss_index_path}_meta.pkl", "rb") as f:
                 data = pickle.load(f)
-                self.texts = data["texts"]
-                self.metadata = data["metadata"]
-                self.id_map = {i: self.metadata[i] for i in range(len(self.metadata))}
-            print(
-                f"FAISS index loaded from {faiss_index_path} with {len(self.texts)} documents"
-            )
+            self.faiss_texts    = data["texts"]
+            self.faiss_metadata = data["metadata"]
+            self.id_map         = {i: self.faiss_metadata[i] for i in range(len(self.faiss_metadata))}
+            print(f"✅ Loaded FAISS index from {faiss_index_path} ({len(self.faiss_texts)} docs)")
         except Exception as e:
-            print(f"Error loading FAISS index: {e}")
-            raise
+            raise RuntimeError(f"Failed to load FAISS index at {faiss_index_path}: {e}")
 
-        # Load BM25
+        # --- BM25 initialization ---
         try:
             with open(bm25_index_path, "rb") as f:
                 data = pickle.load(f)
-                self.bm25 = data["bm25"]
-                self.bm25_texts = data["texts"]
-                self.bm25_metadata = data["metadata"]
-            print(
-                f"BM25 index loaded from {bm25_index_path} with {len(self.bm25_texts)} documents"
-            )
+            self.bm25          = data["bm25"]
+            self.bm25_texts    = data["texts"]
+            self.bm25_metadata = data["metadata"]
+            print(f"✅ Loaded BM25 index from {bm25_index_path} ({len(self.bm25_texts)} docs)")
         except Exception as e:
-            print(f"Error loading BM25 index: {e}")
-            raise
+            raise RuntimeError(f"Failed to load BM25 index at {bm25_index_path}: {e}")
 
-        # Validate index alignment if possible
-        if len(self.texts) != len(self.bm25_texts):
+        if len(self.faiss_texts) != len(self.bm25_texts):
             print(
-                f"Warning: FAISS and BM25 indexes have different document counts: {len(self.texts)} vs {len(self.bm25_texts)}"
+                f"⚠️  FAISS/BM25 size mismatch: {len(self.faiss_texts)} vs. {len(self.bm25_texts)}"
             )
 
-    def _filter_by_metadata(
-        self, metadata_list: List[Dict[str, Any]], filter_dict: Optional[Dict[str, Any]]
-    ) -> List[int]:
+        # --- Neo4j initialization ---
+        uri   = env.get("NEO4J_URI")
+        user  = env.get("NEO4J_USERNAME")
+        pwd   = env.get("NEO4J_PASSWORD")
+        self.fulltext_index = env.get("NEO4J_FULLTEXT_INDEX_NAME", "entityNames")
+        self.neo4j_driver   = None
+        if uri and user and pwd:
+            try:
+                self.neo4j_driver = GraphDatabase.driver(uri, auth=(user, pwd))
+                print(f"✅ Connected to Neo4j at {uri}")
+            except Exception as e:
+                print(f"⚠️  Neo4j connection failed: {e}")
+                self.neo4j_driver = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if self.neo4j_driver:
+            self.neo4j_driver.close()
+
+    # ─── Budget allocation ──────────────────────────────────────────────────────
+
+    @staticmethod
+    def _allocate_budget(k: int, alpha: float, graph_ratio: float, include_graph: bool) -> Tuple[int,int,int]:
         """
-        Filter documents by their metadata attributes.
-
-        Args:
-            metadata_list: List of metadata dictionaries to filter
-            filter_dict: Dictionary of key-value pairs to match
-
-        Returns:
-            List of indices of documents that match the filter criteria
+        Decide how many results to pull from graph, FAISS, and BM25.
+        Returns (k_graph, k_faiss, k_bm25).
         """
-        if not filter_dict:
-            return list(range(len(metadata_list)))
+        k_graph     = int(k * graph_ratio) if include_graph else 0
+        remaining   = max(0, k - k_graph)
+        k_faiss     = int(round(alpha * remaining)) if alpha > 0 else 0
+        k_bm25      = remaining - k_faiss
+        return k_graph, k_faiss, k_bm25
 
-        filtered_ids = []
-        for i, meta in enumerate(metadata_list):
-            match = all(
-                meta.get(k) in v if isinstance(v, list) else meta.get(k) == v
-                for k, v in filter_dict.items()
-                if k in meta
-            )
-            if match:
-                filtered_ids.append(i)
+    # ─── Result merging ─────────────────────────────────────────────────────────
 
-        return filtered_ids
-
-    def faiss_search(
-        self, query: str, metadata_filter: Optional[Dict[str, Any]] = None, k: int = 5
+    @staticmethod
+    def _merge_and_dedupe(
+        results: List[List[Dict[str, Any]]],
+        primary_key: str,
+        limit: int
     ) -> List[Dict[str, Any]]:
         """
-        Perform semantic search using FAISS.
+        Flatten multiple lists of result dicts, deduplicate them by a hashable ID,
+        sort by descending 'score', and return up to 'limit' items.
 
         Args:
-            query: Search query
-            metadata_filter: Optional dictionary for filtering results by metadata
-            k: Number of results to return
+            results: A list of result lists (e.g. [faiss_results, bm25_results])
+            primary_key: The key whose value identifies each result uniquely
+                         (e.g. "metadata" for chunks or "entity" for graph nodes)
+            limit: Maximum number of items to return
 
         Returns:
-            List of result dictionaries with chunk, metadata, score, and retrieval method
+            A list of deduplicated result dicts, sorted by score descending.
         """
-        instruction = (
-            "Given a search query, retrieve relevant passages that answer the query"
-        )
-        query_embedding = self.model.encode(
-            [[instruction, query]], normalize_embeddings=True
-        )
-        query_embedding = np.array(query_embedding).astype("float32")
+        merged: List[Dict[str, Any]] = []
+        seen: set = set()
 
-        distances, indices = self.index.search(query_embedding, k * 5)  # over-fetch
+        for result_list in results:
+            for item in result_list:
+                val = item.get(primary_key)
+                # If the value is itself a dict, extract its 'id' field
+                if isinstance(val, dict):
+                    key = val.get("id")
+                else:
+                    key = val
+
+                # Skip if no key or already seen
+                if key is None or key in seen:
+                    continue
+
+                seen.add(key)
+                merged.append(item)
+
+        # Sort by score descending and truncate to limit
+        merged.sort(key=lambda x: x["score"], reverse=True)
+        return merged[:limit]
+
+    # ─── Metadata filtering ─────────────────────────────────────────────────────
+
+    @staticmethod
+    def _filter_by_metadata(metadata_list: List[Dict[str, Any]], filter_dict: Optional[Dict[str, Any]]) -> List[int]:
+        if not filter_dict:
+            return list(range(len(metadata_list)))
+        filtered = []
+        for i, meta in enumerate(metadata_list):
+            if all((meta.get(k) in v if isinstance(v, list) else meta.get(k) == v)
+                   for k,v in filter_dict.items()):
+                filtered.append(i)
+        return filtered
+
+    # ─── FAISS search ───────────────────────────────────────────────────────────
+
+    def faiss_search(self, query: str, metadata_filter: Optional[Dict[str, Any]], k: int) -> List[Dict[str, Any]]:
+        # don’t call FAISS if we have zero budget
+        if k <= 0:
+           return []
+        instruction = "Given a search query, retrieve relevant passages that answer the query"
+        emb = self.model.encode([[instruction, query]], normalize_embeddings=True)
+        emb = np.array(emb).astype("float32")
+        distances, indices = self.index.search(emb, k * 5)
         results = []
-
-        for idx, dist in zip(indices[0], distances[0]):
-            if idx == -1:
-                continue
+        for dist, idx in zip(distances[0], indices[0]):
+            if idx < 0: continue
             meta = self.id_map[idx]
-            if metadata_filter and not self._filter_by_metadata(
-                [meta], metadata_filter
-            ):
+            if metadata_filter and idx not in self._filter_by_metadata([meta], metadata_filter):
                 continue
-            results.append(
-                {
-                    "chunk": self.texts[idx],
-                    "metadata": meta,
-                    "score": 1 / (1 + dist),
-                    "retrieval_method": "FAISS",
-                }
-            )
-
+            score = 1.0 / (1.0 + dist)
+            results.append({
+                "chunk": self.faiss_texts[idx],
+                "metadata": meta,
+                "score": score,
+                "retrieval_method": "faiss"
+            })
             if len(results) >= k:
                 break
         return results
 
-    def bm25_search(
-        self, query: str, metadata_filter: Optional[Dict[str, Any]] = None, k: int = 5
-    ) -> List[Dict[str, Any]]:
-        """
-        Perform keyword search using BM25.
+    # ─── BM25 search ────────────────────────────────────────────────────────────
 
-        Args:
-            query: Search query
-            metadata_filter: Optional dictionary for filtering results by metadata
-            k: Number of results to return
-
-        Returns:
-            List of result dictionaries with chunk, metadata, score, and retrieval method
-        """
-        tokenized_query = query.split()
-
+    def bm25_search(self, query: str, metadata_filter: Optional[Dict[str, Any]], k: int) -> List[Dict[str, Any]]:
+        # don’t call BM25 if we have zero budget
+        if k <= 0:
+           return []
+        tokens = query.split()
         try:
-            scores = self.bm25.get_scores(tokenized_query)
+            raw_scores = self.bm25.get_scores(tokens)
         except Exception as e:
-            print(f"Error scoring with BM25: {e}")
+            print(f"⚠️  BM25 scoring error: {e}")
             return []
-
+        # Normalize to [0,1]
+        max_score = max(raw_scores) or 1.0
+        normalized = [s / max_score for s in raw_scores]
         filtered_ids = self._filter_by_metadata(self.bm25_metadata, metadata_filter)
-        scored = [(i, scores[i]) for i in filtered_ids if scores[i] > 0]
-        scored = sorted(scored, key=lambda x: x[1], reverse=True)[:k]
-
+        scored = sorted(
+            [(i, normalized[i]) for i in filtered_ids if normalized[i] > 0],
+            key=lambda x: x[1], reverse=True
+        )[:k]
         return [
             {
                 "chunk": self.bm25_texts[i],
                 "metadata": self.bm25_metadata[i],
                 "score": score,
-                "retrieval_method": "BM25",
+                "retrieval_method": "bm25"
             }
             for i, score in scored
         ]
+
+    # ─── Graph search ───────────────────────────────────────────────────────────
+
+    def graph_search(
+        self, 
+        query: str, 
+        metadata_filter: Optional[Dict[str, Any]] = None,
+        k: int = 5
+    ) -> List[Dict[str, Any]]:
+        """
+        Perform graph-based search using Neo4j.
+        """
+        if not self.neo4j_driver or k <= 0:
+            return []
+
+        cypher = f"""
+        CALL db.index.fulltext.queryNodes($index_name, $q) YIELD node AS e, score
+        OPTIONAL MATCH (e)-[r]-(related)
+        RETURN e, collect(DISTINCT {{
+            relationship: type(r),
+            entity: related,
+            strength: r.strength
+        }}) AS conns, score
+        ORDER BY score DESC
+        LIMIT $limit
+        """
+
+        results = []
+        with self.neo4j_driver.session() as sess:
+            try:
+                records = sess.run(
+                    cypher,
+                    index_name=self.fulltext_index,  # your index name
+                    q=query,                          # renamed param
+                    limit=k
+                )
+                for rec in records:
+                    node = rec["e"]
+                    conns = rec["conns"]
+                    ent = dict(node)
+                    results.append({
+                        "entity": {
+                            "id": ent.get("id"),
+                            "name": ent.get("name"),
+                            "type": ent.get("entity_type"),
+                            "attributes": {
+                                kk: vv for kk, vv in ent.items()
+                                if kk not in ("id", "name", "entity_type")
+                            }
+                        },
+                        "connections": [
+                            {
+                                "relationship_type": c["relationship"],
+                                "related_entity": dict(c["entity"]),
+                                "strength": c["strength"]
+                            }
+                            for c in conns if c["entity"] is not None
+                        ],
+                        "score": rec["score"],
+                        "retrieval_method": "graph"
+                    })
+            except Exception as e:
+                print(f"⚠️  Neo4j query failed: {e}")
+
+        return results
+
+    # ─── Unified search ─────────────────────────────────────────────────────────
 
     def search(
         self,
@@ -182,55 +283,35 @@ class HybridRetriever:
         metadata_filter: Optional[Dict[str, Any]] = None,
         k: int = 5,
         alpha: float = 0.5,
+        include_graph: bool = True,
+        graph_ratio: float = 0.3,
     ) -> List[Dict[str, Any]]:
-        """
-        Perform hybrid search combining FAISS and BM25 results.
+        # Validate
+        if not 0 <= alpha <= 1:
+            raise ValueError("alpha must be between 0 and 1")
+        if not 0 <= graph_ratio <= 1:
+            raise ValueError("graph_ratio must be between 0 and 1")
 
-        Args:
-            query: Search query
-            metadata_filter: Optional dictionary for filtering results by metadata
-            k: Number of results to return
-            alpha: Weight between FAISS and BM25 (1.0 = only FAISS, 0.0 = only BM25)
+        # Allocate budgets
+        k_graph, k_faiss, k_bm25 = self._allocate_budget(k, alpha, graph_ratio, include_graph)
 
-        Returns:
-            List of combined and deduplicated results
-        """
-        if not (0 <= alpha <= 1):
-            raise ValueError("Alpha must be between 0 and 1")
+        # Retrieve
+        graph_results = self.graph_search(query, metadata_filter, k_graph)
+        faiss_results = self.faiss_search(query, metadata_filter, k_faiss)
+        bm25_results  = self.bm25_search(query, metadata_filter, k_bm25)
 
-        k_faiss = max(1, int(alpha * k)) if alpha > 0 else 0
-        k_bm25 = k - k_faiss if alpha < 1 else 0
+        # Merge + dedupe
+        # For graph: dedupe on entity.id; for chunks: dedupe on metadata.id
+        merged = []
+        if graph_results:
+            merged.extend(self._merge_and_dedupe([graph_results], primary_key="entity", limit=k))
+        merged.extend(self._merge_and_dedupe([faiss_results, bm25_results], primary_key="metadata", limit=k))
 
-        results = []
-        seen_ids = set()
+        # Final sort & truncate
+        merged.sort(key=lambda x: x["score"], reverse=True)
+        return merged[:k]
 
-        # Get FAISS results
-        if k_faiss > 0:
-            faiss_results = self.faiss_search(query, metadata_filter, k_faiss)
-            for r in faiss_results:
-                doc_id = r["metadata"].get("id")
-                if doc_id not in seen_ids:
-                    results.append(r)
-                    seen_ids.add(doc_id)
-
-        # Get BM25 results
-        if k_bm25 > 0:
-            bm25_results = self.bm25_search(query, metadata_filter, k_bm25)
-            for r in bm25_results:
-                doc_id = r["metadata"].get("id")
-                if doc_id not in seen_ids:
-                    results.append(r)
-                    seen_ids.add(doc_id)
-
-        # Fill in from FAISS if needed
-        if len(results) < k and k_faiss > 0:
-            extra_faiss = self.faiss_search(query, metadata_filter, k)
-            extra_faiss = [
-                r for r in extra_faiss if r["metadata"].get("id") not in seen_ids
-            ]
-            results.extend(extra_faiss[: k - len(results)])
-
-        # Sort results by score (higher is better)
-        results = sorted(results, key=lambda x: x["score"], reverse=True)
-
-        return results[:k]
+    def close(self):
+        """Explicitly close Neo4j driver if not using context manager."""
+        if self.neo4j_driver:
+            self.neo4j_driver.close()

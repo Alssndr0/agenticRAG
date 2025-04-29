@@ -1,9 +1,11 @@
-import configparser
 import json
-import os
 from typing import Any, Dict
-
+import os
+import sys
+# allow module imports when run as script
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from neo4j import GraphDatabase
+from utils.load_env import get_env_vars
 
 
 def load_neo4j_data(filepath: str) -> Dict[str, Any]:
@@ -25,161 +27,128 @@ def load_neo4j_data(filepath: str) -> Dict[str, Any]:
         print(f"   - Total relationships: {len(data.get('relationships', []))}")
         return data
     except Exception as e:
-        print(f"❌ Error loading data from {filepath}: {str(e)}")
+        print(f"❌ Error loading data from {filepath}: {e}")
         raise
 
 
 def create_neo4j_database(data: Dict[str, Any], clear_database: bool = False):
     """
-    Create a Neo4j database from the provided entities and relationships.
-
-    Parameters:
-    - data (Dict[str, Any]): Data containing entities and relationships
-    - clear_database (bool): Whether to clear the database before importing
+    Create a Neo4j database from the provided entities and relationships,
+    and automatically create a fulltext index for Entity.name.
     """
-    # Read config
-    config = configparser.ConfigParser()
-    config.read("config.ini", encoding="utf-8")
+    # Load connection info and index name from .env
+    env      = get_env_vars()
+    uri      = env.get("NEO4J_URI")
+    username = env.get("NEO4J_USERNAME")
+    password = env.get("NEO4J_PASSWORD")
+    index_name = env.get("NEO4J_FULLTEXT_INDEX_NAME", "entityNames")
 
-    uri = os.environ.get("NEO4J_URI", config.get("neo4j", "NEO4J_URI", fallback=None))
-    username = os.environ.get(
-        "NEO4J_USERNAME", config.get("neo4j", "NEO4J_USERNAME", fallback=None)
-    )
-    password = os.environ.get(
-        "NEO4J_PASSWORD", config.get("neo4j", "NEO4J_PASSWORD", fallback=None)
-    )
-
-    if not uri or not username or not password:
+    if not (uri and username and password):
         raise ValueError(
-            "Neo4j connection details not found. Please check your config.ini file or environment variables."
+            "Missing Neo4j credentials in environment. "
+            "Please set NEO4J_URI, NEO4J_USERNAME and NEO4J_PASSWORD in your .env."
         )
 
     # Connect to Neo4j
-    with GraphDatabase.driver(uri, auth=(username, password)) as driver:
-        print(f"🔄 Connecting to Neo4j at {uri}")
+    driver = GraphDatabase.driver(uri, auth=(username, password))
+    print(f"🔄 Connecting to Neo4j at {uri}")
 
-        with driver.session() as session:
-            # Clear the database if requested
-            if clear_database:
-                print("🧹 Clearing existing database...")
-                session.run("MATCH (n) DETACH DELETE n")
+    with driver.session() as session:
+        # 1) Optionally clear the DB
+        if clear_database:
+            print("🧹 Clearing existing database...")
+            session.run("MATCH (n) DETACH DELETE n")
 
-            # Create constraints for faster lookups and uniqueness
-            print("🔧 Creating constraints...")
-            try:
-                session.run(
-                    "CREATE CONSTRAINT entity_id IF NOT EXISTS FOR (n:Entity) REQUIRE n.id IS UNIQUE"
-                )
-            except Exception as e:
-                print(f"⚠️ Could not create constraint (may already exist): {str(e)}")
-
-            # Import entities
-            entities = data.get("entities", [])
-            print(f"📥 Importing {len(entities)} entities...")
-
-            entity_count = 0
-            for entity in entities:
-                # Prepare entity properties
-                props = {
-                    "id": entity["id"],
-                    "name": entity["name"],
-                    "entity_type": entity["type"],
-                }
-
-                # Add all attributes as properties
-                for key, value in entity.get("attributes", {}).items():
-                    # Convert any non-string values to strings to ensure Neo4j compatibility
-                    if isinstance(value, (list, dict)):
-                        props[key] = json.dumps(value)
-                    else:
-                        props[key] = value
-
-                # Create the entity node with appropriate labels
-                query = """
-                MERGE (e:Entity {id: $id})
-                SET e = $props
-                SET e:`{entity_type}`
-                RETURN e.id
-                """.replace("{entity_type}", entity["type"])
-
-                result = session.run(query, id=entity["id"], props=props)
-                if result.single():
-                    entity_count += 1
-
-                # Print progress
-                if entity_count % 50 == 0 or entity_count == len(entities):
-                    print(
-                        f"   Progress: {entity_count}/{len(entities)} entities imported"
-                    )
-
-            # Import relationships
-            relationships = data.get("relationships", [])
-            print(f"🔗 Importing {len(relationships)} relationships...")
-
-            rel_count = 0
-            for rel in relationships:
-                # Prepare relationship properties
-                props = {}
-
-                # Add all attributes as properties
-                for key, value in rel.get("attributes", {}).items():
-                    # Convert any non-string values to strings to ensure Neo4j compatibility
-                    if isinstance(value, (list, dict)):
-                        props[key] = json.dumps(value)
-                    else:
-                        props[key] = value
-
-                # Add strength property if available
-                if "strength" in rel:
-                    props["strength"] = rel["strength"]
-
-                # Create the relationship between entities
-                query = """
-                MATCH (source:Entity {id: $source_id})
-                MATCH (target:Entity {id: $target_id})
-                MERGE (source)-[r:`{rel_type}`]->(target)
-                SET r = $props
-                RETURN type(r) as type
-                """.replace("{rel_type}", rel["type"])
-
-                result = session.run(
-                    query,
-                    source_id=rel["source_id"],
-                    target_id=rel["target_id"],
-                    props=props,
-                )
-                if result.single():
-                    rel_count += 1
-
-                # Print progress
-                if rel_count % 50 == 0 or rel_count == len(relationships):
-                    print(
-                        f"   Progress: {rel_count}/{len(relationships)} relationships imported"
-                    )
-
-            print(
-                f"✅ Database creation complete: {entity_count} entities and {rel_count} relationships imported"
+        # 2) Create uniqueness constraint for Entity.id
+        print("🔧 Creating constraints...")
+        try:
+            session.run(
+                "CREATE CONSTRAINT entity_id IF NOT EXISTS "
+                "FOR (n:Entity) REQUIRE n.id IS UNIQUE"
             )
+        except Exception as e:
+            print(f"⚠️ Could not create constraint (may already exist): {e}")
 
-            # Add context as a special node
-            if "context" in data:
-                context = data["context"]
-                props = {
-                    "id": "context",
-                    "domain": context.get("domain", ""),
-                    "themes": json.dumps(context.get("themes", [])),
-                }
+        # 3) Import entities
+        entities = data.get("entities", [])
+        print(f"📥 Importing {len(entities)} entities...")
+        for i, entity in enumerate(entities, start=1):
+            props = {
+                "id":          entity["id"],
+                "name":        entity["name"],
+                "entity_type": entity["type"],
+            }
+            for k, v in entity.get("attributes", {}).items():
+                props[k] = json.dumps(v) if isinstance(v, (list, dict)) else v
 
-                session.run(
-                    """
+            cypher = f"""
+            MERGE (e:Entity {{id: $id}})
+            SET e = $props
+            SET e:`{entity['type']}`
+            """
+            session.run(cypher, id=entity["id"], props=props)
+            if i % 50 == 0 or i == len(entities):
+                print(f"   Progress: {i}/{len(entities)} entities imported")
+
+        # 4) Import relationships
+        relationships = data.get("relationships", [])
+        print(f"🔗 Importing {len(relationships)} relationships...")
+        for i, rel in enumerate(relationships, start=1):
+            props = {}
+            for k, v in rel.get("attributes", {}).items():
+                props[k] = json.dumps(v) if isinstance(v, (list, dict)) else v
+            if "strength" in rel:
+                props["strength"] = rel["strength"]
+
+            cypher = f"""
+            MATCH (src:Entity {{id: $source}})
+            MATCH (tgt:Entity {{id: $target}})
+            MERGE (src)-[r:`{rel['type']}`]->(tgt)
+            SET r = $props
+            """
+            session.run(
+                cypher,
+                source=rel["source_id"],
+                target=rel["target_id"],
+                props=props,
+            )
+            if i % 50 == 0 or i == len(relationships):
+                print(f"   Progress: {i}/{len(relationships)} relationships imported")
+
+        print(f"✅ Database creation complete: {len(entities)} entities "
+              f"and {len(relationships)} relationships imported")
+
+        # 5) Add context node if present
+        if "context" in data:
+            ctx = data["context"]
+            props = {
+                "id":     "context",
+                "domain": ctx.get("domain", ""),
+                "themes": json.dumps(ctx.get("themes", [])),
+            }
+            session.run(
+                """
                 MERGE (c:Context {id: $id})
                 SET c = $props
                 """,
-                    id="context",
-                    props=props,
-                )
+                id="context",
+                props=props,
+            )
+            print("✅ Context information added")
 
-                print("✅ Context information added")
+        # 6) Create (or ensure) fulltext index on Entity.name
+        print(f"🔍 Creating fulltext index '{index_name}' on :Entity(name)...")
+        try:
+            session.run(
+                f"CREATE FULLTEXT INDEX {index_name} "
+                f"FOR (e:Entity) ON EACH [e.name]"
+            )
+            print(f"✅ Fulltext index '{index_name}' created.")
+        except Exception as e:
+            # will error if it already exists or if fulltext isn't supported — safe to ignore
+            print(f"⚠️ Fulltext index creation skipped: {e}")
+
+    driver.close()
 
 
 def main(json_file_path: str = "data/graph/neo4j_data.json", clear_db: bool = False):
@@ -191,16 +160,11 @@ def main(json_file_path: str = "data/graph/neo4j_data.json", clear_db: bool = Fa
     - clear_db (bool): Whether to clear the database before importing
     """
     try:
-        # Load data from file
         data = load_neo4j_data(json_file_path)
-
-        # Create Neo4j database
         create_neo4j_database(data, clear_database=clear_db)
-
         print("🎉 Neo4j database creation completed successfully!")
-
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"❌ Error: {e}")
         raise
 
 
@@ -217,9 +181,10 @@ if __name__ == "__main__":
         help="Path to the input JSON file",
     )
     parser.add_argument(
-        "--clear", action="store_true", help="Clear the database before importing data"
+        "--clear",
+        action="store_true",
+        help="Clear the database before importing data",
     )
 
     args = parser.parse_args()
-
     main(json_file_path=args.input, clear_db=args.clear)

@@ -1,200 +1,169 @@
 import os
 import sys
+from typing import Any, Dict, List, Optional
 
-# Add the parent directory to sys.path to allow importing
+# allow module imports when run as script
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import Dict, List
 
 from openai import OpenAI
 from sentence_transformers import SentenceTransformer
-
-# Use conditional import to handle both direct execution and module import
-try:
-    # When imported as a module
-    from .hybrid_retriever import HybridRetriever
-except ImportError:
-    # When run directly
-    from hybrid_retriever import HybridRetriever
-
 from utils.load_env import get_env_vars
 
+# hybrid retriever with FAISS, BM25 & Neo4j graph
+try:
+    from hybrid_retriever import HybridRetriever  # script run directly
+except ImportError:
+    from .hybrid_retriever import HybridRetriever  # module import
+
+# ─── Load config & initialize clients ────────────────────────────────────────
 ENV = get_env_vars()
 
-# Check for required environment variables
-required_env_vars = ["OPENAI_API_KEY"]
-missing_vars = [var for var in required_env_vars if var not in ENV or not ENV[var]]
-if missing_vars:
-    raise ValueError(
-        f"Missing required environment variables: {', '.join(missing_vars)}"
-    )
+# Validate required env vars
+if not ENV.get("OPENAI_API_KEY"):
+    raise ValueError("Missing required environment variable: OPENAI_API_KEY")
 
-api_key = ENV["OPENAI_API_KEY"]
-embeddings_model_name = ENV["EMBED_MODEL_ID"]
-
-# Initialize OpenAI client
-client = OpenAI(api_key=api_key)
+client = OpenAI(api_key=ENV["OPENAI_API_KEY"])
 
 
+# ─── Embeddings model ────────────────────────────────────────────────────────
 def initialize_embeddings_model(
-    model_name: str = embeddings_model_name,
+    model_name: str = ENV["EMBED_MODEL_ID"],
 ) -> SentenceTransformer:
-    """Initialize and return a sentence transformer model for embeddings."""
     try:
         model = SentenceTransformer(model_name)
-        print(f"Loaded embeddings model: {model_name}")
+        print(f"✅ Loaded embeddings model: {model_name}")
         return model
     except Exception as e:
-        raise ValueError(f"Failed to load embeddings model '{model_name}': {str(e)}")
+        raise RuntimeError(f"Failed to load embeddings model '{model_name}': {e}")
 
 
+# ─── Retriever factory ───────────────────────────────────────────────────────
 def initialize_retriever(
-    embeddings_model: SentenceTransformer = None,
-    faiss_index_path: str = ENV.get(
-        "FAISS_INDEX_PATH",
-        "/Users/alessandro/Development/generalRAG/indexes/FAISS-TEST/enhanced_chunks_20250412_193515",
-    ),
-    bm25_index_path: str = ENV.get(
-        "BM25_INDEX_PATH",
-        "/Users/alessandro/Development/generalRAG/indexes/bm25/bm25_index_20250412_193515.pkl",
-    ),
+    embeddings_model: Optional[SentenceTransformer] = None,
 ) -> HybridRetriever:
-    """Initialize the hybrid retriever with the specified index paths and embeddings model."""
+    """
+    Initialize the HybridRetriever. 
+    Index paths and Neo4j creds are read from ENV.
+    """
     if embeddings_model is None:
         embeddings_model = initialize_embeddings_model()
 
     return HybridRetriever(
-        faiss_index_path=faiss_index_path,
-        bm25_index_path=bm25_index_path,
-        model_embeddings=embeddings_model,
+        model_embeddings=embeddings_model
     )
 
 
-def create_history(
-    conversation_history: List[Dict[str, str]], user_input: str, assistant_response: str
-) -> List[Dict[str, str]]:
-    """Add a user-assistant exchange to the conversation history."""
-    conversation_history.append({"role": "user", "content": user_input})
-    conversation_history.append({"role": "assistant", "content": assistant_response})
-    return conversation_history
-
-
+# ─── Response generation ────────────────────────────────────────────────────
 def generate_response(
     question: str,
     retriever: HybridRetriever,
-    model: str = ENV.get("OPENAI_MODEL", "gpt-4o-mini"),
-    k: int = 2,
-    alpha: float = 0.7,
+    model: str = ENV["OPENAI_MODEL"],
+    k: int = int(ENV.get("RETRIEVE_K", 5)),
+    alpha: float = float(ENV.get("RETRIEVE_ALPHA", 0.7)),
+    include_graph: bool = True,
+    graph_ratio: float = float(ENV.get("GRAPH_RATIO", 0.3)),
 ) -> str:
     """
-    Generate a response to a question using retrieved context and an LLM.
-
-    Args:
-        question: The user's question
-        retriever: The retriever to use for context
-        model: The OpenAI model to use
-        k: Number of documents to retrieve
-        alpha: Weight between FAISS and BM25 (1.0 = only FAISS, 0.0 = only BM25)
-
-    Returns:
-        The generated response
+    1) Hybrid retrieval: graph, FAISS, BM25
+    2) Build a unified context
+    3) Call OpenAI chat completion
     """
-    try:
-        # Retrieve relevant documents
-        retrieved = retriever.search(query=question, k=k, alpha=alpha)
+    # fetch
+    results = retriever.search(
+        query=question,
+        metadata_filter=None,
+        k=k,
+        alpha=alpha,
+        include_graph=include_graph,
+        graph_ratio=graph_ratio,
+    )
+    if not results:
+        return "No relevant information found."
 
-        if not retrieved:
-            return "No relevant documents found for this query."
-
-        # Format context for the prompt
-        context = "\n\n".join(
-            [
-                f"Document: {doc['metadata'].get('filename', 'Unknown')}, Page: {doc['metadata'].get('pages', 'N/A')}\n"
-                f"Content: {doc['chunk']}"
-                for doc in retrieved
+    # format context
+    ctx_parts: List[str] = []
+    for item in results:
+        method = item["retrieval_method"]
+        if method == "graph":
+            ent = item["entity"]
+            conns = item["connections"]
+            # Attributes dict -> inline key: val pairs
+            attrs = ", ".join(f"{kk}={vv}" for kk, vv in ent["attributes"].items())
+            lines = [
+                f"Entity: {ent['name']} (type={ent['type']})",
+                f"Attributes: {attrs or 'none'}",
+                "Connections:"
             ]
-        )
-        print(f"Retrieved:\n {context}")
+            for conn in conns:
+                rel = conn["relationship_type"]
+                tgt = conn["related_entity"]
+                tgt_name = tgt.get("name", "<unknown>")
+                tgt_type = tgt.get("entity_type", "<unknown>")
+                strength = conn.get("strength", "")
+                lines.append(f"  - ({rel}) → {tgt_name} (type={tgt_type}, strength={strength})")
+            ctx_parts.append("\n".join(lines))
 
-        # Create the prompt
-        messages = [
-            {
-                "role": "system",
-                "content": "You are a helpful assistant that answers questions based on the provided documentation.",
-            },
-            {
-                "role": "user",
-                "content": f"Given the provided documentation:\n{context}\n\n"
-                f"Answer the following question, being careful to only report factual data found in the documents:\n{question}\n\n"
-                f"In your response cite the name of the document and page you got that info from, in this format (Document name, page: )",
-            },
-        ]
-
-        print(f"Using OpenAI model: {model}")
-
-        # Generate response
-        response = client.chat.completions.create(
-            model=model, messages=messages, max_tokens=1000
-        )
-
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        import traceback
-
-        error_details = traceback.format_exc()
-        print(f"Detailed error:\n{error_details}")
-
-        # Provide helpful advice based on the error
-        if "invalid model ID" in str(e):
-            available_models = ["gpt-3.5-turbo", "gpt-4-turbo", "gpt-4o-mini"]
-            return (
-                f"Error with OpenAI model '{model}'. This model may not be available to your account.\n"
-                f"Try one of these models instead: {', '.join(available_models)}\n"
-                f"Update your .env file or pass a different model to the function."
+        else:  # faiss or bm25
+            meta = item["metadata"]
+            filename = meta.get("filename", "Unknown")
+            pages    = meta.get("pages", "N/A")
+            chunk    = item["chunk"]
+            ctx_parts.append(
+                f"Document: {filename}, Page: {pages}\nContent: {chunk}"
             )
 
-        return f"Error generating response: {str(e)}"
+    context = "\n\n---\n\n".join(ctx_parts)
+    print(f"📑 Retrieved context:\n{context}\n")
 
+    # build messages
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant that answers questions using only the provided context."
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Context:\n{context}\n\n"
+                f"Question: {question}\n\n"
+                f"Please answer using *only* factual info from the context, "
+                f"and cite your sources (document name/page or entity)."
+            )
+        }
+    ]
 
-def main():
+    # call OpenAI
     try:
-        # Initialize the embeddings model
-        print("Initializing embeddings model...")
-        embeddings_model = initialize_embeddings_model()
-
-        # Initialize the retriever
-        print("Initializing hybrid retriever...")
-        retriever = initialize_retriever(embeddings_model=embeddings_model)
-
-        # Initialize conversation history
-        conversation_history = []
-
-        # Example question or get from command line
-        if len(sys.argv) > 1:
-            question = " ".join(sys.argv[1:])
-        else:
-            question = (
-                "How many debt issuance will be maturing until 2030 for Engie Brazil?"
-            )
-            print(f"Using example question: {question}")
-
-        # Generate response
-        print("Generating response...")
-        response = generate_response(question, retriever)
-
-        # Update conversation history
-        conversation_history = create_history(conversation_history, question, response)
-
-        # Print the response
-        print("\nResponse:")
-        print(response)
+        resp = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            max_tokens=int(ENV.get("OPENAI_MAX_TOKENS", 500)),
+            temperature=float(ENV.get("OPENAI_TEMPERATURE", 0.0)),
+        )
+        return resp.choices[0].message.content.strip()
 
     except Exception as e:
-        print(f"Error: {str(e)}")
-        import traceback
+        err = str(e)
+        if "invalid model" in err.lower():
+            return (
+                f"Error: OpenAI model '{model}' invalid or unavailable.\n"
+                f"Available: gpt-3.5-turbo, gpt-4-turbo, gpt-4o-mini."
+            )
+        return f"Error generating response: {err}"
 
-        traceback.print_exc()
-        sys.exit(1)
+
+# ─── CLI entrypoint ─────────────────────────────────────────────────────────
+def main():
+    embeddings_model = initialize_embeddings_model()
+    retriever = initialize_retriever(embeddings_model)
+
+    # simple CLI question
+    question = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else input("Question: ")
+
+    print("\n🔍 Generating answer...\n")
+    answer = generate_response(question, retriever)
+    print("\n💬 Answer:\n")
+    print(answer)
 
 
 if __name__ == "__main__":
