@@ -165,23 +165,6 @@ Alternatively, you can set these as environment variables:
 - `NEO4J_USERNAME`
 - `NEO4J_PASSWORD`
 
-### Querying the Knowledge Graph
-
-Once you've created your Neo4j graph database, you can explore it using the Neo4j Browser or Cypher queries:
-
-```cypher
-// Find all organization entities
-MATCH (org:organization) RETURN org LIMIT 10
-
-// Find relationships between organizations
-MATCH (org1:organization)-[r]->(org2:organization) 
-RETURN org1.name, type(r), r.strength, org2.name
-
-// Find entities with specific attributes
-MATCH (e:Entity) 
-WHERE e.rating IS NOT NULL
-RETURN e.name, e.rating, e.entity_type
-```
 
 ## Complete End-to-End Process
 
