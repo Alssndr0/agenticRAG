@@ -19,18 +19,18 @@ except ImportError:
 
 from utils.load_env import get_env_vars
 
-env = get_env_vars()
+ENV = get_env_vars()
 
 # Check for required environment variables
 required_env_vars = ["OPENAI_API_KEY"]
-missing_vars = [var for var in required_env_vars if var not in env or not env[var]]
+missing_vars = [var for var in required_env_vars if var not in ENV or not ENV[var]]
 if missing_vars:
     raise ValueError(
         f"Missing required environment variables: {', '.join(missing_vars)}"
     )
 
-api_key = env["OPENAI_API_KEY"]
-embeddings_model_name = env.get("EMBED_MODEL_ID", "Alibaba-NLP/gte-Qwen2-7B-instruct")
+api_key = ENV["OPENAI_API_KEY"]
+embeddings_model_name = ENV["EMBED_MODEL_ID"]
 
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
@@ -50,11 +50,11 @@ def initialize_embeddings_model(
 
 def initialize_retriever(
     embeddings_model: SentenceTransformer = None,
-    faiss_index_path: str = env.get(
+    faiss_index_path: str = ENV.get(
         "FAISS_INDEX_PATH",
         "/Users/alessandro/Development/generalRAG/indexes/FAISS-TEST/enhanced_chunks_20250412_193515",
     ),
-    bm25_index_path: str = env.get(
+    bm25_index_path: str = ENV.get(
         "BM25_INDEX_PATH",
         "/Users/alessandro/Development/generalRAG/indexes/bm25/bm25_index_20250412_193515.pkl",
     ),
@@ -82,7 +82,7 @@ def create_history(
 def generate_response(
     question: str,
     retriever: HybridRetriever,
-    model: str = env.get("OPENAI_MODEL", "gpt-4o-mini"),
+    model: str = ENV.get("OPENAI_MODEL", "gpt-4o-mini"),
     k: int = 2,
     alpha: float = 0.7,
 ) -> str:
