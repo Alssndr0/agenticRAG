@@ -153,14 +153,7 @@ Key features:
 
 To use the Neo4j functionality, add the following to your `config.ini` file:
 
-```ini
-[neo4j]
-NEO4J_URI = bolt://localhost:7687
-NEO4J_USERNAME = neo4j
-NEO4J_PASSWORD = your_password
-```
-
-Alternatively, you can set these as environment variables:
+Set these environment variables:
 - `NEO4J_URI`
 - `NEO4J_USERNAME`
 - `NEO4J_PASSWORD`
@@ -197,18 +190,43 @@ After completing these steps, you'll have:
 Once you've created your knowledge base indexes, you can query them using the hybrid retrieval system:
 
 ```bash
-# Basic usage - will prompt for a question
-python rag_query.py
+# 100% graph search, 0 chunks returned
+python rag_query.py --graph-ratio 1 "Who are the subsidiaries of Engie Brasil?"
 
-# Pass a question as a command-line argument
-python rag_query.py "What is the debt maturity profile for Engie Brazil?"
+# Retrieve 10 contexts, weighting BM25 more heavily
+python rag_query.py -k 10 --alpha 0.3 "Describe Engie Brasil's credit ratings."
 ```
 
-The hybrid retrieval system combines both vector search (FAISS) and keyword search (BM25) for more reliable and comprehensive results. It:
-1. Retrieves relevant documents from both indexes
-2. Deduplicates results
-3. Formats the context for the LLM
-4. Generates a response with citations to source documents
+Key parameters:
+- `-m, --model MODEL`: OpenAI model to use (default: `$OPENAI_MODEL`)
+- `-k K`: Total number of contexts (chunks + graph hits) to retrieve (default: `$RETRIEVE_K`)
+- `--alpha ALPHA`: FAISS vs BM25 weight (1.0 = only FAISS, 0.0 = only BM25; default: `$RETRIEVE_ALPHA`)
+- `--no-graph`: Disable graph-based retrieval (only FAISS + BM25)
+- `--graph-ratio RATIO`: Fraction of results from the graph (0.0–1.0; default: `$GRAPH_RATIO`)
+
+
+## What Happens Under the Hood?
+**Budget allocation**
+Splits k between graph, FAISS, and BM25 according to graph_ratio and alpha.
+
+**Retrieval**
+
+Graph: full-text match on entity names + fetches relationships.
+
+FAISS: semantic vector search over chunk embeddings.
+
+BM25: keyword match over chunk text.
+
+**Deduplication**
+Keeps unique entities and document-chunks by their IDs.
+
+**Context assembly**
+Formats entities (with attributes & connections) and chunks (with filename/page) into a single prompt.
+
+**LLM call**
+Sends the combined context to OpenAI, with citations, using your configured model and token limits.
+
+This unified RAG approach ensures you leverage the best of semantic, keyword, and graph-based retrieval in every answer.
 
 ### Configuration
 
