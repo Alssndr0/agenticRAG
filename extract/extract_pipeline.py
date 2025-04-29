@@ -17,13 +17,13 @@ from write_chunks import write_unified_chunks
 from extract import convert_pdf_with_vlm
 from utils.load_env import get_env_vars
 
-env_vars = get_env_vars(force_reload=True)
-INPUT_FOLDER = Path(env_vars["INPUT_FOLDER"])
-OUTPUT_FOLDER = Path(env_vars["OUTPUT_FOLDER"])
-MAX_TOKENS = int(env_vars["CHUNK_SIZE"])
-EMBED_MODEL_ID = env_vars["EMBED_MODEL_ID"]
-EXTRACTED_CHUNKS_FILE = env_vars["EXTRACTED_CHUNKS_FILE"]
-MIN_WORDS = int(env_vars.get("MIN_WORDS", "200"))  # Minimum words per chunk
+ENV = get_env_vars(force_reload=True)
+INPUT_FOLDER = Path(ENV["INPUT_FOLDER"])
+OUTPUT_FOLDER = Path(ENV["OUTPUT_FOLDER"])
+MAX_TOKENS = int(ENV["CHUNK_SIZE"])
+EMBED_MODEL_ID = ENV["EMBED_MODEL_ID"]
+EXTRACTED_CHUNKS_FILE = ENV["EXTRACTED_CHUNKS_FILE"]
+MIN_WORDS = int(ENV["MIN_WORDS"])  # Minimum words per chunk
 
 
 def parse_args():

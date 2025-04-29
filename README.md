@@ -1,6 +1,6 @@
-# GeneralRAG
+# GraphRAG
 
-A general-purpose Retrieval-Augmented Generation (RAG) system with an end-to-end pipeline for document processing, enhancement, and knowledge base creation.
+A Graph Retrieval-Augmented Generation (RAG) system with an end-to-end pipeline for document processing, enhancement, and knowledge base creation.
 
 ## Pipeline Overview
 

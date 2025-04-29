@@ -1,114 +1,71 @@
 import json
 import os
-
 from utils.load_env import get_env_vars
 
-env_vars = get_env_vars()
-EXTRACTED_CHUNKS_FILE = env_vars.get(
-    "EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"
-)
-# Legacy variables maintained for backward compatibility
-CHUNKS_FILE = env_vars.get("CHUNKS_FILE", "data/chunked/chunks.json")
-METADATA_FILE = env_vars.get("METADATA_FILE", "data/chunked/metadata.json")
+# Load every path from the centralised env loader
+ENV = get_env_vars()
+EXTRACTED_CHUNKS_FILE = ENV["EXTRACTED_CHUNKS_FILE"]
+CHUNKS_FILE = ENV["CHUNKS_FILE"]
+METADATA_FILE = ENV["METADATA_FILE"]
 
 
-def write_chunks_json(
-    new_chunks,
-    unified_path=EXTRACTED_CHUNKS_FILE,
-    append=True,
-    use_legacy=False,
-    chunks_path=CHUNKS_FILE,
-    metadata_path=METADATA_FILE,
-):
+def write_chunks_json(new_chunks, append=True, use_legacy=False):
     """
-    Write chunks and metadata to JSON files, either as a unified structure or in separate files.
+    Write chunks and metadata to JSON files, using only env-configured paths.
 
     Args:
-        new_chunks: List of new chunks to write (each containing 'idx', 'text', and 'metadata')
-        unified_path: Path to the unified JSON file (containing both chunks and metadata)
-        append: Whether to append to existing files or create new ones
-        use_legacy: Whether to also write to separate chunks and metadata files (backward compatibility)
-        chunks_path: Path to the legacy chunks JSON file
-        metadata_path: Path to the legacy metadata JSON file
+        new_chunks: List of dicts with keys 'text' and 'metadata'
+        append: Whether to append to existing unified file
+        use_legacy: Also write separate legacy chunk & metadata files
     """
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(unified_path), exist_ok=True)
+    # Ensure output dir exists for unified file
+    os.makedirs(os.path.dirname(EXTRACTED_CHUNKS_FILE), exist_ok=True)
 
-    # Create unified chunk objects
-    unified_chunks = []
-
-    # If appending and file exists, read existing data first
-    if append and os.path.exists(unified_path):
+    unified = []
+    if append and os.path.exists(EXTRACTED_CHUNKS_FILE):
         try:
-            with open(unified_path, "r", encoding="utf-8") as f:
-                existing_chunks = json.load(f)
-
-            # Get the next idx to use
-            next_idx = (
-                max([chunk.get("idx", 0) for chunk in existing_chunks], default=-1) + 1
-            )
-
-            # Prepare to append new chunks
-            unified_chunks = existing_chunks
-
-            # Assign sequential idx values to new chunks starting from next_idx
-            for i, chunk in enumerate(new_chunks):
-                # Create a copy of the chunk to avoid modifying the input
-                new_chunk = chunk.copy()
-                new_chunk["idx"] = next_idx + i
-                unified_chunks.append(new_chunk)
-
+            with open(EXTRACTED_CHUNKS_FILE, "r", encoding="utf-8") as f:
+                unified = json.load(f)
+            next_idx = max((c.get("idx", -1) for c in unified), default=-1) + 1
         except (json.JSONDecodeError, FileNotFoundError):
-            # If file is empty or corrupt, treat as new file
-            # Assign sequential idx values starting from 0
-            for i, chunk in enumerate(new_chunks):
-                # Create a copy of the chunk to avoid modifying the input
-                new_chunk = chunk.copy()
-                new_chunk["idx"] = i
-                unified_chunks.append(new_chunk)
+            unified = []
+            next_idx = 0
     else:
-        # Assign sequential idx values starting from 0
-        for i, chunk in enumerate(new_chunks):
-            # Create a copy of the chunk to avoid modifying the input
-            new_chunk = chunk.copy()
-            new_chunk["idx"] = i
-            unified_chunks.append(new_chunk)
+        next_idx = 0
 
-    # Save unified chunks
-    with open(unified_path, "w", encoding="utf-8") as f:
-        json.dump(unified_chunks, f, ensure_ascii=False, indent=2)
-    print(f"Unified chunks written to {unified_path}")
+    # Assign sequential idx and build unified list
+    for i, chunk in enumerate(new_chunks):
+        entry = {
+            "idx": next_idx + i,
+            "text": chunk["text"],
+            "metadata": chunk["metadata"],
+        }
+        unified.append(entry)
 
-    # For backward compatibility, also write to separate files if requested
+    # Write unified file
+    with open(EXTRACTED_CHUNKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(unified, f, ensure_ascii=False, indent=2)
+    print(f"Unified chunks written to {EXTRACTED_CHUNKS_FILE}")
+
+    # Backwards-compat: separate files
     if use_legacy:
-        # Ensure legacy directories exist
-        os.makedirs(os.path.dirname(chunks_path), exist_ok=True)
-        os.makedirs(os.path.dirname(metadata_path), exist_ok=True)
+        os.makedirs(os.path.dirname(CHUNKS_FILE), exist_ok=True)
+        os.makedirs(os.path.dirname(METADATA_FILE), exist_ok=True)
 
-        # Extract chunk data and metadata for the legacy format
-        chunks_data = [item["text"] for item in unified_chunks]
-        metadata_data = [item["metadata"] for item in unified_chunks]
+        texts    = [c["text"]     for c in unified]
+        metas    = [c["metadata"] for c in unified]
 
-        # Save chunks
-        with open(chunks_path, "w", encoding="utf-8") as f:
-            json.dump(chunks_data, f, ensure_ascii=False, indent=2)
-        print(f"Legacy chunks written to {chunks_path}")
+        with open(CHUNKS_FILE, "w", encoding="utf-8") as f:
+            json.dump(texts, f, ensure_ascii=False, indent=2)
+        print(f"Legacy chunks written to {CHUNKS_FILE}")
 
-        # Save metadata
-        with open(metadata_path, "w", encoding="utf-8") as f:
-            json.dump(metadata_data, f, ensure_ascii=False, indent=2)
-        print(f"Legacy metadata written to {metadata_path}")
+        with open(METADATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(metas, f, ensure_ascii=False, indent=2)
+        print(f"Legacy metadata written to {METADATA_FILE}")
 
 
-def write_unified_chunks(new_chunks, output_path=EXTRACTED_CHUNKS_FILE, append=True):
+def write_unified_chunks(new_chunks, append=True):
     """
-    Simplified function to write chunks and metadata to a unified JSON file.
-
-    Args:
-        new_chunks: List of new chunks to write (each containing 'idx', 'text', and 'metadata')
-        output_path: Path to the unified JSON file
-        append: Whether to append to existing file or create a new one
+    Convenience wrapper for writing only the unified JSON.
     """
-    return write_chunks_json(
-        new_chunks, unified_path=output_path, append=append, use_legacy=False
-    )
+    write_chunks_json(new_chunks, append=append, use_legacy=False)
