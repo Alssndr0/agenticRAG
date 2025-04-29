@@ -18,12 +18,8 @@ from utils.load_env import get_env_vars
 ENV = get_env_vars()
 
 # Input/output file paths
-EXTRACTED_CHUNKS_FILE = ENV.get(
-    "EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"
-)
-ENHANCED_CHUNKS_FILE = ENV.get(
-    "ENHANCED_CHUNKS_FILE", "data/enhanced/enhanced_chunks.json"
-)
+EXTRACTED_CHUNKS_FILE = ENV["EXTRACTED_CHUNKS_FILE"]
+ENHANCED_CHUNKS_FILE = ENV["ENHANCED_CHUNKS_FILE"]
 
 
 def parse_args():

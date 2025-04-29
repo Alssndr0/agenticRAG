@@ -5,15 +5,11 @@ from collections import defaultdict
 from utils.load_env import get_env_vars
 
 ENV = get_env_vars()
-EXTRACTED_CHUNKS_FILE = ENV.get(
-    "EXTRACTED_CHUNKS_FILE", "data/chunked/extracted_chunks.json"
-)
-GROUPED_CHUNKS_FILE = ENV.get(
-    "GROUPED_CHUNKS_FILE", "data/enhanced/grouped_chunks.json"
-)
-MERGED_CHUNKS_FILE = ENV.get("MERGED_CHUNKS_FILE", "data/enhanced/merged_chunks.json")
-FULL_DOCS_FILE = ENV.get("FULL_DOCS_FILE", "data/enhanced/full_docs.json")
-DOC_FILENAMES_FILE = ENV.get("DOC_FILENAMES_FILE", "data/enhanced/doc_filenames.json")
+EXTRACTED_CHUNKS_FILE = ENV["EXTRACTED_CHUNKS_FILE"]
+GROUPED_CHUNKS_FILE = ENV["GROUPED_CHUNKS_FILE"]
+MERGED_CHUNKS_FILE = ENV["MERGED_CHUNKS_FILE"]
+FULL_DOCS_FILE = ENV["FULL_DOCS_FILE"]
+DOC_FILENAMES_FILE = ENV["DOC_FILENAMES_FILE"]
 
 
 def group_by_filename(extracted_chunks_file: str) -> str:
