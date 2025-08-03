@@ -32,5 +32,4 @@ def convert_pdf_with_vlm(document):
             )
         }
     )
-
     return doc_converter.convert(document)

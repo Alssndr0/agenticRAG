@@ -5,8 +5,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "docling>=2.43.0",
     "dotenv>=0.9.9",
     "fastapi>=0.115.12",
+    "gradio>=5.39.0",
+    "ipython>=9.4.0",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.27",
+    "langchain-openai>=0.3.28",
+    "langgraph>=0.6.2",
     "loguru>=0.7.3",
     "openai>=1.78.1",
     "psutil>=7.0.0",
