@@ -1,0 +1,3 @@
+Make Sure That Data on Bill of Lading is not Conflicting with Data on Other Documents:
+Data in a document, when read in context with the credit, the document itself and international standard banking practice, need not be identical to, but must not conflict with, data in that document, any other stipulated document or the credit.
+For example description of goods, gross weight, net weight, product classification codes, shipping marks, packaging, quantity of goods etc. as stated on the bill of lading must not conflict with data in any other stipulated document.

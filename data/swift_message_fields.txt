@@ -1,0 +1,102 @@
+Understanding Swift Message Fields Which are Related to the Bill of Lading
+Below fields are directly related to the bill of lading and each one must be reviewed carefully.
+
+Field 50: Applicant
+Field 59: Beneficiary
+Field 43P: Partial Shipments
+Field 43T: Transhipment
+Field 44E: Port of Loading/Airport of Departure
+Field 44F: Port of Discharge/Airport of Destination
+Field 44C: Latest Date of Shipment
+Field 45A: Description of Goods &/or Services
+Field 46A: Documents Required
+Field 47A: Additional Conditions
+
+Field 50: Applicant: Applicant is the importer. Usually issuing banks require that bills of lading show applicants’ details under notify party fields. Applicant is a field in MT 700 swift message type that is used to specify the party on behalf of which the documentary credit is being issued.
+This is a mandatory field, which means that it must be stated in all of the letters of credit issued via MT 700 swift format.
+Applicant means the party on whose request the credit is issued.
+A credit must not be issued available by a draft drawn on the applicant.
+A bank utilizing the services of another bank for the purpose of giving effect to the instructions of the applicant does so for the account and at the risk of the applicant.
+The applicant shall be bound by and liable to indemnify a bank against all obligations and responsibilities imposed by foreign laws and usages.
+
+Field 59: Beneficiary: Beneficiary is the exporter. Although letters of credit rules state that the shipper or consignor of the goods indicated on any document need not be the beneficiary of the credit, it would be a wise move to mention exact beneficiary details under consignor / shipper fields of the bills of lading.
+Beneficiary is a field in MT 700 swift message type that is used to specify the party in favour of which the documentary credit is being issued.
+This is a mandatory field, which means that it must be stated in all of the letters of credit issued via MT 700 swift format.
+Beneficiary means the party in whose favour a credit is issued.
+Presenter means a beneficiary, bank or other party that makes a presentation.
+A beneficiary can in no case avail itself of the contractual relationships existing between banks or between the applicant and the issuing bank.
+Except as provided in sub-article 29 (a), a presentation by or on behalf of the beneficiary must be made on or before the expiry date.
+
+Field 43P: Partial Shipments: This field determines whether partial shipments are acceptable or not.Partial Shipments is a field in MT 700 swift message type that is used to specify whether or not partial shipments are allowed under the documentary credit.
+This is an optional field.
+According to letter of credit rules partial drawings or shipments are allowed unless otherwise stated on the credit.
+A presentation consisting of more than one set of transport documents evidencing shipment commencing on the same means of conveyance and for the same journey, provided they indicate the same destination, will not be regarded as covering a partial shipment, even if they indicate different dates of shipment or different ports of loading, places of taking in charge or dispatch.
+If the presentation consists of more than one set of transport documents, the latest date of shipment as evidenced on any of the sets of transport documents will be regarded as the date of shipment.
+A presentation consisting of one or more sets of transport documents evidencing shipment on more than one means of conveyance within the same mode of transport will be regarded as covering a partial shipment, even if the means of conveyance leave on the same day for the same destination.
+Codes
+Code must contain one of the following codes
+ALLOWED Allowed under the documentary credit.
+CONDITIONAL Conditional based on conditions specified elsewhere in the message.
+NOT ALLOWED Not allowed under the documentary credit.
+
+Field 43T: Transhipment: This field determines whether transhipment are acceptable or not. Transshipment is a field in MT 700 swift message type that is used to specify whether or not transshipment is allowed under the documentary credit.
+This is an optional field.
+According to letter of credit rules, transhipment means unloading from one means of conveyance and reloading to another means of conveyance (whether or not in different modes of transport) during the carriage from the place of dispatch, taking in charge or shipment to the place of final destination stated in the credit.
+A bill of lading may indicate that the goods will or may be transshipped provided that the entire carriage is covered by one and the same bill of lading.
+A bill of lading indicating that transhipment will or may take place is acceptable, even if the credit prohibits transhipment, if the goods have been shipped in a container, trailer or lash barge as evidenced by the bill of lading.
+
+Field 44E: Port of Loading/Airport of Departure: This field indicates the port of loading. Port of Loading/Airport of Departure is a field in MT 700 swift message type that is used to specify the port of loading or airport of departure to be indicated on the transport document.
+This is an optional field.
+A bill of lading, however named, must appear to indicate that the goods have been shipped on board a named vessel at the port of loading stated in the credit.
+An air transport document, however named, must appear to indicate the airport of departure and the airport of destination stated in the credit.
+
+Field 44F: Port of Discharge/Airport of Destination: This field indicates the port of discharge.
+Port of Discharge/Airport of Destination is a field in MT 700 swift message type that is used to specify the port of discharge or airport of destination to be indicated on the transport document.
+This is an optional field.
+A bill of lading, however named, must appear to indicate shipment from the port of loading to the port of discharge stated in the credit.
+An air transport document, however named, must appear to indicate the airport of departure and the airport of destination stated in the credit.
+
+Field 44C: Latest Date of Shipment: This field indicates latest date of shipment. Please be careful that date of shipment is a technical term in letters of credit rules. You should understand how date of shipment is determined on a bill of lading.
+Latest Date of Shipment is a field in MT 700 swift message type that is used to specify the latest date for loading on board/dispatch/taking in charge.
+This is an optional field.
+Date must be a valid date expressed as YYMMDD.
+Latest date of shipment will apply only to the presentations that contain at least one transport document as described in the latest version of the UCP.
+Please be careful that below documents are not considered as a transport document according to the UCP 600.
+Delivery Order,
+Forwarder’s Certificate of Receipt,
+Forwarder’s Certificate of Shipment,
+Forwarder’s Certificate of Transport,
+Forwarder’s Cargo Receipt
+Mate’s Receipt
+Therefore, these documents will be examined in the same manner as other documents for which there are no specific provisions in UCP 600, i.e., under sub-article 14(f).
+If a presentation contains a transport document, then the goods must be shipped before the latest date of shipment and presentation must be completed within the presentation period stated in the credit.
+If a presentation does not contain a transport document, then the latest date of shipment and presentation period should not used.
+In any event, documents must be presented not later than the expiry date for presentation as stated in the credit.
+
+Field 45A: Description of Goods &/or Services: According to the letters of credit rules in documents other than the commercial invoice, the description of the goods, services or performance, if stated, may be in general terms not conflicting with their description in the credit.
+Description of Goods and/or Services is a field in MT 700 swift message type that contains a description of the goods and/or services.
+This is an optional field.
+According to current letter of credit rules the description of the goods, services or performance in a commercial invoice must correspond with that appearing in the credit.
+According to current letter of credit rules, in documents other than the commercial invoice, the description of the goods, services or performance, if stated, may be in general terms not conflicting with their description in the credit.
+As per ISBP 2007, if a trade term is part of the goods description in the credit, or stated in connection with the amount, the invoice must state the trade term specified, and if the description provides the source of the trade term, the same source must be identified (e.g., a credit term “CIF Singapore Incoterms 2000” would not be satisfied by “CIF Singapore Incoterms”).
+
+Field 46A: Documents Required: One of the articles under this field usually determines the requirements of the bill of lading.
+Documents Required is a field in MT 700 swift message type that contains a description of any documents required.
+This is an optional field.
+According to current letter of credit rules banks deal with documents and not with goods, services or performance to which the documents may relate.
+Presentation means either the delivery of documents under a credit to the issuing bank or nominated bank or the documents so delivered.
+According to current letter of credit rules a nominated bank acting on its nomination, a confirming bank, if any, and the issuing bank must examine a presentation to determine, on the basis of the documents alone, whether or not the documents appear on their face to constitute a complying presentation.
+
+Field 47A: Additional Conditions: This field may include additional conditions that must be stated on the bill of lading.
+Additional Conditions is a field in MT 700 swift message type that contains a description of further conditions of the documentary credit.
+
+This is an optional field.
+According to current letter of credit rules complying presentation means a presentation that is in accordance with the terms and conditions of the credit, the applicable provisions of these rules and international standard banking practice.
+Beneficiaries should carefully examine the additional conditions section.
+The issuing banks state special requirements regarding the requested documents under this field such as signature requirements, attestation requirements, date requirements etc…
+If there is any unclear article exists under the additional conditions field, please do not hesitate to contact the issuing bank for further clarification.
+Examples:
+All documents must be dated and signed.
+All documents must indicate the beneficiary’s name.
+Bill of lading bearing charges additional to freight mentioned on articles 26(c) of UCP 2007 Revision Publication 600 prohibited.
+L/C reference no TF1808669450 must be indicated on all documents except proforma invoice.

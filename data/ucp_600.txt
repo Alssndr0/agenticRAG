@@ -1,0 +1,41 @@
+UCP 600 article 20 states that:
+
+a. A bill of lading, however named, must appear to:
+
+i. indicate the name of the carrier and be signed by:
+
+– the carrier or a named agent for or on behalf of the carrier, or
+– the master or a named agent for or on behalf of the master.
+
+Any signature by the carrier, master or agent must be identified as that of the carrier, master or agent.
+
+Any signature by an agent must indicate whether the agent has signed for or on behalf of the carrier or for or on behalf of the master.
+
+ii. indicate that the goods have been shipped on board a named vessel at the port of loading stated in the credit by:
+
+– Pre-printed wording, or
+– An on board notation indicating the date on which the goods have been shipped on board.
+
+The date of issuance of the bill of lading will be deemed to be the date of shipment unless the bill of lading contains an on board notation indicating the date of shipment, in which case the date stated in the on board notation will be deemed to be the date of shipment.
+
+If the bill of lading contains the indication “intended vessel” or similar qualification in relation to the name of the vessel, an on board notation indicating the date of shipment and the name of the actual vessel is required.
+
+iii. indicate shipment from the port of loading to the port of discharge stated in the credit.
+
+If the bill of lading does not indicate the port of loading stated in the credit as the port of loading, or if it contains the indication “intended” or similar qualification in relation to the port of loading, an on board notation indicating the port of loading as stated in the credit, the date of shipment and the name of the vessel is required. This provision applies even when loading on board or shipment on a named vessel is indicated by pre-printed wording
+on the bill of lading.
+
+iv. be the sole original bill of lading or, if issued in more than one original, be the full set as indicated on the bill of lading.
+
+v. contain terms and conditions of carriage or make reference to another source containing the terms and conditions of carriage (short form or blank back bill of lading). Contents of terms and conditions of carriage will not be examined.
+
+vi. contain no indication that it is subject to a charter party.
+
+b. For the purpose of this article, transhipment means unloading from one vessel and reloading to another vessel during the carriage from the port of loading to the port of discharge stated in the credit.
+c.
+
+i. A bill of lading may indicate that the goods will or may be transhipped provided that the entire carriage is covered by one and the same bill of lading.
+
+ii. A bill of lading indicating that transhipment will or may take place is acceptable, even if the credit prohibits transhipment, if the goods have been shipped in a container, trailer or LASH barge as evidenced by the bill of lading.
+
+d. Clauses in a bill of lading stating that the carrier reserves the right to tranship will be disregarded.
