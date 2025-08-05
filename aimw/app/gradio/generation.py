@@ -42,8 +42,7 @@ def run_compliance_check(
     thinking = ""
     last_thinking_yield = ""
 
-    # Stream all "thinking" tokens. With a checkpointer set, the graph
-    # will now automatically save the state for the given thread_id.
+    #  With a checkpointer set, the graph will now automatically save the state for the given thread_id.
     for token, metadata in graph.stream(init_state, config, stream_mode="messages"):
         if isinstance(token, AIMessage):
             node = metadata.get("langgraph_node", "")
@@ -52,8 +51,6 @@ def run_compliance_check(
                 last_thinking_yield = f"**Compliance Agent is checking:**\n{thinking}"
                 yield "", last_thinking_yield, ""
 
-    # Once the stream is done, retrieve the final state of that run.
-    # This now works because the checkpointer has saved the state.
     final_state_obj = graph.get_state(config)
     final_answer = final_state_obj.values.get("answer", "No answer found.")
 
