@@ -10,5 +10,6 @@ dependencies = [
     "langchain-core>=0.3.72",
     "langchain-openai>=0.3.28",
     "langgraph>=0.6.2",
+    "loguru>=0.7.3",
     "typing-extensions>=4.14.1",
 ]

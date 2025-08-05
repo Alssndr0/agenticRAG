@@ -22,12 +22,7 @@ class BaseConfig(BaseSettings):
 
     AI_CONFIG_FILE: Path = Field(default=CONF_DIR / "ai_config.env")
     APP_CONFIG_FILE: Path = Field(default=CONF_DIR / "app_config.env")
-    MINIO_CONFIG_FILE: Path = Field(default=CONF_DIR / "minio_config.env")
     LOGS_CONFIG_FILE: Path = Field(default=CONF_DIR / "logs_config.env")
-    PATH_CONFIG_FILE: Path = Field(default=CONF_DIR / "paths_config.env")
-    EXCEL_CONFIG_FILE: Path = Field(default=CONF_DIR / "excel_config.env")
-    CHUNK_CONFIG_FILE: Path = Field(default=CONF_DIR / "chunk_config.env")
-    NEO4J_CONFIG_FILE: Path = Field(default=CONF_DIR / "neo4j_config.env")
 
 
 @lru_cache()

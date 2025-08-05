@@ -1,16 +1,8 @@
-from enum import Enum
 from functools import lru_cache
-from typing import Any, Dict, List, Union
+from typing import Dict
 
 from app.configs.base_config import BaseConfig, get_base_config
 from pydantic import Field
-
-
-class Environment(str, Enum):
-    PRODUCTION = "Production"
-    STAGING = "Staging"
-    QA = "QA"
-    DEVELOPMENT = "Development"
 
 
 class AppConfig(BaseConfig):
@@ -18,16 +10,16 @@ class AppConfig(BaseConfig):
 
 
 class AppSettings(AppConfig):
-    APP_NAME: str = Field(default="Lumera-SQ-RG-BE")
+    APP_NAME: str = Field(default="Traydstream")
     APP_VERSION: str = Field(default="v0.0.1")
     API_VERSION: str = Field(default="/api/v1")
-    API_KEYS: str = Field(default="nSx0eOtFUNw2QknCxEACgDJkjyO8z6xbTG6XnRhby4Q=")
-    ENVIRONMENT: Environment = Field(default=Environment.DEVELOPMENT)
-    ADMIN_EMAIL: str = Field(default="name.surname@lumera.com")
-    AIMW_PORT: int = Field(default=7401, ge=1024, le=65535)
-    HOST: str = Field(default="https://127.0.0.1")
-    SERVERS: List[Dict[str, Union[str, Any]]] = []
-    PROCESS_TIME_FORMAT: str = Field(default="{0:.8f}")
+    CHECKS: Dict[str, str] = Field(
+        default={
+            "swift": "../data/swift_message_fields.txt",
+            "ucp600": "../data/ucp_600.txt",
+            "conflict": "../data/conflicting.txt",
+        }
+    )
 
 
 @lru_cache()
