@@ -1,3 +1,5 @@
+import uuid
+
 from loguru import logger
 
 from app.services.graph import graph
@@ -30,18 +32,7 @@ def run_compliance_check(
         "answer": "",
     }
 
+    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
     # Run the workflow
-    result = graph.invoke(init_state)
+    result = graph.invoke(init_state, config=config)
     return result
-
-
-if __name__ == "__main__":
-    # Example usage
-    try:
-        result = run_compliance_check("../data/bill_of_lading.txt")
-        print("\n" + "=" * 50)
-        print("FINAL RESULT:")
-        print("=" * 50)
-        print(result["answer"])
-    except Exception as e:
-        print(f"Error running compliance check: {e}")

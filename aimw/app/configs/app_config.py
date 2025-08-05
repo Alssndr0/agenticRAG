@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Dict
+from typing import Dict, List
 
 from app.configs.base_config import BaseConfig, get_base_config
 from pydantic import Field
@@ -10,15 +10,21 @@ class AppConfig(BaseConfig):
 
 
 class AppSettings(AppConfig):
-    APP_NAME: str = Field(default="Traydstream")
-    APP_VERSION: str = Field(default="v0.0.1")
-    API_VERSION: str = Field(default="/api/v1")
+    APP_NAME: str = "Traydstream"
+    APP_VERSION: str = "v0.0.1"
+    DESCRIPTION: str = "Traydstream Demo"
     CHECKS: Dict[str, str] = Field(
         default={
-            "swift": "../data/swift_message_fields.txt",
-            "ucp600": "../data/ucp_600.txt",
+            # "swift": "../data/swift_message_fields.txt",
+            # "ucp600": "../data/ucp_600.txt",
             "conflict": "../data/conflicting.txt",
         }
+    )
+    HOST: str = "127.0.0.1"
+    AIMW_PORT: int = 8000
+    API_VERSION: str = "/api/v1"
+    API_KEYS: List[str] = Field(
+        default_factory=list, description="List of allowed API keys"
     )
 
 

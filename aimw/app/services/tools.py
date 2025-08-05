@@ -1,6 +1,9 @@
+import os
+
+from loguru import logger
+
 from app.configs.app_config import get_app_settings
 from app.schemas.agent_schemas import AgentState
-from loguru import logger
 
 APP_CONFIG = get_app_settings()
 CHECKS = APP_CONFIG.CHECKS
@@ -8,17 +11,22 @@ CHECKS = APP_CONFIG.CHECKS
 
 def retrieve_document(document_path: str) -> str:
     """
-    Retrieve a document from a given path.
-
-    Args:
-        document_path (str): The path to the document.
-
-    Returns:
-        str: The content of the document.
+    Retrieve a document from a given path (supports text and PDF).
     """
+    ext = os.path.splitext(document_path)[-1].lower()
+
     try:
-        with open(document_path, "r", encoding="utf-8") as file:
-            return file.read()
+        if ext in [".txt", ".md"]:
+            with open(document_path, "r", encoding="utf-8") as file:
+                return file.read()
+        elif ext == ".pdf":
+            # Import your PDF conversion function here!
+            from app.services.extract_pdf import convert_pdf_with_docling
+
+            return convert_pdf_with_docling(document_path)
+        else:
+            logger.warning(f"Unsupported file extension for {document_path}")
+            return f"[Unsupported file type: {ext}]"
     except FileNotFoundError:
         logger.warning(
             f"Warning: File {document_path} not found. Using placeholder content."
