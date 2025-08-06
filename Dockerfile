@@ -3,20 +3,18 @@ FROM python:3.12-slim
 # Install uv
 RUN pip install --upgrade pip && pip install uv
 
-# Copy pyproject.toml and poetry.lock 
-COPY pyproject.toml /app/pyproject.toml
+WORKDIR /aimw
 
-# If you use a lockfile (highly recommended for prod), add it:
-COPY uv.lock /app/uv.lock
-
-WORKDIR /app
-
-# Install all dependencies using uv (fast, reproducible)
+COPY pyproject.toml /aimw/pyproject.toml
+COPY uv.lock /aimw/uv.lock
 RUN uv pip install --system --no-cache-dir .
 
-# Copy your app code into the image
-COPY traydstream /app/traydstream
+COPY aimw/app /aimw/app
+COPY conf /aimw/conf    
 
-EXPOSE 7860
+ENV PYTHONPATH=/aimw
 
-CMD ["python", "-u", "traydstream/app.py"]
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+

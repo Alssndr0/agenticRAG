@@ -1,0 +1,111 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, traydstream ]
+  pull_request:
+    branches: [ main, traydstream ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install uv & ruff
+        run: |
+          pip install uv
+          uv add ruff
+      - name: Run Ruff Lint
+        run: |
+          source .venv/bin/activate
+          ruff check aimw/
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install static analysis tools
+        run: |
+          pip install uv
+          uv add mypy bandit pip-audit types-requests
+      - name: Type check (mypy)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          mypy --ignore-missing-imports aimw/
+      - name: Security check (bandit)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          bandit -r aimw/ -x aimw/tests
+      - name: Dependency vulnerability check (pip-audit)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          pip-audit
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run Unit Tests
+        run: |
+          pip install uv
+          uv venv
+          source .venv/bin/activate
+          uv pip install pyproject.toml
+          uv add pytest
+          cd aimw
+          export PYTHONPATH=$(pwd)
+          pytest tests/unit_tests
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run Integration Tests
+        run: |
+          pip install uv
+          uv venv
+          source .venv/bin/activate
+          uv pip install pyproject.toml
+          uv add pytest
+          cd aimw
+          export PYTHONPATH=$(pwd)
+          pytest tests/integration_tests
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, static-analysis, unit-tests, integration-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          # username: ${{ github.actor }}
+          # password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker image
+        run: |
+          docker build -t traydstream-app:latest .
+            # Optional: Push to registry (comment/uncomment as needed)
+      # - name: Push Docker image to GHCR
+      #   run: |
+      #     docker tag traydstream-app:latest ghcr.io/${{ github.repository_owner }}/traydstream-app:latest
+      #     docker push ghcr.io/${{ github.repository_owner }}/traydstream-app:latest

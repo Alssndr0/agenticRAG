@@ -1,0 +1,41 @@
+services:
+  traydstream-demo-api:
+    container_name: traydstream-demo-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONPATH=/aimw
+      - PYTHONUNBUFFERED=1
+      - CONF_DIR=/aimw/conf
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./aimw:/aimw
+      - ./conf:/aimw/conf   
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - traydstream-default
+
+  traydstream-demo-gradio:
+    container_name: traydstream-demo-gradio
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONPATH=/aimw
+      - PYTHONUNBUFFERED=1
+      - CONF_DIR=/aimw/conf
+    ports:
+      - "7860:7860"   
+    volumes:
+      - ./aimw:/aimw
+      - ./conf:/aimw/conf   
+    command: python -m app.gradio.app
+    networks:
+      - traydstream-default
+
+networks:
+  traydstream-default:
+    name: traydstream-default
+    driver: bridge

@@ -107,9 +107,9 @@ Be thorough in your analysis and provide specific reasons for your decision."""
     check_results = list(state.get("check_results", []))
     check_results.append(
         {
-            "check_name": check,  # Now guaranteed to be str
-            "passed": bool(passed),  # ensure bool
-            "explanation": str(explanation),  # ensure str
+            "check_name": check,
+            "passed": bool(passed),
+            "explanation": str(explanation),
         }
     )
 

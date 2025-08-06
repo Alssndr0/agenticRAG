@@ -22,10 +22,8 @@ python -m app.gradio.app
 ## Run Locally with Docker
 
 ```bash
-# From project root - Build Docker image
-docker build -t traydstream-app:latest .
-# Run
-docker run -p 8000:8000 traydstream-app:latest
+# From project root - Build and compose.
+docker compose up --build
 ```
 
 ---
