@@ -50,45 +50,43 @@ jobs:
           source .venv/bin/activate
           pip-audit
 
-#   unit-tests:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.12'
-#       - name: Install test dependencies
-#         run: |
-#           pip install uv
-#           uv init
-#           uv venv
-#           uv pip install -r aimw/requirements.txt
-#           uv add pytest
-#       - name: Run Unit Tests
-#         run: |
-#           cd aimw
-#           export PYTHONPATH=$(pwd)
-#           pytest tests/unit_tests
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: |
+          pip install uv
+          uv venv
+          uv pip install pyproject.toml
+          uv add pytest
+      - name: Run Unit Tests
+        run: |
+          cd aimw
+          export PYTHONPATH=$(pwd)
+          pytest tests/unit_tests
 
-#   integration-tests:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.12'
-#       - name: Install integration dependencies
-#         run: |
-#           pip install uv
-#           uv init
-#           uv venv
-#           uv pip install -r aimw/requirements.txt
-#           uv add pytest
-#       - name: Run Integration Tests
-#         run: |
-#           cd aimw
-#           export PYTHONPATH=$(pwd)
-#           pytest -m integration tests/integration_tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install integration dependencies
+        run: |
+          pip install uv
+          uv venv
+          uv pip install pyproject.toml
+          uv add pytest
+      - name: Run Integration Tests
+        run: |
+          cd aimw
+          export PYTHONPATH=$(pwd)
+          pytest -m integration tests/integration_tests
 
 #   build:
 #     runs-on: ubuntu-latest

@@ -9,11 +9,6 @@ from loguru import logger
 router = APIRouter()
 
 
-from fastapi import APIRouter
-
-router = APIRouter()
-
-
 @router.post("/run-check", response_model=RunCheckResponse)
 async def run_check(file: UploadFile = File(...), query: str = Form(...)):
     try:

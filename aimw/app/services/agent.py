@@ -37,7 +37,10 @@ def agent_executor(state: AgentState) -> dict:
     check = state["current_check"]
     if not check:
         raise ValueError("No current_check set in state")
-    assert isinstance(check, str), "current_check must be a string"
+
+    # Replace assert with proper validation
+    if not isinstance(check, str):
+        raise TypeError(f"current_check must be a string, got {type(check).__name__}")
 
     check_file = CHECKS[check]
     logger.info(f"Executing check: {check}")
