@@ -53,8 +53,8 @@ Uploads and checks a trade document (PDF or text) for compliance. Returns a deta
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/v1/run/run-check" \
-  -H "X-API-Key: mysecretkey1" \
-  -F "file=@/data/bill_of_lading.pdf" \
+  -H "Authorization: Bearer mysecretkey1" \
+  -F "file=@data/bill_of_lading.pdf" \
   -F "query=Please check my document for compliance."
 ```
 
