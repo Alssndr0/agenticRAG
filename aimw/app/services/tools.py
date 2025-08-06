@@ -4,6 +4,7 @@ from loguru import logger
 
 from app.configs.app_config import get_app_settings
 from app.schemas.agent_schemas import AgentState
+from app.services.extract_pdf import convert_pdf_with_docling
 
 APP_CONFIG = get_app_settings()
 CHECKS = APP_CONFIG.CHECKS
@@ -21,7 +22,6 @@ def retrieve_document(document_path: str) -> str:
                 return file.read()
         elif ext == ".pdf":
             # Import your PDF conversion function here!
-            from app.services.extract_pdf import convert_pdf_with_docling
 
             return convert_pdf_with_docling(document_path)
         else:

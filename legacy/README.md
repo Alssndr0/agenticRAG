@@ -2,7 +2,6 @@
 ngrok http 127.0.0.1:1234
 
 docker build -t traydstream-app .
-
 # insert the ngrok https followed by /v1
 docker run --rm -p 7860:7860 -e LLM_API_BASE="https://ec711726f134.ngrok-free.app/v1" traydstream-app
 
@@ -20,5 +19,31 @@ docker push <repo-uri>:latest
 # delete Amazon ECR
 
 export PYTHONPATH="$PWD"
+python -m app.gradio.app
 
- python -m app.gradio.app
+
+```bash
+git clone https://github.com/Alssndr0/agenticRAG.git
+cd agenticRAG
+git checkout traydstream
+```
+
+```bash
+pip install uv
+uv pip install -r pyproject.toml
+```
+
+```bash
+cd aimw
+export PYTHONPATH="$PWD"
+uvicorn app.main:app --reload
+```
+
+- The app will run at http://127.0.0.1:8000
+- Interactive docs available at http://127.0.0.1:8000/docs
+
+```bash
+cd aimw
+export PYTHONPATH="$PWD"
+python -m app.gradio.app
+```
