@@ -1,32 +1,35 @@
-   apiVersion: apps/v1
-   kind: Deployment
-   metadata:
-     name: traydstream-app
-   spec:
-     replicas: 2
-     selector:
-       matchLabels:
-         app: traydstream-app
-     template:
-       metadata:
-         labels:
-           app: traydstream-app
-       spec:
-         containers:
-         - name: traydstream-app
-           image: <ECR_URL>:latest
-           ports:
-           - containerPort: 8080
+# creates and manages the actual containers/pods.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traydstream-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traydstream-app
+  template:
+    metadata:
+      labels:
+        app: traydstream-app
+    spec:
+      containers:
+      - name: traydstream-app
+        image: <ECR_URL>:latest  # Insert ECR image URL here 
+        ports:
+        - containerPort: 7860
 
-   apiVersion: v1
-   kind: Service
-   metadata:
-     name: traydstream-app
-   spec:
-     selector:
-       app: traydstream-app
-     ports:
-       - protocol: TCP
-         port: 80
-         targetPort: 8080
-     type: LoadBalancer
+---
+# exposes the app with a stable DNS name and provisions an AWS Load Balancer.
+apiVersion: v1
+kind: Service
+metadata:
+  name: traydstream-app
+spec:
+  selector:
+    app: traydstream-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7860
+  type: LoadBalancer

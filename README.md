@@ -26,9 +26,9 @@ After running, visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) fo
 
 ```bash
 # From project root - Build Docker image
-sudo docker build -t traydstream-app:latest .
+docker build -t traydstream-app:latest .
 # Run
-sudo docker run -p 8000:8000 traydstream-app:latest
+docker run -p 8000:8000 traydstream-app:latest
 ```
 
 ---
