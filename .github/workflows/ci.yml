@@ -61,6 +61,7 @@ jobs:
         run: |
           pip install uv
           uv venv
+          source .venv/bin/activate
           uv pip install pyproject.toml
           uv add pytest
       - name: Run Unit Tests
@@ -80,6 +81,7 @@ jobs:
         run: |
           pip install uv
           uv venv
+          source .venv/bin/activate
           uv pip install pyproject.toml
           uv add pytest
       - name: Run Integration Tests
