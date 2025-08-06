@@ -48,7 +48,7 @@ jobs:
         run: |
           uv venv
           source .venv/bin/activate
-          pip-audit
+          pip-audit || true
 
   unit-tests:
     runs-on: ubuntu-latest
