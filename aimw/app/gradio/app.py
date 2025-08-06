@@ -162,4 +162,4 @@ with gr.Blocks(css=css, title="PDF Agent QA") as demo:
         ],
     )
 
-demo.queue().launch(server_name="0.0.0.0", share=False)  # type: ignore
+demo.queue().launch(server_name="0.0.0.0", share=False)  # nosec B104

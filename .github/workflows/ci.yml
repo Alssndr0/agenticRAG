@@ -57,15 +57,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install test dependencies
+      - name: Run Unit Tests
         run: |
           pip install uv
           uv venv
           source .venv/bin/activate
           uv pip install pyproject.toml
           uv add pytest
-      - name: Run Unit Tests
-        run: |
           cd aimw
           export PYTHONPATH=$(pwd)
           pytest tests/unit_tests
@@ -77,18 +75,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install integration dependencies
+      - name: Run Integration Tests
         run: |
           pip install uv
           uv venv
           source .venv/bin/activate
           uv pip install pyproject.toml
           uv add pytest
-      - name: Run Integration Tests
-        run: |
           cd aimw
           export PYTHONPATH=$(pwd)
-          pytest -m integration tests/integration_tests
+          pytest tests/integration_tests
 
 #   build:
 #     runs-on: ubuntu-latest
