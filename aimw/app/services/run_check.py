@@ -3,7 +3,6 @@ import uuid
 from langchain_core.runnables import RunnableConfig
 from loguru import logger
 
-from app.schemas.agent_schemas import AgentState
 from app.services.graph import graph
 from app.services.tools import retrieve_document
 
@@ -23,8 +22,8 @@ def run_compliance_check(
     """
     logger.info(f"Starting compliance check for document: {document_path}")
 
-    # Prepare state to exactly match AgentState schema
-    init_state: AgentState = {
+    # Use a plain dict for init_state (not a TypedDict for mypy compatibility)
+    init_state = {
         "document": retrieve_document(document_path),
         "comparison_document": "",
         "pending_checks": [],

@@ -15,11 +15,9 @@ async def run_check(file: UploadFile = File(...), query: str = Form(...)):
         logger.info(f"Received question: {query}")
         logger.info(f"Received file: {file.filename}")
 
-        suffix = os.path.splitext(file.filename)[-1] or ".pdf"
+        suffix = os.path.splitext(file.filename or "")[-1] or ".pdf"
 
-        # Create temporary file and write the uploaded content to it
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
-            # Read the uploaded file content and write it to the temp file
             content = await file.read()
             temp_file.write(content)
             temp_file_path = temp_file.name
@@ -27,20 +25,18 @@ async def run_check(file: UploadFile = File(...), query: str = Form(...)):
         logger.info(f"Temp file name: {temp_file_path}")
         logger.info(f"Temp file size: {os.path.getsize(temp_file_path)} bytes")
 
-        # Run the compliance check on the saved file
         answer = run_compliance_check(document_path=temp_file_path, question=query)
 
+        # Ensure answer is a string for Pydantic
         if isinstance(answer, dict) and "answer" in answer:
-            answer = answer["answer"]
+            answer = str(answer["answer"])
 
-        # Clean up the temp file
         os.remove(temp_file_path)
 
         return RunCheckResponse(answer=answer)
 
     except Exception as e:
         logger.error(f"Error processing request: {e}", exc_info=True)
-        # Clean up temp file if it exists
         if "temp_file_path" in locals() and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
         raise HTTPException(status_code=500, detail=f"Error processing request: {e}")
