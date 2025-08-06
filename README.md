@@ -12,7 +12,10 @@ uv pip install -r pyproject.toml
 cd aimw
 # Add the project directory to PYTHONPATH
 export PYTHONPATH="$PWD"
+# lunch the service
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+# lunch Gradio
+python -m app.gradio.app
 ```
 
 After running, visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for all API endpoints.

@@ -22,7 +22,7 @@ def run_compliance_check(
     """
     logger.info(f"Starting compliance check for document: {document_path}")
 
-    # Use a plain dict for init_state (not a TypedDict for mypy compatibility)
+    # Use a plain dict that matches AgentState structure (don't instantiate TypedDict)
     init_state = {
         "document": retrieve_document(document_path),
         "comparison_document": "",
@@ -34,5 +34,5 @@ def run_compliance_check(
     }
 
     config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
-    result = graph.invoke(init_state, config=config)
+    result = graph.invoke(init_state, config=config)  # type: ignore
     return result

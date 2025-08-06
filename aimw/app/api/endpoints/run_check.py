@@ -9,6 +9,11 @@ from loguru import logger
 router = APIRouter()
 
 
+from fastapi import APIRouter
+
+router = APIRouter()
+
+
 @router.post("/run-check", response_model=RunCheckResponse)
 async def run_check(file: UploadFile = File(...), query: str = Form(...)):
     try:
@@ -25,15 +30,22 @@ async def run_check(file: UploadFile = File(...), query: str = Form(...)):
         logger.info(f"Temp file name: {temp_file_path}")
         logger.info(f"Temp file size: {os.path.getsize(temp_file_path)} bytes")
 
-        answer = run_compliance_check(document_path=temp_file_path, question=query)
+        compliance_result = run_compliance_check(
+            document_path=temp_file_path, question=query
+        )
 
-        # Ensure answer is a string for Pydantic
-        if isinstance(answer, dict) and "answer" in answer:
-            answer = str(answer["answer"])
+        # Convert result to string for Pydantic
+        answer_str: str
+        if isinstance(compliance_result, dict) and "answer" in compliance_result:
+            answer_str = str(compliance_result["answer"])
+        elif isinstance(compliance_result, str):
+            answer_str = compliance_result
+        else:
+            answer_str = str(compliance_result)
 
         os.remove(temp_file_path)
 
-        return RunCheckResponse(answer=answer)
+        return RunCheckResponse(answer=answer_str)
 
     except Exception as e:
         logger.error(f"Error processing request: {e}", exc_info=True)
