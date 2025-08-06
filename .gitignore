@@ -175,3 +175,6 @@ override.tf.json
 
 # Ignore plan output files
 *.tfplan
+
+# old scripts 
+legacy

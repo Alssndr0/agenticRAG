@@ -1,0 +1,32 @@
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: traydstream-app
+   spec:
+     replicas: 2
+     selector:
+       matchLabels:
+         app: traydstream-app
+     template:
+       metadata:
+         labels:
+           app: traydstream-app
+       spec:
+         containers:
+         - name: traydstream-app
+           image: <ECR_URL>:latest
+           ports:
+           - containerPort: 8080
+
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: traydstream-app
+   spec:
+     selector:
+       app: traydstream-app
+     ports:
+       - protocol: TCP
+         port: 80
+         targetPort: 8080
+     type: LoadBalancer
