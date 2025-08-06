@@ -33,6 +33,10 @@ def run_compliance_check(
         "answer": "",
     }
 
-    config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
+    config: RunnableConfig = {
+        "configurable": {
+            "thread_id": str(uuid.uuid4()),
+        }
+    }
     result = graph.invoke(init_state, config=config)  # type: ignore
     return result

@@ -8,6 +8,7 @@ from app.services.agent import (
     planner_router,
     reviewer,
 )
+from app.services.langfuse import langfuse_handler
 from app.services.tools import prepare_document
 
 # Build the state graph
@@ -36,4 +37,6 @@ builder.add_edge("reviewer", END)
 checkpointer = InMemorySaver()
 
 # Compile the graph
-graph = builder.compile(checkpointer=checkpointer)
+graph = builder.compile(checkpointer=checkpointer).with_config(
+    {"callbacks": [langfuse_handler]}
+)
