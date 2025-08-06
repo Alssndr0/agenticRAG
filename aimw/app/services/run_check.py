@@ -1,14 +1,16 @@
 import uuid
 
+from langchain_core.runnables import RunnableConfig
 from loguru import logger
 
+from app.schemas.agent_schemas import AgentState
 from app.services.graph import graph
 from app.services.tools import retrieve_document
 
 
 def run_compliance_check(
     document_path: str, question: str = "Please check my document for compliance."
-):
+) -> dict:
     """
     Run the complete compliance checking workflow.
 
@@ -21,8 +23,8 @@ def run_compliance_check(
     """
     logger.info(f"Starting compliance check for document: {document_path}")
 
-    # Initialize state
-    init_state = {
+    # Prepare state to exactly match AgentState schema
+    init_state: AgentState = {
         "document": retrieve_document(document_path),
         "comparison_document": "",
         "pending_checks": [],
@@ -32,7 +34,6 @@ def run_compliance_check(
         "answer": "",
     }
 
-    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
-    # Run the workflow
+    config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
     result = graph.invoke(init_state, config=config)
     return result

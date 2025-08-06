@@ -1,19 +1,21 @@
 import json
 
+from langchain_openai import ChatOpenAI
+from loguru import logger
+from pydantic import SecretStr
+
 from app.configs.ai_config import get_ai_settings
 from app.configs.app_config import get_app_settings
 from app.schemas.agent_schemas import AgentState
 from app.services.tools import retrieve_document
-from langchain_openai import ChatOpenAI
-from loguru import logger
 
 APP_CONFIG = get_app_settings()
 AI_CONFIG = get_ai_settings()
 
 llm = ChatOpenAI(
-    openai_api_base=AI_CONFIG.OPENAI_API_BASE,
-    api_key=AI_CONFIG.OPENAI_API_KEY,
-    model_name=AI_CONFIG.MODEL_NAME,
+    base_url=AI_CONFIG.OPENAI_API_BASE,
+    api_key=SecretStr(AI_CONFIG.OPENAI_API_KEY),
+    model=AI_CONFIG.MODEL_NAME,
 )
 
 CHECKS = APP_CONFIG.CHECKS
@@ -33,8 +35,11 @@ def agent_planner(state: AgentState) -> dict:
 def agent_executor(state: AgentState) -> dict:
     """Execute a specific compliance check on the document."""
     check = state["current_check"]
-    check_file = CHECKS[check]
+    if not check:
+        raise ValueError("No current_check set in state")
+    assert isinstance(check, str), "current_check must be a string"
 
+    check_file = CHECKS[check]
     logger.info(f"Executing check: {check}")
 
     # Retrieve the rules for this check
@@ -58,11 +63,17 @@ Be thorough in your analysis and provide specific reasons for your decision."""
     try:
         # Get LLM response
         result = llm.invoke(prompt)
+        # Handle LLM returning a string or a list of strings
+        content = result.content
+        if isinstance(content, list):
+            content = " ".join(str(c) for c in content)
+        elif not isinstance(content, str):
+            content = str(content)
+        content = content.strip()
 
         # Parse the JSON response
         try:
             # Try to extract JSON from the response
-            content = result.content.strip()
             if content.startswith("```json"):
                 content = content.replace("```json", "").replace("```", "").strip()
             elif content.startswith("```"):
@@ -74,9 +85,15 @@ Be thorough in your analysis and provide specific reasons for your decision."""
         except json.JSONDecodeError as e:
             logger.error(f"JSON parsing error for {check}: {e}")
             # Fallback: analyze the response content
-            content = result.content.lower()
-            passed = "passed" in content or "compliant" in content or "yes" in content
-            explanation = f"Could not parse JSON response. Raw response: {result.content[:200]}..."
+            lc_content = content.lower()
+            passed = (
+                "passed" in lc_content
+                or "compliant" in lc_content
+                or "yes" in lc_content
+            )
+            explanation = (
+                f"Could not parse JSON response. Raw response: {content[:200]}..."
+            )
 
     except Exception as e:
         logger.error(f"Error executing check {check}: {e}")
@@ -87,9 +104,9 @@ Be thorough in your analysis and provide specific reasons for your decision."""
     check_results = list(state.get("check_results", []))
     check_results.append(
         {
-            "check_name": check,
-            "passed": passed,
-            "explanation": explanation,
+            "check_name": check,  # Now guaranteed to be str
+            "passed": bool(passed),  # ensure bool
+            "explanation": str(explanation),  # ensure str
         }
     )
 

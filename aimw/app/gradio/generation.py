@@ -1,9 +1,11 @@
 import time
 import uuid
+from typing import cast
 
 from langchain_core.messages import AIMessage
 from loguru import logger
 
+from app.schemas.agent_schemas import AgentState
 from app.services.extract_pdf import convert_pdf_with_docling
 from app.services.graph import graph
 
@@ -22,7 +24,7 @@ def run_compliance_check(
     retrieves the final state of that same run without a second execution.
     """
     logger.info("Starting compliance check")
-    init_state = {
+    init_state: AgentState = {
         "document": document_content,
         "comparison_document": "",
         "pending_checks": [],
@@ -42,8 +44,9 @@ def run_compliance_check(
     thinking = ""
     last_thinking_yield = ""
 
-    #  With a checkpointer set, the graph will now automatically save the state for the given thread_id.
-    for token, metadata in graph.stream(init_state, config, stream_mode="messages"):
+    for token, metadata in graph.stream(
+        cast(AgentState, init_state), config, stream_mode="messages"
+    ):
         if isinstance(token, AIMessage):
             node = metadata.get("langgraph_node", "")
             if node == "agent_executor":
@@ -51,8 +54,14 @@ def run_compliance_check(
                 last_thinking_yield = f"**Compliance Agent is checking:**\n{thinking}"
                 yield "", last_thinking_yield, ""
 
+    # Get the final answer from the same run's state
     final_state_obj = graph.get_state(config)
-    final_answer = final_state_obj.values.get("answer", "No answer found.")
+    final_answer = ""
+    values = getattr(final_state_obj, "values", None)
+    if isinstance(values, dict):
+        final_answer = values.get("answer", "No answer found.")
+    if not isinstance(final_answer, str):
+        final_answer = str(final_answer)
 
     # Animate the final answer.
     left_stream = ""

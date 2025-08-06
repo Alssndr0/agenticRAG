@@ -9,11 +9,11 @@ class CheckResult(TypedDict):
     explanation: str
 
 
-class AgentState(TypedDict):
+class AgentState(TypedDict, total=False):
     document: str
-    comparison_document: Optional[str] = ""
-    pending_checks: List[str] = []
-    current_check: Optional[str] = ""
-    check_results: List[CheckResult] = []
-    question: Optional[str] = ""
-    answer: Optional[str] = ""
+    comparison_document: Optional[str]
+    pending_checks: List[str]
+    current_check: Optional[str]
+    check_results: List[CheckResult]
+    question: Optional[str]
+    answer: Optional[str]
