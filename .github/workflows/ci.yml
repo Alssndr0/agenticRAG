@@ -20,37 +20,35 @@ jobs:
           uv add ruff
       - name: Run Ruff Lint
         run: |
-          uv venv
           source .venv/bin/activate
           ruff check aimw/
 
-#   static-analysis:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.12'
-#       - name: Install static analysis tools
-#         run: |
-#           pip install uv
-#           uv init
-#           uv add mypy bandit pip-audit types-requests
-#       - name: Type check (mypy)
-#         run: |
-#           uv venv
-#           source .venv/bin/activate
-#           mypy --ignore-missing-imports aimw/
-#       - name: Security check (bandit)
-#         run: |
-#           uv venv
-#           source .venv/bin/activate
-#           bandit -r aimw/ -x aimw/tests
-#       - name: Dependency vulnerability check (pip-audit)
-#         run: |
-#           uv venv
-#           source .venv/bin/activate
-#           pip-audit
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install static analysis tools
+        run: |
+          pip install uv
+          uv add mypy bandit pip-audit types-requests
+      - name: Type check (mypy)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          mypy --ignore-missing-imports aimw/
+      - name: Security check (bandit)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          bandit -r aimw/ -x aimw/tests
+      - name: Dependency vulnerability check (pip-audit)
+        run: |
+          uv venv
+          source .venv/bin/activate
+          pip-audit
 
 #   unit-tests:
 #     runs-on: ubuntu-latest
