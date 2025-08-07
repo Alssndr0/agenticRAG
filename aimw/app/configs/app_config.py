@@ -15,8 +15,8 @@ class AppSettings(AppConfig):
     DESCRIPTION: str = "Traydstream Demo"
     CHECKS: Dict[str, str] = Field(
         default={
-            # "swift": "../data/swift_message_fields.txt",
-            # "ucp600": "../data/ucp_600.txt",
+            "swift": "../data/swift_message_fields.txt",
+            "ucp600": "../data/ucp_600.txt",
             "conflict": "../data/conflicting.txt",
         }
     )

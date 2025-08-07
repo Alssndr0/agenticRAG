@@ -46,8 +46,10 @@ async def run_compliance_check(
 
     # Stream the agent's thoughts.
     async for token, metadata in graph.astream(
-        init_state, config, stream_mode="messages"
-    ):  # type: ignore
+        init_state,  # type: ignore
+        config,
+        stream_mode="messages",
+    ):
         if isinstance(token, AIMessage):
             # Fix 2: Add type check for metadata to ensure it's a dict
             if isinstance(metadata, dict):
