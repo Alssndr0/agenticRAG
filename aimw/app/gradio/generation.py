@@ -1,6 +1,6 @@
-import time
+import asyncio
 import uuid
-from typing import Any, Dict, Generator, Tuple
+from typing import Any, AsyncGenerator, Dict, Tuple
 
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableConfig
@@ -16,9 +16,9 @@ def convert_and_cache_pdf(file) -> str:
     return markdown
 
 
-def run_compliance_check(
+async def run_compliance_check(
     document_content: str, question: str = "Please check my document for compliance."
-) -> Generator[Tuple[str, str, str], None, None]:
+) -> AsyncGenerator[Tuple[str, str, str], None]:
     """
     Runs the compliance check by streaming the agent's thoughts, then
     retrieves the final state of that same run without a second execution.
@@ -44,8 +44,10 @@ def run_compliance_check(
     thinking = ""
     last_thinking_yield = ""
 
-    # Fix 1: Cast init_state to the expected type or use type: ignore
-    for token, metadata in graph.stream(init_state, config, stream_mode="messages"):  # type: ignore
+    # Stream the agent's thoughts.
+    async for token, metadata in graph.astream(
+        init_state, config, stream_mode="messages"
+    ):  # type: ignore
         if isinstance(token, AIMessage):
             # Fix 2: Add type check for metadata to ensure it's a dict
             if isinstance(metadata, dict):
@@ -82,11 +84,17 @@ def run_compliance_check(
     if not isinstance(final_answer, str):
         final_answer = str(final_answer)
 
-    # Stream the final answer.
+    # Stream the final answer word by word
     left_stream = ""
-    for char in final_answer:
-        left_stream += char
+    words = final_answer.split()
+
+    for i, word in enumerate(words):
+        # Add space before word (except for the first word)
+        if i > 0:
+            left_stream += " "
+
+        left_stream += word
         yield left_stream, last_thinking_yield, ""
-        time.sleep(0.0005)
+        await asyncio.sleep(0.005)  # 200ms between words
 
     yield final_answer, last_thinking_yield, ""

@@ -7,7 +7,7 @@ from app.services.graph import graph
 from app.services.tools import retrieve_document
 
 
-def run_compliance_check(
+async def run_compliance_check(
     document_path: str, question: str = "Please check my document for compliance."
 ) -> dict:
     """
@@ -38,5 +38,5 @@ def run_compliance_check(
             "thread_id": str(uuid.uuid4()),
         }
     }
-    result = graph.invoke(init_state, config=config)  # type: ignore
+    result = await graph.ainvoke(init_state, config=config)  # type: ignore
     return result

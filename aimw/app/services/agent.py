@@ -32,7 +32,7 @@ def agent_planner(state: AgentState) -> dict:
         return {}
 
 
-def agent_executor(state: AgentState) -> dict:
+async def agent_executor(state: AgentState) -> dict:
     """Execute a specific compliance check on the document."""
     check = state["current_check"]
     if not check:
@@ -65,7 +65,7 @@ Be thorough in your analysis and provide specific reasons for your decision."""
 
     try:
         # Get LLM response
-        result = llm.invoke(prompt)
+        result = await llm.ainvoke(prompt)
         # Handle LLM returning a string or a list of strings
         content = result.content
         if isinstance(content, list):

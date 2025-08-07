@@ -25,7 +25,7 @@ async def run_check(file: UploadFile = File(...), query: str = Form(...)):
         logger.info(f"Temp file name: {temp_file_path}")
         logger.info(f"Temp file size: {os.path.getsize(temp_file_path)} bytes")
 
-        compliance_result = run_compliance_check(
+        compliance_result = await run_compliance_check(
             document_path=temp_file_path, question=query
         )
 
