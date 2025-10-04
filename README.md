@@ -8,7 +8,8 @@ Automated compliance checking for trade documents.
 git clone https://github.com/Alssndr0/agenticRAG.git
 cd agenticRAG
 pip install uv
-uv pip install -r pyproject.toml
+uv sync
+source .venv/bin/activate
 cd aimw
 # Add the project directory to PYTHONPATH
 export PYTHONPATH="$PWD"
